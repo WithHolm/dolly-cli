@@ -65,7 +65,7 @@
     {#if showUnsupported}
       <header>
         <h2>Not supported yet</h2>
-        <p class="muted">A client called these, and Dolly has no answer. This list shows what to add next.</p>
+        <p class="muted">A client called these, and dollycli has no answer. This list shows what to add next.</p>
       </header>
       <table class="t fixed">
         <colgroup><col style="width: 84px" /><col /><col style="width: 72px" /><col style="width: 110px" /></colgroup>

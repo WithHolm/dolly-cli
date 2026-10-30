@@ -21,7 +21,7 @@
 
 <header>
   <div class="bar">
-    <a class="brand" href="#/">Dolly</a>
+    <a class="brand" href="#/">dollycli</a>
     <nav aria-label="APIs">
       {#each apis as name (name)}
         <a href={route.href(name)} aria-current={name === route.api ? "page" : undefined}>{labels[name] ?? name}</a>
@@ -34,7 +34,7 @@
   {#if Page}
     <Page />
   {:else}
-    <div class="empty"><strong>No page for "{route.api}" yet</strong>Dolly runs this API, and the portal has no page for it.</div>
+    <div class="empty"><strong>No page for "{route.api}" yet</strong>dollycli runs this API, and the portal has no page for it.</div>
   {/if}
 </main>
 

@@ -1,13 +1,13 @@
-# Dolly-cli
-Dolly spins up a fake tenant on localhost. It speaks the OAuth/OIDC of Entra ID and the endpoints of Microsoft Graph, with a stateful directory behind them. Add a user to a group, and memberOf, members and token claims all update.
+# dollycli
+dollycli spins up a fake tenant on localhost. It speaks the OAuth/OIDC of Entra ID and the endpoints of Microsoft Graph, with a stateful directory behind them. Add a user to a group, and memberOf, members and token claims all update.
 
 Make a tenant (`dolly serve --users 50`), test against it, then go back to the seed with `dolly graph reset`. Entra first, Azure data plane next.
 
-Warning: Dolly is a development tool. It issues tokens no real service will trust, binds to localhost by default, and must never be used as an identity provider.
+Warning: dollycli is a development tool. It issues tokens no real service will trust, binds to localhost by default, and must never be used as an identity provider.
 
-Dolly is not affiliated with or endorsed by Microsoft. Entra, Azure and Microsoft Graph are trademarks of Microsoft Corporation.
+dollycli is not affiliated with or endorsed by Microsoft. Entra, Azure and Microsoft Graph are trademarks of Microsoft Corporation. Its just a product i really needed, and might think you do too :)
 
-## Dolly Graph
+## dollycli Graph
 
 A fake Microsoft Graph with fake data. It is a Go package and a server with a CLI.
 
@@ -33,7 +33,7 @@ As a package, for tests:
 
 ## Permissions
 
-The service principal Microsoft Graph is in every Dolly, with the real permissions (598 delegated and 534
+The service principal Microsoft Graph is in every dollycli, with the real permissions (598 delegated and 534
 application, from Microsoft's own list: `make update-permissions`). A service principal gets a permission as
 it does in Entra:
 
@@ -57,15 +57,15 @@ Granted permissions are saved and shown in Graph. They do not decide a call yet.
 Or `docker compose up -d` (see `compose.yaml`). The image is one static program with the portal built in, and it runs as a
 user that is not root. The data is in the volume `/data`.
 
-- **Listen address.** Dolly listens on `127.0.0.1` as it comes. In the image it is `0.0.0.0` (`--host`, or `DOLLY_HOST`): inside a container,
-  loopback cannot be reached from outside. **Publish the port to `127.0.0.1` only**, as above. Dolly has no sign-in of its own:
-  anyone who can reach the port can read and change the data, and Dolly says so in the log when it listens on more than loopback.
+- **Listen address.** dollycli listens on `127.0.0.1` as it comes. In the image it is `0.0.0.0` (`--host`, or `DOLLY_HOST`): inside a container,
+  loopback cannot be reached from outside. **Publish the port to `127.0.0.1` only**, as above. dollycli has no sign-in of its own:
+  anyone who can reach the port can read and change the data, and dollycli says so in the log when it listens on more than loopback.
 - **Other containers** reach it by the name of the service, for example `http://dolly:8650/v1.0/users`. The Graph and sign-in APIs take any
   name. The admin API (and so the portal) takes `localhost` and `127.0.0.1` only, unless you allow a name: `--allow-host dolly`, or
   `DOLLY_ALLOW_HOSTS=dolly`. The addresses in the sign-in documents follow the name that the client used.
 - **Stop and start.** `docker stop` is a clean stop (SIGTERM closes the data). A container that was killed leaves a lock in the volume,
-  and the next one takes it over. In a container Dolly is always process 1, so it must know that a lock with its own process ID is old.
-- **Health check.** `dolly health` asks the running Dolly for its list of APIs. The image runs it, as it has no shell and no curl.
+  and the next one takes it over. In a container dollycli is always process 1, so it must know that a lock with its own process ID is old.
+- **Health check.** `dolly health` asks the running dollycli for its list of APIs. The image runs it, as it has no shell and no curl.
 - **Settings** are the same as the flags, as environment variables: `DOLLY_USERS`, `DOLLY_SEED`, `DOLLY_PAGE_SIZE`, `DOLLY_THROTTLE=1`,
   `DOLLY_PORT`, `DOLLY_HOST`, `DOLLY_ALLOW_HOSTS`. The first start makes the seed, so `DOLLY_USERS` counts then.
 
@@ -81,7 +81,7 @@ connect for PowerShell signs in as this user. A seed of one user has the owner o
 
 ## Query rules
 
-Dolly follows the rules of Graph for `$filter`, `$orderby`, `$search`, and `$count`, and it answers with the error that Graph gives.
+dollycli follows the rules of Graph for `$filter`, `$orderby`, `$search`, and `$count`, and it answers with the error that Graph gives.
 For a directory object (users, groups, service principals), Graph decides by property and operator what works, and what needs an
 *advanced query*: the header `ConsistencyLevel: eventual` and `$count=true`. The rules are Microsoft's own tables
 (*Advanced query capabilities on Microsoft Entra ID objects*). `make update-query` downloads them into `graph/query/raw/` and
@@ -101,7 +101,7 @@ reads them into `graph/query/matrix.json`. A test fails if the two differ, and t
 
 **Where the texts come from.** Microsoft's tables say which operators work on which property, and the real Graph answers
 the rest. The texts of the errors and the shape of the answers were checked against the real Graph (the sample tenant
-of Graph Explorer). The tables are not complete: Graph answers some filters on properties that they do not list, so Dolly
+of Graph Explorer). The tables are not complete: Graph answers some filters on properties that they do not list, so dollycli
 allows a property that Graph declares and the tables do not list.
 
 ## Sign-in
@@ -120,26 +120,26 @@ domains, or `common`:
 - **Grants:**
   - `client_credentials`: an application token. `roles` are the application permissions of the service principal.
   - `authorization_code`: the browser flow, with PKCE (S256 or plain). The client sends the browser to
-    `/<tenant>/oauth2/v2.0/authorize`. Dolly shows a page with the users and **no password**: pick one, and the
+    `/<tenant>/oauth2/v2.0/authorize`. dollycli shows a page with the users and **no password**: pick one, and the
     browser goes back to the `redirect_uri` with a code (`response_mode` query, fragment, or form_post). A code works
     once, for ten minutes. A client ID or a redirect address that is wrong gives an error page, not a redirect.
-  - `password`: a delegated token for a user. Dolly accepts any password.
+  - `password`: a delegated token for a user. dollycli accepts any password.
   - `refresh_token`: with `offline_access`. A refresh token is a signed JWT, so it is good for 90 days and after a restart.
   - A delegated token has `scp`, the user (`oid`, `upn`), and an `id_token` with `openid` (with the `nonce`).
   - Not built: device code, `response_type` with a token or id_token, consent pages.
 - **`/me`:** with a delegated token, `/me` and `/me/...` (also in `$batch`) are the user of the token. With an
-  application token, or a token that Dolly did not make, `/me` is 400, as in Graph.
-- **New clients:** a client ID that Dolly has not seen gets a service principal (open mode). Use any secret, or a
+  application token, or a token that dollycli did not make, `/me` is 400, as in Graph.
+- **New clients:** a client ID that dollycli has not seen gets a service principal (open mode). Use any secret, or a
   certificate in `client_assertion`. In the portal, *Capture next secret* keeps the next one that a client shows
-  (only a hash is saved), and Dolly refuses all others from then on (`AADSTS7000215`).
-- **Graph:** a token that Dolly made is checked. A changed, expired, or wrong-audience token is a 401. The call is counted for
+  (only a hash is saved), and dollycli refuses all others from then on (`AADSTS7000215`).
+- **Graph:** a token that dollycli made is checked. A changed, expired, or wrong-audience token is a 401. The call is counted for
   the client ID in the token. Any other token still works, as before.
 - **The key** is `dolly-data/login/key.pem`, so a token is good after a restart. It is a fake key.
 - **Microsoft Graph PowerShell:** one line connects it, as the admin account `a.philip@acme.example`: `iwr 'http://127.0.0.1:8650/pwsh' | iex`.
-  Dolly gives three lines at `/pwsh`. They run `Add-MgEnvironment -Name Dolly -AzureADEndpoint <address> -GraphEndpoint <address>`, get a token from
+  dollycli gives three lines at `/pwsh`. They run `Add-MgEnvironment -Name Dolly -AzureADEndpoint <address> -GraphEndpoint <address>`, get a token from
   `/jwtToken?hint=<user principal name or object ID>`, and run `Connect-MgGraph -Environment Dolly -AccessToken ...` with it. `/pwsh?user=` sets another user.
   The token is good for ten years, and it has a message in its claims. The page *Sign-in* has the lines to copy.
-  The module's own sign-in (secret, certificate, browser, device code) needs an https address, so it does not work: Dolly has no https.
+  The module's own sign-in (secret, certificate, browser, device code) needs an https address, so it does not work: dollycli has no https.
 
 A call that fails answers as Entra does: `error`, `error_codes`, and `AADSTS` numbers in the text. The portal page
 *Sign-in* has the addresses to copy, and a list of every try.
@@ -179,12 +179,12 @@ opens that person), *Groups*, and *Enterprise applications* (the app roles that 
 the user and the tab (`#/graph/users/<id>/organisation`), so a link opens the dialog on a tab.
 
 The page *Service principals* works the same way. The dialog has three tabs: *Overview*, *Sign-in* (permission mode and credential), and
-*Permissions*. On the *Overview* tab, two switches set how Dolly treats the calls of that client. *Never throttle this client* lets it
+*Permissions*. On the *Overview* tab, two switches set how dollycli treats the calls of that client. *Never throttle this client* lets it
 pass the limits of Graph (its cost is still counted). *Keep its calls out of the list of calls* hides its calls from the page *Calls*.
 The same switches are in the admin API: `PUT /_dolly/graph/service-principals/<client ID>/flags` with `exemptFromThrottle` or `hideCalls`.
 
 The page *API* of Graph is a reference with one page for each resource (users, groups, and so on). A call is closed
-until you open it, and the open call is in the address, so a link points to it. It shows what Dolly answers for the
+until you open it, and the open call is in the address, so a link points to it. It shows what dollycli answers for the
 call (the options, the forms of `$filter` and `$search`), what Graph says about it (the page of Microsoft Learn,
 the properties that `$filter` works on), and the difference between the two. The forms of `$filter` are read from the
 table in `graph/api/query.go` that answers them, and a test sends the example of each form to a server.
@@ -195,7 +195,7 @@ The text of the *API* page is in markdown files, `graph/docs/*.md`, and not in c
 One file is one page. To add a page, add a file: the name, the order, and the text of the page are in the file, and
 the portal needs no change. A `## GET /v1.0/users` title adds text to that call. Its parts (`### Filtering`,
 `### Search`) show next to the text that the code makes, with the label *For this call*, so a call can say what is
-special about it (a filter that Graph has and Dolly refuses, for example). `graph/docs/README.md` has the format.
+special about it (a filter that Graph has and dollycli refuses, for example). `graph/docs/README.md` has the format.
 
 A test fails for a title that is not a call, and for a call with no page. A call with no text is fine. Its
 one-line summary is in the code, with the route, so the two cannot differ.

@@ -106,7 +106,7 @@
     {#if gaps.length}
       <p class="gap">
         Graph also lists {#each gaps as g, i (g)}<Chip tone="amber">{g}</Chip>{i < gaps.length - 1 ? " " : ""}{/each}
-        for this call. Dolly does not answer {gaps.length === 1 ? "it" : "them"} yet.
+        for this call. dollycli does not answer {gaps.length === 1 ? "it" : "them"} yet.
       </p>
     {/if}
   {/if}

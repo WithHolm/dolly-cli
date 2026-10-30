@@ -81,9 +81,9 @@
     <thead>
       <tr>
         <th>Service principal</th>
-        <th title="Open: every call is allowed, and Dolly records what it needs. Enforce: only granted permissions are allowed (not active yet).">Permission mode</th>
+        <th title="Open: every call is allowed, and dollycli records what it needs. Enforce: only granted permissions are allowed (not active yet).">Permission mode</th>
         <th title="How the sign-in API checks the secret or the certificate of the client">Credential</th>
-        <th title="How Dolly treats the calls of this client">Calls are</th>
+        <th title="How dollycli treats the calls of this client">Calls are</th>
         <th class="num">Calls</th>
         <th class="num" title="Resource units">RU</th>
         <th class="num">Throttled</th>

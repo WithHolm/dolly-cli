@@ -106,7 +106,7 @@
     {#if group.dynamic}
       <section>
         <h3>Membership rule</h3>
-        <p class="hint">The members come from this rule. Dolly works them out again when the rule or a user changes. A rule that Entra would refuse is refused here too.</p>
+        <p class="hint">The members come from this rule. dollycli works them out again when the rule or a user changes. A rule that Entra would refuse is refused here too.</p>
         <textarea bind:value={rule} oninput={() => (ruleTouched = true)} rows="3" spellcheck="false" aria-label="Membership rule" class="mono"></textarea>
         <div class="actions">
           <label>

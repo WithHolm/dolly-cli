@@ -87,7 +87,7 @@
             <div class="path">
               <span class="mono truncate" title="{c.path}{c.query ? '?' + c.query : ''}">{c.path}{#if c.query}<span class="faint">?{c.query}</span>{/if}</span>
               {#if c.batch}<Chip title="This call was a part of a $batch call">batch</Chip>{/if}
-              {#if c.fault}<Chip tone="amber" title="Dolly changed the answer: {c.fault}">{c.fault}</Chip>{/if}
+              {#if c.fault}<Chip tone="amber" title="dollycli changed the answer: {c.fault}">{c.fault}</Chip>{/if}
             </div>
           </td>
           <td><Chip tone={statusTone(c.status)}>{c.status}</Chip></td>
@@ -113,12 +113,12 @@
         <dt>Reference</dt>
         <dd><a href={referenceHref(apiDocs.value.endpoints, ref)} class="mono">{ref.method} {ref.path}</a> in the API reference</dd>
       {:else if apiDocs.value}
-        <dt>Reference</dt><dd class="muted">Dolly does not support this call.</dd>
+        <dt>Reference</dt><dd class="muted">dollycli does not support this call.</dd>
       {/if}
       {#if c.query}<dt>Query</dt><dd class="mono">{c.query}</dd>{/if}
       {#if c.agent}<dt>Client</dt><dd>{c.agent}</dd>{/if}
       {#if c.consistency}<dt>ConsistencyLevel</dt><dd>{c.consistency}</dd>{/if}
-      {#if c.fault}<dt>Dolly changed the answer</dt><dd>{c.fault}</dd>{/if}
+      {#if c.fault}<dt>dollycli changed the answer</dt><dd>{c.fault}</dd>{/if}
     </dl>
     {#each [{ title: "Request", body: c.request }, { title: "Response", body: c.response }] as part (part.title)}
       <div class="body-head">

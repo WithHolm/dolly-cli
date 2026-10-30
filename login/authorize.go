@@ -181,7 +181,7 @@ form.find button{padding:6px 12px;font:inherit;border:1px solid var(--line);bord
 </style>`
 
 var pickPage = template.Must(template.New("pick").Parse(`<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in · Dolly</title>` + pageStyle + `</head><body><main>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in · dollycli</title>` + pageStyle + `</head><body><main>
 <h1>Pick a user to sign in</h1>
 <p class="muted"><strong>{{.App}}</strong> <code>{{.ClientID}}</code> wants to sign in to the tenant <code>{{.Tenant}}</code>.</p>
 <div class="scopes" aria-label="Scopes that the client asks for">{{range .Scopes}}<span>{{.}}</span>{{end}}</div>
@@ -196,7 +196,7 @@ var pickPage = template.Must(template.New("pick").Parse(`<!doctype html><html la
 {{else}}<li><button type="button" disabled>No user matches</button></li>{{end}}</ul>
 </form>
 {{if gt .Total 50}}<p class="muted note">Showing 50 of {{.Total}}. Type in the search to find the others.</p>{{end}}
-<p class="muted note">Dolly asks for no password. The user that you pick signs in, and the client gets what it asked for.</p>
+<p class="muted note">dollycli asks for no password. The user that you pick signs in, and the client gets what it asked for.</p>
 </main></body></html>`))
 
 var postPage = template.Must(template.New("post").Parse(`<!doctype html><html><head><meta charset="utf-8"><title>Signing in…</title></head>
@@ -205,5 +205,5 @@ var postPage = template.Must(template.New("post").Parse(`<!doctype html><html><h
 <noscript><button type="submit">Continue</button></noscript></form></body></html>`))
 
 var errPage = template.Must(template.New("err").Parse(`<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign-in error · Dolly</title>` + pageStyle + `</head><body><main>
-<h1>Dolly cannot sign you in</h1><p><code>{{.Code}}</code></p><p>{{.Message}}</p></main></body></html>`))
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign-in error · dollycli</title>` + pageStyle + `</head><body><main>
+<h1>dollycli cannot sign you in</h1><p><code>{{.Code}}</code></p><p>{{.Message}}</p></main></body></html>`))

@@ -21,7 +21,7 @@
       const ok = document.execCommand("copy");
       area.remove();
       if (!ok) {
-        notices.error("The browser did not let Dolly copy. The text is: " + text);
+        notices.error("The browser did not let dollycli copy. The text is: " + text);
         return;
       }
     }

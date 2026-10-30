@@ -36,7 +36,7 @@
 
 {#if loaded && !kept}
   <div class="empty">
-    <strong>This Dolly keeps no history</strong>
+    <strong>This dollycli keeps no history</strong>
     Its data is only in memory. Start it with <code>--dir</code> to keep every change, with the time and who made it.
   </div>
 {:else if loaded && !events.length}

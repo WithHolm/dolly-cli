@@ -82,7 +82,7 @@
       </section>
 
       <section>
-        <h3>How Dolly treats its calls</h3>
+        <h3>How dollycli treats its calls</h3>
         <label class="switch">
           <input type="checkbox" checked={sp.exemptFromThrottle} onchange={(e) => setFlag("exemptFromThrottle", e.currentTarget.checked)} />
           Never throttle this client
@@ -102,7 +102,7 @@
       {:else}
         <section>
           <h3>Permission mode</h3>
-          <p class="hint">Open: every call is allowed, and Dolly records what it needs. Enforce: only granted permissions are allowed (not active yet).</p>
+          <p class="hint">Open: every call is allowed, and dollycli records what it needs. Enforce: only granted permissions are allowed (not active yet).</p>
           <select value={sp.mode} onchange={(e) => setMode(e.currentTarget.value)} aria-label="Permission mode of {sp.displayName}">
             <option value="open">Open</option>
             <option value="enforce">Enforce</option>

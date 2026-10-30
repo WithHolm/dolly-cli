@@ -135,7 +135,7 @@
 
 <p class="intro">
   A client signs in here and gets a signed token. Graph checks the token and counts the call for the client ID in it. A client ID that
-  Dolly has not seen gets a service principal. Use any secret: Dolly can keep the first one for you (Service principals, "Capture next secret").
+  dollycli has not seen gets a service principal. Use any secret: dollycli can keep the first one for you (Service principals, "Capture next secret").
 </p>
 
 {#if info}
@@ -161,13 +161,13 @@
   <section>
     <h3>Sign in as a user</h3>
     <p class="muted">
-      A token for a user is a <em>delegated</em> token. It has the user in it, and <code>/v1.0/me</code> is that user. Dolly asks for no
+      A token for a user is a <em>delegated</em> token. It has the user in it, and <code>/v1.0/me</code> is that user. dollycli asks for no
       password: any password works. The examples use <code>{sampleUser}</code>, a user of your data.
     </p>
 
     <h4>In a browser</h4>
     <p class="muted">
-      Send the browser to the authorize address. Dolly shows the users, and you pick one. The browser then goes back to the
+      Send the browser to the authorize address. dollycli shows the users, and you pick one. The browser then goes back to the
       <code>redirect_uri</code> with a <code>code</code>. The client trades the code at the token address, with PKCE if it uses it.
     </p>
     <div class="example">
@@ -196,14 +196,14 @@
   <section>
     <h3>Microsoft Graph PowerShell</h3>
     <p class="muted">
-      Paste these lines in PowerShell with the module <code>Microsoft.Graph.Authentication</code>. The first line points the module at Dolly. The
+      Paste these lines in PowerShell with the module <code>Microsoft.Graph.Authentication</code>. The first line points the module at dollycli. The
       module keeps this setting between sessions, and the line writes over an old one with the same name, so you can paste it again when
       the port changes. The other Microsoft.Graph modules, such as <code>Get-MgUser</code>, use the same connection.
     </p>
 
     <h4>Quick connect</h4>
     <p class="muted">
-      One line. Dolly gives the first three lines of the next example as text at <code>/pwsh</code>, and <code>iex</code> runs them. Read the text first
+      One line. dollycli gives the first three lines of the next example as text at <code>/pwsh</code>, and <code>iex</code> runs them. Read the text first
       if you like: <a href="{location.origin}/pwsh">{location.origin}/pwsh</a>. To connect as another user, add <code>?user=</code> and a user
       principal name.
     </p>
@@ -233,8 +233,8 @@
     </div>
 
     <p class="muted">
-      The sign-in of the module itself (client secret, certificate, device code, browser) does not work with Dolly. The module needs an https
-      address for it, and stops with <em>Authority host must be a TLS protected (https) endpoint</em>. Get the token from Dolly, as above.
+      The sign-in of the module itself (client secret, certificate, device code, browser) does not work with dollycli. The module needs an https
+      address for it, and stops with <em>Authority host must be a TLS protected (https) endpoint</em>. Get the token from dollycli, as above.
     </p>
   </section>
 {/if}
@@ -257,7 +257,7 @@
             <td class="cut">
               <div class="truncate">
                 {s.app ?? s.appId}
-                {#if s.registered}<Chip tone="primary" title="Dolly made the service principal at this sign-in">new</Chip>{/if}
+                {#if s.registered}<Chip tone="primary" title="dollycli made the service principal at this sign-in">new</Chip>{/if}
               </div>
               <div class="truncate muted small mono">{s.appId}{s.user ? ` · ${s.user}` : ""}{s.resource ? ` → ${s.resource}` : ""}</div>
             </td>

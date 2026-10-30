@@ -6,3 +6,5 @@
 
 # the packages of the portal (npm ci makes them); ui/dist is the build, and it is kept
 /ui/node_modules/
+
+/dolly-data/
