@@ -1,0 +1,329 @@
+{
+  "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
+  "commitDate": "2026-10-26T13:31:32Z",
+  "fetchedDate": "2026-10-27",
+  "files": [
+    {
+      "path": "concepts/throttling-limits.md",
+      "bytes": 9860,
+      "sha256": "b107ce26ae2762585acc51e5505e4b0481ebfad8aad50b8af650141b8ff69d40"
+    },
+    {
+      "path": "includes/throttling-assignment.md",
+      "bytes": 897,
+      "sha256": "bd0cc7c001dd1d8a239a9eb8d26e140172ca4a099be7e733378e9b5cbb6228cc"
+    },
+    {
+      "path": "includes/throttling-bookings.md",
+      "bytes": 919,
+      "sha256": "34f9f7d67abb8bd36e9aaede69a5a7d7ede77ed8aa72752693be67f85b787efc"
+    },
+    {
+      "path": "includes/throttling-call-records.md",
+      "bytes": 765,
+      "sha256": "ff7c83b835f4dea4d5efd08377adbb26cf5b333889839171e0a8adcb3d2871d8"
+    },
+    {
+      "path": "includes/throttling-cloud-communication.md",
+      "bytes": 762,
+      "sha256": "8e1a5db1136eeee1ee8e6fc45f29e80a694021cb9eae623fbccab5deef51a5b4"
+    },
+    {
+      "path": "includes/throttling-cpim.md",
+      "bytes": 2228,
+      "sha256": "dc1de269b30dbb845509bf03d8951c8ffe9f974fd36ae21fbf7431a49c8935da"
+    },
+    {
+      "path": "includes/throttling-datapolicy-operation.md",
+      "bytes": 604,
+      "sha256": "b62ba63da85ad454c1369b731bbc0f7b3e2914bb961ad0daea37d8a37b548053"
+    },
+    {
+      "path": "includes/throttling-device-operation.md",
+      "bytes": 491,
+      "sha256": "4a002bde83cde46ed12e0e13c5abf7f1fd71334da0041a5d4f110d56821a4735"
+    },
+    {
+      "path": "includes/throttling-education-rostering-apis.md",
+      "bytes": 1202,
+      "sha256": "c02f57739ba71bc5f66270df0bd6163fda5c314cfeb3f831702feb7466024d27"
+    },
+    {
+      "path": "includes/throttling-entra-logs-reports.md",
+      "bytes": 3613,
+      "sha256": "575381f01dcda0cfc7e53f6a484980691e02ef18ce34d6825cdd576506bd5b3d"
+    },
+    {
+      "path": "includes/throttling-excel.md",
+      "bytes": 3773,
+      "sha256": "c7ce6e4310cc5de9d2a2b7b26cbd94c3648f9ca328283a4725e48df0abb3a976"
+    },
+    {
+      "path": "includes/throttling-exchange-messagetrace.md",
+      "bytes": 446,
+      "sha256": "56a8669754a81baa330fa20586e61260b86c5eb6b1c0e560ab88515c3bb453fe"
+    },
+    {
+      "path": "includes/throttling-extensions.md",
+      "bytes": 951,
+      "sha256": "c1fe2c58eac7183339032fac9c2bf61799c22d7f8006f62fd64ee683229f3d2c"
+    },
+    {
+      "path": "includes/throttling-files-and-lists.md",
+      "bytes": 1512,
+      "sha256": "98278cae0e72422ee568a5cf298139eb4059fe50eb7bc465484e1cf54c616079"
+    },
+    {
+      "path": "includes/throttling-identity-and-access.md",
+      "bytes": 8665,
+      "sha256": "11591b5cfe99bf49def95e5cf4c9ad6640dad3fbe8a2b8751fd4e10f050369e5"
+    },
+    {
+      "path": "includes/throttling-identityprotection-ca.md",
+      "bytes": 853,
+      "sha256": "0ad9983446b824c6e4fbc9daf850a1885f7ebb5cf98446a92c248acb1f218f39"
+    },
+    {
+      "path": "includes/throttling-industrydata-etl.md",
+      "bytes": 300,
+      "sha256": "192932c04ba5e38d37ac134c4c0631a32b0711cec90d7779b29e29d0b534ce4d"
+    },
+    {
+      "path": "includes/throttling-information-protection.md",
+      "bytes": 1492,
+      "sha256": "ea8b36e4f872215c176ef49872ceab8c8ece0d548081360ecc9a8e146fdac545"
+    },
+    {
+      "path": "includes/throttling-insights.md",
+      "bytes": 832,
+      "sha256": "5dfe4b251ca7648cb426aa0603c9ff6986f1b3f4bc1b33c4c8a2d4e5d453297a"
+    },
+    {
+      "path": "includes/throttling-intune-android-for-work.md",
+      "bytes": 1357,
+      "sha256": "121a2729de450a458051020bf8b8e9e199bf02b55be572b262e7cbb422c0858c"
+    },
+    {
+      "path": "includes/throttling-intune-applications.md",
+      "bytes": 6394,
+      "sha256": "46f67bc9a946d09cde905129551bfd802ff547b8bab381a4b2ddf46f26230635"
+    },
+    {
+      "path": "includes/throttling-intune-auditing.md",
+      "bytes": 759,
+      "sha256": "b9d2ae1d512f4c7764f12d66fc3da42bde3c1e8b88b2621c56ac7ece9bb61a99"
+    },
+    {
+      "path": "includes/throttling-intune-books.md",
+      "bytes": 1232,
+      "sha256": "fb0cea8e3366002f897420ae8e61c84c5f95ff07c77a07f10dea5c1bbf8c97e4"
+    },
+    {
+      "path": "includes/throttling-intune-bundles.md",
+      "bytes": 2741,
+      "sha256": "03f0d3e3cb9c25a1aa0d7d9ea5389a8cd7c3b80c8c60323d55a961505403b9b2"
+    },
+    {
+      "path": "includes/throttling-intune-chromebook-sync.md",
+      "bytes": 871,
+      "sha256": "91b4874101dfe4b7fe504724d357ea88447638f2e294b22e15280b8d9e0e8764"
+    },
+    {
+      "path": "includes/throttling-intune-company-terms.md",
+      "bytes": 1025,
+      "sha256": "77e93b8db9dd44b2f1d115283f1b5c31bdf257079a61b32622ee3b6924f53bac"
+    },
+    {
+      "path": "includes/throttling-intune-device-config-v2.md",
+      "bytes": 2710,
+      "sha256": "df53da8973184029d71c33ba89d7890b5a4bf458ada805c1d6d07e90676d010b"
+    },
+    {
+      "path": "includes/throttling-intune-device-configuration.md",
+      "bytes": 21758,
+      "sha256": "2fd0e9aa8b00731f5b299b7044a44f576956df83bc2eb0707b6e026444500d12"
+    },
+    {
+      "path": "includes/throttling-intune-device-enrollment.md",
+      "bytes": 2505,
+      "sha256": "f524ada55d2c16f656bd382e689c1e5d6c923738e1b54caf418cde545e81e991"
+    },
+    {
+      "path": "includes/throttling-intune-device-intent.md",
+      "bytes": 3861,
+      "sha256": "a587cd793e794e10d4f15d0af1f44c8c6aab6f86b8b47b76d58d9bbe5d634687"
+    },
+    {
+      "path": "includes/throttling-intune-devices.md",
+      "bytes": 7213,
+      "sha256": "07e1e77b62c1685445c9e3c33b6894027c7c3f31d306e51dec12999701c03015"
+    },
+    {
+      "path": "includes/throttling-intune-endpoint-protection.md",
+      "bytes": 1523,
+      "sha256": "f34e1df84712d83ebdc4ba52b51ba30c5123de00a1da62fb51bf8086d1b88969"
+    },
+    {
+      "path": "includes/throttling-intune-enrollment.md",
+      "bytes": 2496,
+      "sha256": "65023eb72cb93b6518dae6d9d3beffe5c6673e1892e643989616bd8935176408"
+    },
+    {
+      "path": "includes/throttling-intune-gpanalytics.md",
+      "bytes": 1028,
+      "sha256": "6cb3a99a1d50b4f3160b0ff01147322f5a6f887ff3f79610b3dafd066dce53cf"
+    },
+    {
+      "path": "includes/throttling-intune-managed-applications.md",
+      "bytes": 2868,
+      "sha256": "12946531c3bc4c800f69be05ede1b3530fc6ef2e737392315f21eda6d69e6e0a"
+    },
+    {
+      "path": "includes/throttling-intune-notifications.md",
+      "bytes": 807,
+      "sha256": "cfb5a2db89c9d8d6a7823904654c172c6e98fb9028218c5af8505406b9513dbe"
+    },
+    {
+      "path": "includes/throttling-intune-odj.md",
+      "bytes": 698,
+      "sha256": "80bfcb44f5ae8f9fc9269477757c7b6b9b9389b1f02f99ff0eb8ee443aa6c684"
+    },
+    {
+      "path": "includes/throttling-intune-partner-integration.md",
+      "bytes": 1450,
+      "sha256": "fa71aed8156dbac21a0b72ec44e2cc2819da6a8c8c72f1c50dc30aa40798a8b3"
+    },
+    {
+      "path": "includes/throttling-intune-rbac.md",
+      "bytes": 1197,
+      "sha256": "7458558f031e684b5a599e12b398e7c87d987ae38b32ed700e90d7afebe1d053"
+    },
+    {
+      "path": "includes/throttling-intune-remote-assistance.md",
+      "bytes": 802,
+      "sha256": "c3dc37fead1f4701022312359679389029697c62174cc6310733af074a393d9e"
+    },
+    {
+      "path": "includes/throttling-intune-telephony.md",
+      "bytes": 899,
+      "sha256": "462c52788700e58e7c96e76cf58e3e1629fe96cd1242a5c2fa950c105d46258a"
+    },
+    {
+      "path": "includes/throttling-intune-tem.md",
+      "bytes": 690,
+      "sha256": "3c3bce1a0aa3e762dcf81955d2be5e8c98ffb89e2588f9401488824ad083b568"
+    },
+    {
+      "path": "includes/throttling-intune-throttling-tunnel.md",
+      "bytes": 1068,
+      "sha256": "cf26c43922696bafe2c00c680451d2c5cb7ad25bec12fb5ffcabd299eced30d2"
+    },
+    {
+      "path": "includes/throttling-intune-troubleshooting.md",
+      "bytes": 1415,
+      "sha256": "d6b2c979d6ae7cd74e3b8344b1337d3902bd667ca49eae9c6548e6dc357b4769"
+    },
+    {
+      "path": "includes/throttling-intune-unlock.md",
+      "bytes": 1263,
+      "sha256": "7bcc50f858023e67725712366fb7b9774729ea4eb588389a050075fcf44f3d41"
+    },
+    {
+      "path": "includes/throttling-intune-updates.md",
+      "bytes": 1389,
+      "sha256": "be26e4031a7af943d06d791340f42c48bcd61b3ba3cd8d5bce9a571c8a04dbef"
+    },
+    {
+      "path": "includes/throttling-intune-wip.md",
+      "bytes": 1047,
+      "sha256": "e55f4ff04e06ed216a5ffa24584fa7319a3ebc02baec14af16ed0f5268db1983"
+    },
+    {
+      "path": "includes/throttling-invitation-manager.md",
+      "bytes": 386,
+      "sha256": "353e5674c7b0cc61f49c4ad20b4fb6e233e2e20ebb74396f51f94f6842b0da9d"
+    },
+    {
+      "path": "includes/throttling-m365-reports.md",
+      "bytes": 938,
+      "sha256": "40f9263b03b2d717a0f6fa12ab633dd6453fd9ee110ec5daab0adb6e7e92c799"
+    },
+    {
+      "path": "includes/throttling-multi-tenant-platform.md",
+      "bytes": 2585,
+      "sha256": "82166bb0e852071e7750c68a02727f431350411036ff476598d626f50628819e"
+    },
+    {
+      "path": "includes/throttling-onenote.md",
+      "bytes": 1269,
+      "sha256": "b04204f4403883f15dc9e6c4a3e471bb32963d4e2a5bbc420a7dd4bccd1aef0e"
+    },
+    {
+      "path": "includes/throttling-outlook.md",
+      "bytes": 4364,
+      "sha256": "1164252f5ecc56ee17dba002e2f4013c89140c9231126ee8b72299022a00c8ba"
+    },
+    {
+      "path": "includes/throttling-places.md",
+      "bytes": 490,
+      "sha256": "b52ca02932ffb6ec2be6a7d31c68bd80dbc2527a0b2ed5acf89dc61186cbe2bd"
+    },
+    {
+      "path": "includes/throttling-project-rome.md",
+      "bytes": 584,
+      "sha256": "a787fcbb3f22504a11a1b3d892301176f44d0ee4939864892485700f834300e5"
+    },
+    {
+      "path": "includes/throttling-pstn-calls.md",
+      "bytes": 841,
+      "sha256": "5386fa79ca80abc50551c034877ea88985f1795470d12b613d326e953aad34b4"
+    },
+    {
+      "path": "includes/throttling-security-audit-log-query.md",
+      "bytes": 3026,
+      "sha256": "00417fd91f3003b756557675851a14877fbe56a9e30665d1141116679bb61931"
+    },
+    {
+      "path": "includes/throttling-security-detections-incidents.md",
+      "bytes": 679,
+      "sha256": "55448c087a65f2a0a7168f6ea4a0b392d80e6867a5bb7213c68c66fa575fd11a"
+    },
+    {
+      "path": "includes/throttling-security-ediscovery.md",
+      "bytes": 368,
+      "sha256": "346dbe074bc7d11ade78c0e0ec3e7798b364bab3a495b7453d1c942997f38ea0"
+    },
+    {
+      "path": "includes/throttling-service-health-communications.md",
+      "bytes": 424,
+      "sha256": "9ac490cb969c54529eaea71127ca38bed64d22e960ecab06f7e1772dbc110428"
+    },
+    {
+      "path": "includes/throttling-subscription-services.md",
+      "bytes": 776,
+      "sha256": "e9a0fe21ae7d46ecbe5e65e3032c8b461de350df4d94100298403ebb040cc29a"
+    },
+    {
+      "path": "includes/throttling-tasks-and-plans.md",
+      "bytes": 1075,
+      "sha256": "3db482d3ed61932aced60c9fa9665637644cf9db7997796d9bd642c919c16912"
+    },
+    {
+      "path": "includes/throttling-teams.md",
+      "bytes": 13304,
+      "sha256": "a2896d0477f46fb4a4a03c4801b868c2350dad195c21ed3aceb13a71d159f5b9"
+    },
+    {
+      "path": "includes/throttling-viva-engage.md",
+      "bytes": 368,
+      "sha256": "ec9446863c2729feb458c3fb6c467eb31aa220788e545810a29d58b525cba4fa"
+    },
+    {
+      "path": "includes/throttling-windows-365.md",
+      "bytes": 1112,
+      "sha256": "e1a83aaeb6298076780e160f83ff2519be80a9202bf28a61b395b823254d6c77"
+    }
+  ],
+  "license": "Documentation: CC BY 4.0 (the file LICENSE in that repo). Give credit to Microsoft when you use the data.",
+  "source": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib"
+}

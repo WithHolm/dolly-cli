@@ -1,0 +1,609 @@
+{
+  "source": {
+    "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
+    "commitDate": "2026-10-26T13:31:32Z",
+    "license": "CC BY 4.0, Microsoft"
+  },
+  "global": { "requests": 130000, "per": "10s", "scope": "app", "methods": "any" },
+
+  "identity": {
+    "unit": "ru",
+    "limits": [
+      { "scope": "appTenant", "ru": { "S": 3500, "M": 5000, "L": 8000 }, "per": "10s", "writes": 3000, "writesPer": "2m30s" },
+      { "scope": "app", "ru": 150000, "per": "20s", "writes": 35000, "writesPer": "5m" },
+      { "scope": "tenant", "writes": 18000, "writesPer": "5m" }
+    ],
+    "tenantSize": { "S": "under 50 users", "M": "50 to 500 users", "L": "over 500 users" },
+    "baseCosts": [
+      { "method": "GET", "path": "applications", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "applications/{id}/extensionProperties", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "contracts", "ru": 3, "write": 0 },
+      { "method": "POST", "path": "directoryObjects/getByIds", "ru": 5, "write": 0 },
+      { "method": "GET", "path": "domains/{id}/domainNameReferences", "ru": 4, "write": 0 },
+      { "method": "POST", "path": "getObjectsById", "ru": 5, "write": 0 },
+      { "method": "GET", "path": "groups/{id}/members", "ru": 3, "write": 0 },
+      { "method": "GET", "path": "groups/{id}/transitiveMembers", "ru": 5, "write": 0 },
+      { "method": "POST", "path": "isMemberOf", "ru": 4, "write": 0 },
+      { "method": "POST", "path": "me/checkMemberGroups", "ru": 4, "write": 0 },
+      { "method": "POST", "path": "me/checkMemberObjects", "ru": 4, "write": 0 },
+      { "method": "POST", "path": "me/getMemberGroups", "ru": 2, "write": 0 },
+      { "method": "POST", "path": "me/getMemberObjects", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "me/licenseDetails", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "me/memberOf", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "me/ownedObjects", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "me/transitiveMemberOf", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "oauth2PermissionGrants", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "oauth2PermissionGrants/{id}", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "servicePrincipals/{id}/appRoleAssignments", "ru": 2, "write": 0 },
+      { "method": "GET", "path": "subscribedSkus", "ru": 3, "write": 0 },
+      { "method": "GET", "path": "users", "ru": 2, "write": 0 }
+    ],
+    "defaults": [
+      { "method": "GET", "ru": 1, "write": 0 },
+      { "method": "POST", "ru": 1, "write": 1 },
+      { "method": "PATCH", "ru": 1, "write": 1 },
+      { "method": "PUT", "ru": 1, "write": 1 },
+      { "method": "DELETE", "ru": 1, "write": 1 }
+    ],
+    "modifiers": [
+      { "when": "$select", "ru": -1 },
+      { "when": "$expand", "ru": 1 },
+      { "when": "$top<20", "ru": -1 },
+      { "when": "b2cUserCreate", "ru": 4 },
+      { "when": "$select", "path": "directoryObjects/getByIds", "ruSet": 2 },
+      { "when": "$select", "path": "getObjectsById", "ruSet": 2 }
+    ],
+    "minimumRu": 1,
+    "specialLimits": [
+      { "path": "applications", "methods": ["POST", "PATCH", "DELETE"],
+        "when": "signInAudience is AzureADMyOrg or AzureADMultipleOrgs", "requests": 70000, "per": "5m" },
+      { "path": "applications", "methods": ["POST", "PATCH", "DELETE"],
+        "when": "signInAudience is AzureADandPersonalMicrosoftAccount or PersonalMicrosoftAccount", "requests": 60, "per": "1m" }
+    ],
+    "headers": {
+      "request": [
+        { "name": "x-ms-throttle-priority", "values": ["low", "normal", "high"], "default": "normal",
+          "notes": "Low priority requests are throttled first, normal second, high last. The header does not change the limits." }
+      ],
+      "response": [
+        { "name": "x-ms-resource-unit", "notes": "The resource units used by the request. A positive integer." },
+        { "name": "x-ms-throttle-limit-percentage",
+          "notes": "Only when the app has used more than 0.8 of its limit. From 0.8 to 1.8. 1.0 is where throttling starts, 1.2 is 20% of requests throttled, 1.8 is 80%." }
+      ],
+      "throttled": [
+        { "name": "x-ms-throttle-scope",
+          "notes": "Form: <Scope>/<Limit>/<ApplicationId>/<TenantId|UserId|ResourceId>. Scope: Tenant_Application, Tenant, or Application. Limit: Read (GET), Write (POST, PATCH, PUT, DELETE), or ReadWrite (any)." },
+        { "name": "x-ms-throttle-information",
+          "notes": "The reason, as free text for diagnostics. Examples: CPULimitExceeded, WriteLimitExceeded, ResourceUnitLimitExceeded." }
+      ]
+    },
+    "notes": [
+      "The status of a throttled request is 429 Too Many Requests. It can also happen below the limits when the services are under heavy load, or by the data volume of a tenant.",
+      "A request cost can never be lower than 1.",
+      "Any request cost that applies to a request path starting with me/ also applies to equivalent requests starting with users/{id | userPrincipalName}/."
+    ]
+  },
+
+  "services": [
+    { "name": "assignment", "include": "throttling-assignment.md",
+      "limits": [
+        { "scope": "appTenant", "requests": 350, "per": "10s", "methods": "any" },
+        { "scope": "tenant", "requests": 700, "per": "10s", "methods": "any" },
+        { "scope": "appTenant", "requests": 10000, "per": "3600s", "methods": "any" },
+        { "scope": "tenant", "requests": 20000, "per": "3600s", "methods": "any" },
+        { "scope": "appTenant", "requests": 25, "per": "10s", "methods": ["POST"], "path": "/publish" },
+        { "scope": "tenant", "requests": 25, "per": "10s", "methods": ["POST"], "path": "/publish" }
+      ], "notes": "" },
+
+    { "name": "bookings", "include": "throttling-bookings.md",
+      "limits": [
+        { "scope": "appMailbox", "concurrent": 4, "methods": "any", "notes": "For each app ID and booking mailbox. v1.0 and beta." }
+      ], "notes": "" },
+
+    { "name": "cloud-communication", "include": "throttling-cloud-communication.md",
+      "limits": [
+        { "scope": "appTenant", "requests": 50000, "per": "15s", "methods": "any", "resource": "calls" },
+        { "scope": "user", "requests": 2000, "per": "1 month", "methods": "any", "resource": "meeting information", "notes": "meetings per user each month" },
+        { "scope": "appTenant", "requests": 10000, "per": "30s", "methods": "any", "resource": "presence" },
+        { "scope": "app", "requests": 750, "per": "30s", "methods": ["GET"], "resource": "virtual event", "notes": "across all tenants" },
+        { "scope": "app", "requests": 15, "per": "30s", "methods": ["Create", "Update", "Delete"], "resource": "virtual event", "notes": "across all tenants. The source names the operations Create, Update, and Delete." }
+      ], "notes": "" },
+
+    { "name": "call-records", "include": "throttling-call-records.md",
+      "limits": [
+        { "scope": "app", "requests": 15000, "per": "20s", "methods": "any", "notes": "per application for all tenants" },
+        { "scope": "tenant", "requests": 10000, "per": "20s", "methods": "any", "notes": "per tenant for all applications" },
+        { "scope": "appTenant", "requests": 1500, "per": "20s", "methods": "any" },
+        { "scope": "resource", "requests": 40, "per": "20s", "methods": "any", "notes": "per call record" },
+        { "scope": "list", "requests": 40, "per": "20s", "methods": "any", "notes": "list call records" }
+      ], "notes": "" },
+
+    { "name": "pstn-calls", "include": "throttling-pstn-calls.md",
+      "limits": [
+        { "scope": "tenant", "requests": 1000, "per": "60s", "methods": "any" },
+        { "scope": "appTenant", "requests": 200, "per": "60s", "methods": "any" },
+        { "scope": "resource", "requests": 50, "per": "60s", "methods": "any", "notes": "per collection" }
+      ], "notes": "" },
+
+    { "name": "excel", "include": "throttling-excel.md",
+      "limits": [
+        { "scope": "app", "requests": 5000, "per": "10s", "methods": "any", "notes": "for all tenants" },
+        { "scope": "appTenant", "requests": 1500, "per": "10s", "methods": "any" }
+      ], "notes": "" },
+
+    { "name": "education", "include": "throttling-education-rostering-apis.md",
+      "limits": [
+        { "scope": "app", "requests": 400000, "per": "20s", "methods": "any", "notes": "for all tenants" },
+        { "scope": "appTenant", "requests": 35000, "per": "10s", "methods": "any" }
+      ], "notes": "" },
+
+    { "name": "exchange-message-trace", "include": "throttling-exchange-messagetrace.md",
+      "limits": [
+        { "scope": "tenant", "requests": 100, "per": "5m", "methods": "any" }
+      ], "notes": "" },
+
+    { "name": "files-and-lists", "include": "throttling-files-and-lists.md",
+      "limits": [],
+      "notes": "No numbers in the source. It refers to 'Avoid getting throttled or blocked in SharePoint' for the limits of OneDrive and SharePoint." },
+
+    { "name": "identity-and-access-reports", "include": "throttling-entra-logs-reports.md",
+      "limits": [
+        { "scope": "app", "requests": 122, "per": "10s", "methods": "any", "notes": "for all tenants" },
+        { "scope": "appTenant", "requests": 5, "per": "10s", "methods": "any" },
+        { "scope": "app", "requests": 10, "per": "1m", "methods": ["GET"], "resource": "signInActivity" },
+        { "scope": "appTenant", "requests": 10, "per": "1m", "methods": ["GET"], "resource": "signInActivity" }
+      ],
+      "notes": "$select=signInActivity on List users may cause stricter throttling. With it, use $top=500." },
+
+    { "name": "identity-and-access-data-policy-operation", "include": "throttling-datapolicy-operation.md",
+      "limits": [
+        { "scope": "tenant", "requests": 1000, "per": "1d", "methods": ["POST"], "path": "exportPersonalData", "notes": "for any subject" },
+        { "scope": "subject", "requests": 100, "per": "1d", "methods": ["POST"], "path": "exportPersonalData", "notes": "per subject, per tenant" },
+        { "scope": "tenant", "requests": 10000, "per": "1h", "methods": "any", "notes": "any other request" }
+      ],
+      "notes": "The resources do not return a Retry-After header on 429." },
+
+    { "name": "identity-and-access-device-operation", "include": "throttling-device-operation.md",
+      "limits": [
+        { "scope": "appTenant", "requests": 3000, "per": "2m30s", "methods": ["POST", "PATCH", "DELETE"] },
+        { "scope": "userTenant", "requests": 25, "per": "10s", "methods": ["POST", "PATCH", "DELETE"] }
+      ],
+      "notes": "A write quota for the device resource." },
+
+    { "name": "identity-protection-and-conditional-access", "include": "throttling-identityprotection-ca.md",
+      "limits": [
+        { "scope": "tenant", "requests": 1, "per": "1s", "methods": "any", "notes": "for all apps" }
+      ],
+      "notes": "The resources do not return a Retry-After header on 429." },
+
+    { "name": "identity-providers", "include": "throttling-cpim.md",
+      "limits": [
+        { "scope": "tenant", "requests": 300, "per": "1m", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 200, "per": "1m", "methods": "any" }
+      ], "notes": "" },
+
+    { "name": "industry-data-etl", "include": "throttling-industrydata-etl.md",
+      "limits": [
+        { "scope": "unspecified", "requests": 5, "per": "12h", "methods": "any", "notes": "Successful starts of on-demand runs. The source gives no scope." }
+      ], "notes": "" },
+
+    { "name": "information-protection", "include": "throttling-information-protection.md",
+      "limits": [
+        { "scope": "tenant", "requests": 150, "per": "15m", "methods": ["POST"], "path": "/informationProtection" },
+        { "scope": "tenant", "requests": 10000, "per": "24h", "methods": ["POST"], "path": "/informationProtection" },
+        { "scope": "resource", "requests": 1, "per": "15m", "methods": ["POST"], "path": "/informationProtection", "notes": "per email, URL, or file" },
+        { "scope": "resource", "requests": 3, "per": "24h", "methods": ["POST"], "path": "/informationProtection", "notes": "per email, URL, or file" }
+      ],
+      "notes": "For email, the resource is a unique network message ID and recipient pair." },
+
+    { "name": "insights", "include": "throttling-insights.md",
+      "limits": [
+        { "scope": "unspecified", "requests": 10000, "per": "10m", "methods": "any", "path": "me/insights, users/{id}/insights", "notes": "v1.0 and beta" },
+        { "scope": "unspecified", "concurrent": 4, "methods": "any", "path": "me/insights, users/{id}/insights", "notes": "v1.0 and beta" }
+      ], "notes": "" },
+
+    { "name": "intune-android-for-work", "include": "throttling-intune-android-for-work.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-applications", "include": "throttling-intune-applications.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-auditing", "include": "throttling-intune-auditing.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-books", "include": "throttling-intune-books.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-bundles", "include": "throttling-intune-bundles.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-chromebook-sync", "include": "throttling-intune-chromebook-sync.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-company-terms", "include": "throttling-intune-company-terms.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-device-configuration", "include": "throttling-intune-device-configuration.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-device-config-v2", "include": "throttling-intune-device-config-v2.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-device-enrollment", "include": "throttling-intune-device-enrollment.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-device-intent", "include": "throttling-intune-device-intent.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-devices", "include": "throttling-intune-devices.md",
+      "limits": [
+        { "scope": "tenant", "requests": 400, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 4000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 2000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-endpoint-protection", "include": "throttling-intune-endpoint-protection.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-enrollment", "include": "throttling-intune-enrollment.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-gpanalytics", "include": "throttling-intune-gpanalytics.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-managed-applications", "include": "throttling-intune-managed-applications.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-notifications", "include": "throttling-intune-notifications.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-odj", "include": "throttling-intune-odj.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-partner-integration", "include": "throttling-intune-partner-integration.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-rbac", "include": "throttling-intune-rbac.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-remote-assistance", "include": "throttling-intune-remote-assistance.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-telephony", "include": "throttling-intune-telephony.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-tem", "include": "throttling-intune-tem.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-throttling-tunnel", "include": "throttling-intune-throttling-tunnel.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "The include file has no heading of its own." },
+    { "name": "intune-troubleshooting", "include": "throttling-intune-troubleshooting.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-unlock", "include": "throttling-intune-unlock.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-updates", "include": "throttling-intune-updates.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+    { "name": "intune-wip", "include": "throttling-intune-wip.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+
+    { "name": "invitation-manager", "include": "throttling-invitation-manager.md",
+      "limits": [
+        { "scope": "tenant", "requests": 150, "per": "5s", "methods": "any", "path": "/invitations", "notes": "for all apps" }
+      ], "notes": "" },
+
+    { "name": "microsoft-365-reports", "include": "throttling-m365-reports.md",
+      "limits": [
+        { "scope": "appTenant", "requests": 14, "per": "10m", "methods": "any", "path": "/reports", "notes": "CSV" },
+        { "scope": "tenant", "requests": 40, "per": "10m", "methods": "any", "path": "/reports", "notes": "CSV, for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "10m", "methods": "any", "path": "/reports", "notes": "JSON, beta. The limit per tenant for all apps is n/a." }
+      ],
+      "notes": "The limits apply individually to each report API." },
+
+    { "name": "microsoft-teams", "include": "throttling-teams.md",
+      "per": "1s",
+      "dimensions": {
+        "app": "All requests from one app (client ID) summed across every tenant.",
+        "appTenant": "Requests from one app within a single tenant.",
+        "resource": "Requests against a single team, channel, or chat.",
+        "user": "Requests made on behalf of a single user."
+      },
+      "limits": [],
+      "routes": [
+        { "group": "teams", "methods": ["GET"], "path": "/teams/{team-id}", "app": 1500, "appTenant": 30, "resource": { "requests": 4, "per": "1s", "of": "team" } },
+        { "group": "teams", "methods": ["GET"], "path": "/me/joinedTeams or /users/{user-id}/joinedTeams", "app": 300, "appTenant": 30 },
+        { "group": "teams", "methods": ["POST"], "path": "/teams", "app": 100, "appTenant": 10 },
+        { "group": "teams", "methods": ["PUT"], "path": "/groups/{team-id}/team", "app": 150, "appTenant": 6 },
+        { "group": "teams", "methods": ["PATCH"], "path": "/teams/{team-id}", "app": 300, "appTenant": 30, "resource": { "requests": 4, "per": "1s", "of": "team" } },
+        { "group": "teams", "methods": ["POST"], "path": "/teams/{team-id}/clone", "app": 150, "appTenant": 6 },
+        { "group": "teams", "methods": ["POST"], "path": "/teams/{team-id}/completeMigration", "app": 100, "appTenant": 10 },
+
+        { "group": "channels", "methods": ["GET"], "path": "/teams/{team-id}/channels", "app": 1200, "appTenant": 60, "resource": { "requests": 4, "per": "1s", "of": "team" } },
+        { "group": "channels", "methods": ["GET"], "path": "/teams/{team-id}/channels/{channel-id}", "app": 600, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "channel" } },
+        { "group": "channels", "methods": ["GET"], "path": "/teams/{team-id}/channels/{channel-id}/members", "app": 1200, "appTenant": 60, "resource": { "requests": 1, "per": "1s", "of": "channel" } },
+        { "group": "channels", "methods": ["POST"], "path": "/teams/{team-id}/channels", "app": 100, "appTenant": 10, "resource": { "requests": 4, "per": "1s", "of": "team" } },
+        { "group": "channels", "methods": ["PATCH"], "path": "/teams/{team-id}/channels/{channel-id}", "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "channel" } },
+        { "group": "channels", "methods": ["DELETE"], "path": "/teams/{team-id}/channels/{channel-id}", "app": 150, "appTenant": 15, "resource": { "requests": 1, "per": "1s", "of": "channel" } },
+        { "group": "channels", "methods": ["POST"], "path": "/teams/{team-id}/channels/{channel-id}/completeMigration", "app": 100, "appTenant": 10 },
+
+        { "group": "channel messages", "methods": ["GET"], "path": "/teams/{team-id}/channels/{channel-id}/messages", "app": 200, "appTenant": 20, "resource": { "requests": 1, "per": "1s", "of": "channel" } },
+        { "group": "channel messages", "methods": ["POST"], "path": "/teams/{team-id}/channels/{channel-id}/messages", "app": 500, "appTenant": 50, "resource": { "requests": 1, "per": "1s", "of": "channel" }, "user": 1 },
+        { "group": "channel messages", "methods": ["POST"], "path": "/teams/{team-id}/channels/{channel-id}/messages/{message-id}/replies", "app": 500, "appTenant": 50, "resource": { "requests": 1, "per": "1s", "of": "channel" }, "user": 1 },
+
+        { "group": "chats", "methods": ["GET"], "path": "/chats, /me/chats, or /users/{user-id}/chats", "app": 200, "appTenant": 20, "user": 1 },
+        { "group": "chats", "methods": ["GET"], "path": "/chats/{chat-id}", "app": 2000, "appTenant": 200, "resource": { "requests": 1, "per": "1s", "of": "chat" }, "user": 5 },
+        { "group": "chats", "methods": ["POST"], "path": "/chats", "app": 200, "appTenant": 20 },
+        { "group": "chats", "methods": ["PATCH"], "path": "/chats/{chat-id}", "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat" } },
+        { "group": "chats", "methods": ["DELETE"], "path": "/chats/{chat-id}", "app": 10, "appTenant": 1, "resource": { "requests": 1, "per": "1s", "of": "chat" } },
+        { "group": "chats", "methods": ["POST"], "path": "/chats/{chat-id}/removeAllAccessForUser", "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat" }, "user": 1 },
+
+        { "group": "chat messages", "methods": ["GET"], "path": "/chats/{chat-id}/messages", "app": 200, "appTenant": 20, "resource": { "requests": 1, "per": "1s", "of": "chat" } },
+        { "group": "chat messages", "methods": ["POST"], "path": "/chats/{chat-id}/messages", "app": 200, "appTenant": 20, "resource": { "requests": 1, "per": "1s", "of": "chat" }, "user": 1 },
+        { "group": "chat messages", "methods": ["PATCH"], "path": "/chats/{chat-id}/messages/{message-id}", "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat" } },
+        { "group": "chat messages", "methods": ["POST"], "path": "/chats/{chat-id}/messages/{message-id}/softDelete or undoSoftDelete", "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat" } },
+        { "group": "chat messages", "methods": ["GET"], "path": "/chats/{chat-id}/messages/{message-id}/hostedContents", "app": 500, "appTenant": 50, "resource": { "requests": 1, "per": "1s", "of": "chat" } },
+        { "group": "chat messages", "methods": ["GET"], "path": "/chats/{chat-id}/messages/{message-id}/hostedContents/{id}/$value", "app": 600, "appTenant": 60, "resource": { "requests": 1, "per": "1s", "of": "chat" } },
+
+        { "group": "members", "methods": ["GET"], "path": "/teams/{team-id}/members", "app": 1200, "appTenant": 60, "resource": { "requests": 4, "per": "1s", "of": "team" } },
+        { "group": "members", "methods": ["POST"], "path": "/teams/{team-id}/members", "app": 300, "appTenant": 30, "resource": { "requests": 4, "per": "1m", "of": "team" } },
+        { "group": "members", "methods": ["POST"], "path": "/teams/{team-id}/members/add", "app": 100, "appTenant": 10, "resource": { "requests": 4, "per": "1m", "of": "team" } },
+        { "group": "members", "methods": ["POST"], "path": "/chats/{chat-id}/members", "app": 300, "appTenant": 30, "resource": { "requests": 4, "per": "1m", "of": "chat" } },
+        { "group": "members", "methods": ["DELETE"], "path": "/chats/{chat-id}/members/{membership-id}", "app": 300, "appTenant": 30, "resource": { "requests": 4, "per": "1m", "of": "chat" } },
+
+        { "group": "apps, tabs, and permission grants", "methods": ["GET"], "path": "installedApps for team, chat, or user", "app": 1500, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" } },
+        { "group": "apps, tabs, and permission grants", "methods": ["GET"], "path": "permissionGrants for team or chat", "app": 1500, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" } },
+        { "group": "apps, tabs, and permission grants", "methods": ["POST"], "path": "installedApps for team, chat, or user", "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" } },
+        { "group": "apps, tabs, and permission grants", "methods": ["DELETE"], "path": "installedApps for team, chat, or user", "app": 150, "appTenant": 15, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" } },
+        { "group": "apps, tabs, and permission grants", "methods": ["GET"], "path": "tabs for channel or chat", "app": 600, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" } },
+        { "group": "apps, tabs, and permission grants", "methods": ["POST"], "path": "tabs for channel or chat", "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" } },
+        { "group": "apps, tabs, and permission grants", "methods": ["PATCH"], "path": "tab", "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" } },
+        { "group": "apps, tabs, and permission grants", "methods": ["DELETE"], "path": "tabs for channel or chat", "app": 150, "appTenant": 15, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" } },
+        { "group": "apps, tabs, and permission grants", "methods": ["GET"], "path": "/appCatalogs/teamsApps", "app": 1500, "appTenant": 30 },
+        { "group": "apps, tabs, and permission grants", "methods": ["POST"], "path": "/appCatalogs/teamsApps", "app": 300, "appTenant": 30 },
+        { "group": "apps, tabs, and permission grants", "methods": ["DELETE"], "path": "/appCatalogs/teamsApps/{app-id}", "app": 150, "appTenant": 15 },
+
+        { "group": "activity feed notifications", "methods": ["POST"], "path": "/teams/{team-id}/sendActivityNotification", "app": 50, "appTenant": 5, "resource": { "requests": 4, "per": "1s", "of": "team" } },
+        { "group": "activity feed notifications", "methods": ["POST"], "path": "/chats/{chat-id}/sendActivityNotification", "app": 50, "appTenant": 5, "resource": { "requests": 1, "per": "1s", "of": "chat" } },
+        { "group": "activity feed notifications", "methods": ["POST"], "path": "/users/{user-id}/teamwork/sendActivityNotification", "app": 50, "appTenant": 5 },
+        { "group": "activity feed notifications", "methods": ["POST"], "path": "/teamwork/sendActivityNotificationToRecipients", "app": 20, "appTenant": 2 },
+
+        { "group": "bulk message retrieval", "methods": ["GET"], "path": "/teams/{team-id}/channels/getAllMessages or /channels/allMessages", "app": 1000, "appTenant": 200 },
+        { "group": "bulk message retrieval", "methods": ["GET"], "path": "/users/{user-id}/chats/getAllMessages or /chats/allMessages", "app": 1000, "appTenant": 200 },
+        { "group": "bulk message retrieval", "methods": ["GET"], "path": "/teams/{team-id}/channels/getAllRetainedMessages", "app": 1000, "appTenant": 200 },
+        { "group": "bulk message retrieval", "methods": ["GET"], "path": "/users/{user-id}/chats/getAllRetainedMessages", "app": 1000, "appTenant": 200 },
+        { "group": "bulk message retrieval", "methods": ["GET"], "path": "/copilot/users/{user-id}/interactionHistory/getAllEnterpriseInteractions", "app": 1500, "appTenant": 30 },
+
+        { "group": "shifts", "methods": ["GET"], "path": "/teams/{team-id}/schedule and all APIs under this path", "app": 600, "appTenant": 30 },
+        { "group": "shifts", "methods": ["POST"], "path": "/teams/{team-id}/schedule and all APIs under this path", "app": 300, "appTenant": 30 },
+        { "group": "shifts", "methods": ["PUT"], "path": "/teams/{team-id}/schedule and all APIs under this path", "app": 300, "appTenant": 30 },
+
+        { "group": "sections", "methods": "any", "path": "all section management APIs under /users/{user-id}/teamwork/sections", "appTenant": 5,
+          "notes": "All section operations, including sections, section items, reorder actions, and delta queries, share a single limit. No limit per app." }
+      ],
+      "routeDefaults": [
+        { "methods": ["GET"], "app": 1500, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" }, "user": 1 },
+        { "methods": ["POST", "PUT", "PATCH"], "app": 300, "appTenant": 30, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" }, "user": 1 },
+        { "methods": ["DELETE"], "app": 150, "appTenant": 15, "resource": { "requests": 1, "per": "1s", "of": "chat or channel" }, "user": 1 }
+      ],
+      "notes": "Numbers are requests per second unless a limit says otherwise. A request is throttled when it exceeds any limit that applies to it. A sustained limit of about 83 percent of the listed value is also evaluated over a longer window. The POST limits for channel messages are shared by regular sends and by message import; the per-user limit does not apply to import." },
+
+    { "name": "multitenant-management", "include": "throttling-multi-tenant-platform.md",
+      "limits": [
+        { "scope": "tenant", "requests": 200, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 100, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "tenant", "requests": 2000, "per": "20s", "methods": "any", "notes": "for all apps" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": "any" }
+      ], "notes": "" },
+
+    { "name": "onenote", "include": "throttling-onenote.md",
+      "limits": [
+        { "scope": "appUser", "requests": 120, "per": "1m", "methods": "any", "notes": "delegated context" },
+        { "scope": "appUser", "requests": 400, "per": "1h", "methods": "any", "notes": "delegated context" },
+        { "scope": "appUser", "concurrent": 5, "methods": "any", "notes": "delegated context" },
+        { "scope": "app", "requests": 240, "per": "1m", "methods": "any", "notes": "app-only context" },
+        { "scope": "app", "requests": 800, "per": "1h", "methods": "any", "notes": "app-only context" },
+        { "scope": "app", "concurrent": 20, "methods": "any", "notes": "app-only context" }
+      ],
+      "notes": "The resources do not return a Retry-After header on 429." },
+
+    { "name": "open-and-schema-extensions", "include": "throttling-extensions.md",
+      "limits": [
+        { "scope": "appTenant", "requests": 455, "per": "10s", "methods": "any" }
+      ], "notes": "" },
+
+    { "name": "outlook", "include": "throttling-outlook.md",
+      "limits": [
+        { "scope": "appMailbox", "requests": 10000, "per": "10m", "methods": "any", "notes": "v1.0 and beta" },
+        { "scope": "appMailbox", "concurrent": 4, "methods": "any", "notes": "v1.0 and beta" },
+        { "scope": "appMailbox", "uploadMB": 150, "per": "5m", "methods": ["PATCH", "POST", "PUT"], "notes": "v1.0 and beta" }
+      ],
+      "notes": "For each app ID and mailbox combination. In a JSON batch of unordered requests, Microsoft Graph sends up to four individual requests to Outlook at a time. With dependsOn, it sends one at a time." },
+
+    { "name": "places", "include": "throttling-places.md",
+      "limits": [
+        { "scope": "unspecified", "requests": 3, "per": "1s", "methods": "any", "path": "Get operation, List operations, Upsert places (beta)" }
+      ], "notes": "" },
+
+    { "name": "project-rome", "include": "throttling-project-rome.md",
+      "limits": [
+        { "scope": "user", "requests": 400, "per": "5m", "methods": ["GET"], "notes": "for all apps" },
+        { "scope": "user", "requests": 12000, "per": "1d", "methods": ["GET"], "notes": "for all apps" },
+        { "scope": "user", "requests": 100, "per": "5m", "methods": ["POST", "PUT", "PATCH", "DELETE"], "notes": "for all apps" },
+        { "scope": "user", "requests": 8000, "per": "1d", "methods": ["POST", "PUT", "PATCH", "DELETE"], "notes": "for all apps" }
+      ], "notes": "" },
+
+    { "name": "security-audit-log-query", "include": "throttling-security-audit-log-query.md",
+      "limits": [
+        { "scope": "tenant", "minRequests": 200, "per": "24h", "methods": "any", "notes": "Query submissions. A rolling window of 24 hours. The baseline: tenants with more eligible licenses can get higher limits." },
+        { "scope": "tenant", "minConcurrent": 50, "methods": "any", "notes": "Queries that are queued or running." },
+        { "scope": "query", "minRecords": 1000000, "methods": "any", "notes": "Records generated by one query. Above it, record generation stops and the query completes successfully." }
+      ],
+      "notes": "A throttled submission gets 429, with a Retry-After header or not. Exceeding the record limit is not an error: isRecordCountLimitExceeded says it." },
+
+    { "name": "security-detections-and-incidents", "include": "throttling-security-detections-incidents.md",
+      "limits": [
+        { "scope": "appTenant", "requests": 150, "per": "1m", "methods": "any", "path": "alert, securityActions, secureScore" },
+        { "scope": "appTenant", "requests": 1000, "per": "1m", "methods": "any", "path": "tiIndicator" },
+        { "scope": "appTenant", "requests": 10000, "per": "10m", "methods": "any", "path": "secureScore, secureScorecontrolProfile" },
+        { "scope": "appTenant", "concurrent": 4, "methods": "any", "path": "secureScore, secureScorecontrolProfile" }
+      ],
+      "notes": "Applies to any request on /security." },
+
+    { "name": "security-ediscovery", "include": "throttling-security-ediscovery.md",
+      "limits": [
+        { "scope": "appTenant", "requests": 5, "per": "1m", "methods": "any", "path": "/security/eDiscoveryCases" }
+      ], "notes": "" },
+
+    { "name": "service-communications", "include": "throttling-service-health-communications.md",
+      "limits": [
+        { "scope": "appTenant", "requests": 240, "per": "60s", "methods": "any", "path": "/admin/serviceAnnouncement/" },
+        { "scope": "appTenant", "requests": 800, "per": "1h", "methods": "any", "path": "/admin/serviceAnnouncement/" }
+      ], "notes": "" },
+
+    { "name": "subscription", "include": "throttling-subscription-services.md",
+      "limits": [
+        { "scope": "app", "requests": 2000, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"], "notes": "for all tenants" },
+        { "scope": "appTenant", "requests": 500, "per": "20s", "methods": ["POST", "PUT", "DELETE", "PATCH"] },
+        { "scope": "app", "requests": 4000, "per": "20s", "methods": ["POST"], "path": "reauthorize subscription by ID", "notes": "for all tenants" },
+        { "scope": "appTenant", "requests": 1000, "per": "20s", "methods": ["POST"], "path": "reauthorize subscription by ID" },
+        { "scope": "app", "requests": 2000, "per": "20s", "methods": ["GET"], "path": "subscription by ID", "notes": "for all tenants" },
+        { "scope": "appTenant", "requests": 500, "per": "20s", "methods": ["GET"], "path": "subscription by ID" },
+        { "scope": "app", "requests": 40, "per": "20s", "methods": ["GET"], "path": "subscription list", "notes": "for all tenants" },
+        { "scope": "appTenant", "requests": 25, "per": "20s", "methods": ["GET"], "path": "subscription list" }
+      ], "notes": "" },
+
+    { "name": "tasks-and-plans", "include": "throttling-tasks-and-plans.md",
+      "limits": [],
+      "notes": "The source says: Service limits for Planner aren't available." },
+
+    { "name": "viva-engage", "include": "throttling-viva-engage.md",
+      "limits": [
+        { "scope": "appUser", "requests": 10, "per": "30s", "methods": "any" }
+      ], "notes": "Per user, per app." },
+
+    { "name": "windows-365", "include": "throttling-windows-365.md",
+      "limits": [
+        { "scope": "tenant", "requests": 180, "per": "60s", "methods": ["GET"], "path": "List Cloud PCs", "notes": "for all apps or users", "until": "2025-09-30" },
+        { "scope": "appOrUserTenant", "requests": 162, "per": "60s", "methods": ["GET"], "path": "List Cloud PCs", "until": "2025-09-30" },
+        { "scope": "tenant", "requests": 540, "per": "60s", "methods": ["GET"], "path": "Get Cloud PC", "notes": "for all apps or users", "until": "2025-09-30" },
+        { "scope": "appOrUserTenant", "requests": 486, "per": "60s", "methods": ["GET"], "path": "Get Cloud PC", "until": "2025-09-30" },
+        { "scope": "tenant", "requests": 180, "per": "60s", "methods": ["GET"], "path": "List Cloud PCs", "notes": "for all apps or users", "from": "2025-09-30" },
+        { "scope": "appOrUserTenant", "requests": 90, "per": "60s", "methods": ["GET"], "path": "List Cloud PCs", "from": "2025-09-30" },
+        { "scope": "tenant", "requests": 540, "per": "60s", "methods": ["GET"], "path": "Get Cloud PC", "notes": "for all apps or users", "from": "2025-09-30" },
+        { "scope": "appOrUserTenant", "requests": 270, "per": "60s", "methods": ["GET"], "path": "Get Cloud PC", "from": "2025-09-30" }
+      ],
+      "notes": "The source says the per-app or per-user limit per tenant is reduced to half of the limit per tenant, starting September 30, 2025. The source lists the methods as request types 'List Cloud PCs' and 'Get Cloud PC', and does not name the HTTP method; GET is an assumption." }
+  ]
+}

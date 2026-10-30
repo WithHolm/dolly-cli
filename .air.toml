@@ -1,0 +1,30 @@
+# A Dolly that rebuilds itself, for development and for Claude's checks: `make dev` (or `air`).
+#
+# It listens on 127.0.0.1:8651, not on 8650, so it never meets the Dolly of a person. Its data stays in memory (--dir ""):
+# every start is the same fresh seed, and dolly-data is not touched.
+#
+# A change in ui/src, or in a Go file, builds the portal (into ui/dist, which Go embeds) and then the program, and restarts it.
+# The build skips 'npm run check' and the tests: run 'make ui' and 'make test' for those.
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "cd ui && npm run build && cd .. && go build -o tmp/dolly ./cmd/dolly"
+  entrypoint = ["./tmp/dolly", "serve", "--port", "8651", "--dir="]
+  include_dir = ["cmd", "graph", "internal", "login", "shared", "ui/src"]
+  include_ext = ["go", "svelte", "ts", "css", "html", "json", "md"]
+  include_file = ["ui/index.html", "go.mod"]
+  # ui/dist is where the portal build writes: watching it would start the build again
+  exclude_dir = ["tmp", "bin", "dolly-data", "graft", "ui/dist", "ui/node_modules", ".git", ".claude"]
+  exclude_regex = ["_test\\.go$", "\\.test\\.ts$"]
+  delay = 500
+  stop_on_error = true
+  send_interrupt = true
+  kill_delay = "2s"
+
+[log]
+  time = true
+  main_only = false
+
+[misc]
+  clean_on_exit = false

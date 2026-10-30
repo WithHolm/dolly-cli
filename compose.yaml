@@ -1,0 +1,23 @@
+# Dolly for development, with docker compose:
+#
+#   docker compose up -d
+#   curl http://127.0.0.1:8650/v1.0/users?$top=2 -H "Authorization: Bearer any"
+#
+# A container of your own that needs Dolly reaches it as http://dolly:8650 (the name of the service). Its admin API (and
+# the portal) accept that name only when it is allowed: DOLLY_ALLOW_HOSTS. The Graph and sign-in APIs need no allowing.
+services:
+  dolly:
+    build: .
+    image: dolly
+    ports:
+      - "127.0.0.1:8650:8650" # only this machine reaches it
+    volumes:
+      - dolly-data:/data
+    environment:
+      DOLLY_USERS: "500" # how many fake users the seed has (the first start makes the seed)
+      DOLLY_ALLOW_HOSTS: dolly
+    stop_grace_period: 10s
+    restart: unless-stopped
+
+volumes:
+  dolly-data:

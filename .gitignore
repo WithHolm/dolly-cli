@@ -1,0 +1,8 @@
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
+
+# the build and the log of `make dev` (air)
+/tmp/
+
+# the packages of the portal (npm ci makes them); ui/dist is the build, and it is kept
+/ui/node_modules/

@@ -1,0 +1,865 @@
+{
+ "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
+ "filter": {
+  "administrativeUnit": {
+   "description": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "isMemberManagementRestricted": {
+    "eq": "default+advanced"
+   },
+   "membershipRule": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "membershipRuleProcessingState": {
+    "eq": "default+advanced"
+   }
+  },
+  "application": {
+   "appId": {
+    "eq": "default+advanced"
+   },
+   "createdDateTime": {
+    "eqNull": "advanced",
+    "ge/le": "default+advanced"
+   },
+   "description": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "disabledByMicrosoftStatus": {
+    "eq": "default+advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "extensionProperties/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "federatedIdentityCredentials/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "federatedIdentityCredentials/any:issuer": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "federatedIdentityCredentials/any:name": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "federatedIdentityCredentials/any:subject": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "identifierUris/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "info/logoUrl": {
+    "eqNull": "advanced"
+   },
+   "info/termsOfServiceUrl": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "notes": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "publicClient/redirectUris/any:": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "publisherDomain": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "requiredResourceAccess/any:resourceAppId": {
+    "eq": "advanced"
+   },
+   "serviceManagementReference": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "signInAudience": {
+    "eq": "default+advanced"
+   },
+   "spa/redirectUris/any:": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "tags/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "uniqueName": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "verifiedPublisher/displayName": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "web/homePageUrl": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "web/redirectUris/any:": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   }
+  },
+  "contract": {
+   "customerId": {
+    "eq": "default+advanced"
+   },
+   "defaultDomainName": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   }
+  },
+  "device": {
+   "accountEnabled": {
+    "eq": "default+advanced"
+   },
+   "alternativeSecurityIds/any:identityProvider": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "alternativeSecurityIds/any:type": {
+    "eq": "default+advanced"
+   },
+   "approximateLastSignInDateTime": {
+    "eqNull": "advanced",
+    "ge/le": "default+advanced"
+   },
+   "deviceCategory": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "deviceId": {
+    "eq": "default+advanced"
+   },
+   "deviceOwnership": {
+    "eq": "advanced",
+    "eqNull": "advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "enrollmentProfileName": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "extensionAttributes/extensionAttribute1-15": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "hostnames/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "isCompliant": {
+    "eq": "default+advanced"
+   },
+   "isManaged": {
+    "eq": "default+advanced"
+   },
+   "isRooted": {
+    "eq": "advanced",
+    "eqNull": "advanced"
+   },
+   "managementType": {
+    "eq": "advanced",
+    "eqNull": "advanced"
+   },
+   "manufacturer": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "mdmAppId": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "model": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "onPremisesLastSyncDateTime": {
+    "ge/le": "default+advanced"
+   },
+   "onPremisesSecurityIdentifier": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "onPremisesSyncEnabled": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "operatingSystem": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "operatingSystemVersion": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "physicalIds/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "physicalIds/any:": {
+    "eq": "default+advanced"
+   },
+   "profileType": {
+    "eq": "default+advanced"
+   },
+   "registrationDateTime": {
+    "eqNull": "advanced",
+    "ge/le": "advanced"
+   },
+   "systemLabels/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "trustType": {
+    "eq": "default+advanced"
+   }
+  },
+  "directoryRole": {
+   "description": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "roleTemplateId": {
+    "eq": "default+advanced",
+    "eqNull": "none"
+   }
+  },
+  "group": {
+   "assignedLicenses/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "assignedLicenses/any:skuId": {
+    "eq": "default+advanced"
+   },
+   "classification": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "createdByAppId": {
+    "eq": "default+advanced"
+   },
+   "createdDateTime": {
+    "eqNull": "advanced",
+    "ge/le": "advanced"
+   },
+   "description": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "expirationDateTime": {
+    "ge/le": "advanced"
+   },
+   "groupTypes/any:": {
+    "eq": "default+advanced"
+   },
+   "hasMembersWithLicenseErrors": {
+    "eq": "defaultOnly",
+    "eqNull": "defaultOnly"
+   },
+   "infoCatalogs/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "isAssignableToRole": {
+    "eq": "default+advanced"
+   },
+   "mail": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "mailEnabled": {
+    "eq": "default+advanced"
+   },
+   "mailNickname": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "membershipRule": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "membershipRuleProcessingState": {
+    "eq": "default+advanced"
+   },
+   "onPremisesLastSyncDateTime": {
+    "ge/le": "default+advanced"
+   },
+   "onPremisesProvisioningErrors/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "onPremisesProvisioningErrors/any:category": {
+    "eq": "default+advanced"
+   },
+   "onPremisesProvisioningErrors/any:propertyCausingError": {
+    "eq": "default+advanced"
+   },
+   "onPremisesSamAccountName": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "onPremisesSecurityIdentifier": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "onPremisesSyncEnabled": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "preferredLanguage": {
+    "eq": "advanced",
+    "eqNull": "advanced"
+   },
+   "proxyAddresses/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "proxyAddresses/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "renewedDateTime": {
+    "ge/le": "default+advanced"
+   },
+   "resourceBehaviorOptions/any:": {
+    "eq": "default+advanced"
+   },
+   "resourceProvisioningOptions/any:": {
+    "eq": "default+advanced"
+   },
+   "securityEnabled": {
+    "eq": "default+advanced"
+   },
+   "uniqueName": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   }
+  },
+  "orgContact": {
+   "companyName": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "department": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "givenName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "jobTitle": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "mail": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "mailNickname": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "manager/id": {
+    "eq": "default+advanced"
+   },
+   "onPremisesLastSyncDateTime": {
+    "ge/le": "default+advanced"
+   },
+   "onPremisesProvisioningErrors/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "onPremisesProvisioningErrors/any:category": {
+    "eq": "default+advanced"
+   },
+   "onPremisesProvisioningErrors/any:propertyCausingError": {
+    "eq": "default+advanced"
+   },
+   "onPremisesSyncEnabled": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "proxyAddresses/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "proxyAddresses/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "surname": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   }
+  },
+  "servicePrincipal": {
+   "accountEnabled": {
+    "eq": "default+advanced"
+   },
+   "alternativeNames/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "appId": {
+    "eq": "default+advanced"
+   },
+   "appOwnerOrganizationId": {
+    "eq": "advanced"
+   },
+   "appRoleAssignmentRequired": {
+    "eq": "advanced"
+   },
+   "applicationTemplateId": {
+    "eq": "default+advanced"
+   },
+   "claimsPolicy/id": {
+    "eq": "default+advanced"
+   },
+   "createdObjects/any:id": {
+    "eq": "advanced"
+   },
+   "description": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "federatedIdentityCredentials/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "federatedIdentityCredentials/any:issuer": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "federatedIdentityCredentials/any:name": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "federatedIdentityCredentials/any:subject": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "homepage": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "info/logoUrl": {
+    "eqNull": "advanced"
+   },
+   "info/termsOfServiceUrl": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "notes": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "preferredSingleSignOnMode": {
+    "eq": "default+advanced"
+   },
+   "preferredTokenSigningKeyEndDateTime": {
+    "ge/le": "default+advanced"
+   },
+   "publisherName": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "remoteDesktopSecurityConfiguration/id": {
+    "eq": "default+advanced"
+   },
+   "servicePrincipalNames/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "servicePrincipalType": {
+    "eq": "default+advanced"
+   },
+   "tags/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "verifiedPublisher/displayName": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   }
+  },
+  "user": {
+   "accountEnabled": {
+    "eq": "default+advanced"
+   },
+   "ageGroup": {
+    "eq": "default+advanced"
+   },
+   "assignedLicenses/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "assignedLicenses/any:skuId": {
+    "eq": "default+advanced"
+   },
+   "assignedPlans/any:capabilityStatus": {
+    "eq": "advanced"
+   },
+   "assignedPlans/any:service": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "assignedPlans/any:servicePlanId": {
+    "eq": "advanced"
+   },
+   "authorizationInfo/certificateUserIds/any:": {
+    "eq": "advanced"
+   },
+   "businessPhones/any:": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "city": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "cloudRealtimeCommunicationInfo/isSipEnabled": {
+    "eq": "default+advanced"
+   },
+   "companyName": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "consentProvidedForMinor": {
+    "eq": "default+advanced"
+   },
+   "country": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "createdDateTime": {
+    "eqNull": "advanced",
+    "ge/le": "default+advanced"
+   },
+   "createdObjects/any:id": {
+    "eq": "advanced"
+   },
+   "creationType": {
+    "eq": "default+advanced"
+   },
+   "department": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "displayName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "employeeHireDate": {
+    "ge/le": "advanced"
+   },
+   "employeeId": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "employeeOrgData/costCenter": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "employeeOrgData/division": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "employeeType": {
+    "eq": "advanced"
+   },
+   "externalUserState": {
+    "eq": "default+advanced"
+   },
+   "faxNumber": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "givenName": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "identities/any:issuer": {
+    "eq": "defaultOnly",
+    "eqNull": "defaultOnly"
+   },
+   "imAddresses/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "infoCatalogs/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "isLicenseReconciliationNeeded": {
+    "eq": "defaultOnly"
+   },
+   "isResourceAccount": {
+    "eq": "default+advanced"
+   },
+   "jobTitle": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "mail": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "mailNickname": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "mobilePhone": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "officeLocation": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "onPremisesDistinguishedName": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "onPremisesExtensionAttributes/extensionAttribute1-15": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "onPremisesImmutableId": {
+    "eq": "default+advanced"
+   },
+   "onPremisesLastSyncDateTime": {
+    "ge/le": "default+advanced"
+   },
+   "onPremisesProvisioningErrors/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "onPremisesProvisioningErrors/any:category": {
+    "eq": "default+advanced"
+   },
+   "onPremisesProvisioningErrors/any:propertyCausingError": {
+    "eq": "default+advanced"
+   },
+   "onPremisesSamAccountName": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "onPremisesSecurityIdentifier": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "onPremisesSipInfo/isSipEnabled": {
+    "eq": "advanced"
+   },
+   "onPremisesSyncEnabled": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "otherMails/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "otherMails/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "ownedObjects/$count": {
+    "count0": "advanced",
+    "count1": "advanced"
+   },
+   "passwordPolicies": {
+    "eqNull": "advanced"
+   },
+   "passwordProfile/forceChangePasswordNextSignIn": {
+    "eq": "advanced",
+    "eqNull": "advanced"
+   },
+   "passwordProfile/forceChangePasswordNextSignInWithMfa": {
+    "eq": "advanced",
+    "eqNull": "advanced"
+   },
+   "postalCode": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "preferredLanguage": {
+    "eq": "advanced",
+    "eqNull": "advanced"
+   },
+   "provisionedPlans/any:provisioningStatus": {
+    "eq": "advanced"
+   },
+   "provisionedPlans/any:service": {
+    "eq": "advanced",
+    "startsWith": "advanced"
+   },
+   "proxyAddresses/$count": {
+    "count0": "advanced",
+    "count1": "none"
+   },
+   "proxyAddresses/any:": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "state": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   },
+   "streetAddress": {
+    "eq": "advanced",
+    "eqNull": "advanced",
+    "startsWith": "advanced"
+   },
+   "surname": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "usageLocation": {
+    "eq": "default+advanced",
+    "eqNull": "advanced",
+    "startsWith": "default+advanced"
+   },
+   "userPrincipalName": {
+    "eq": "default+advanced",
+    "startsWith": "default+advanced"
+   },
+   "userType": {
+    "eq": "default+advanced",
+    "eqNull": "advanced"
+   }
+  }
+ },
+ "orderby": {
+  "administrativeUnit": {
+   "createdDateTime": "advanced",
+   "deletedDateTime": "advanced",
+   "displayName": "advanced"
+  },
+  "application": {
+   "createdDateTime": "advanced",
+   "deletedDateTime": "advanced",
+   "displayName": "advanced"
+  },
+  "device": {
+   "approximateLastSignInDateTime": "advanced",
+   "createdDateTime": "advanced",
+   "deletedDateTime": "advanced",
+   "displayName": "advanced"
+  },
+  "group": {
+   "createdDateTime": "advanced",
+   "deletedDateTime": "advanced",
+   "displayName": "default"
+  },
+  "orgContact": {
+   "createdDateTime": "advanced",
+   "displayName": "advanced"
+  },
+  "servicePrincipal": {
+   "createdDateTime": "advanced",
+   "deletedDateTime": "advanced",
+   "displayName": "advanced"
+  },
+  "user": {
+   "createdDateTime": "advanced",
+   "deletedDateTime": "advanced",
+   "displayName": "default",
+   "userPrincipalName": "default"
+  }
+ }
+}

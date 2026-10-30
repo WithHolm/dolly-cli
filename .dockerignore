@@ -1,0 +1,11 @@
+.git
+.claude
+.codegraph
+graft
+bin
+dolly-data
+ui/node_modules
+last
+*.har
+Dockerfile
+compose.yaml

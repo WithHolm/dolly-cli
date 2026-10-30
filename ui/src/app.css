@@ -1,0 +1,162 @@
+/* Dolly portal: one font, one primary color, meaning in the colors that are left.
+   Spacing is on a 4px scale. The components add their own layout; the parts that every
+   page uses (buttons, fields, tables, chips) are here. */
+
+:root {
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --sunken: #f4f4f5;
+  --line: #e4e4e7;
+  --line-strong: #d4d4d8;
+  --text: #18181b;
+  --muted: #71717a;
+  --faint: #a1a1aa;
+
+  --primary: #4f46e5;
+  --primary-ink: #ffffff;
+  --primary-soft: #eef2ff;
+  --green: #15803d;
+  --green-soft: #dcfce7;
+  --amber: #b45309;
+  --amber-soft: #fef3c7;
+  --red: #b91c1c;
+  --red-soft: #fee2e2;
+
+  --radius: 6px;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0f12;
+    --surface: #17171c;
+    --sunken: #1e1e24;
+    --line: #2a2a32;
+    --line-strong: #3a3a44;
+    --text: #ececf1;
+    --muted: #a0a0ab;
+    --faint: #6e6e7a;
+
+    --primary: #818cf8;
+    --primary-ink: #0f0f12;
+    --primary-soft: #23233a;
+    --green: #4ade80;
+    --green-soft: #12301f;
+    --amber: #fbbf24;
+    --amber-soft: #33270c;
+    --red: #f87171;
+    --red-soft: #3a1616;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.6);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p { margin: 0; }
+h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+h3 { font-size: 14px; font-weight: 600; }
+
+code, .mono { font-family: var(--mono); font-size: 12.5px; }
+.muted { color: var(--muted); }
+.faint { color: var(--faint); }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+/* ---- buttons ---- */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 10px;
+  font: inherit; font-size: 13px; font-weight: 500; line-height: 1;
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); cursor: pointer; white-space: nowrap;
+  transition: background 0.1s, border-color 0.1s;
+}
+.btn:hover:not(:disabled) { background: var(--sunken); }
+.btn:active:not(:disabled) { background: var(--line); }
+.btn:disabled { opacity: 0.5; cursor: default; box-shadow: none; }
+.btn.primary { color: var(--primary-ink); background: var(--primary); border-color: var(--primary); }
+.btn.primary:hover:not(:disabled) { filter: brightness(1.08); background: var(--primary); }
+.btn.ghost { background: transparent; border-color: transparent; box-shadow: none; color: var(--muted); }
+.btn.ghost:hover:not(:disabled) { background: var(--sunken); color: var(--text); }
+.btn.danger { color: var(--red); }
+.btn.icon { width: 28px; padding: 0; justify-content: center; }
+.btn.busy { cursor: progress; }
+
+/* ---- fields ---- */
+input[type="text"], input[type="search"], select {
+  height: 28px; padding: 0 8px;
+  font: inherit; font-size: 13px; color: var(--text);
+  background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius);
+}
+select { padding-right: 4px; }
+input::placeholder { color: var(--faint); }
+input[type="text"]:hover, input[type="search"]:hover, select:hover { border-color: var(--faint); }
+
+.switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.switch input {
+  appearance: none; margin: 0; width: 30px; height: 18px; border-radius: 9px;
+  background: var(--line-strong); position: relative; cursor: pointer; transition: background 0.15s;
+}
+.switch input::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
+  background: #fff; box-shadow: var(--shadow-sm); transition: transform 0.15s;
+}
+.switch input:checked { background: var(--primary); }
+.switch input:checked::after { transform: translateX(12px); }
+.switch input:disabled { opacity: 0.5; cursor: default; }
+
+/* ---- tables: text on the left edge, numbers on the right edge ---- */
+table.t { width: 100%; border-collapse: collapse; }
+/* with fixed widths, tables under each other keep their columns on the same edges, and long text can truncate */
+table.t.fixed { table-layout: fixed; }
+.t td.cut { overflow: hidden; }
+.t th {
+  position: sticky; top: 0; z-index: 1;
+  padding: 6px 12px; text-align: left; font-size: 12px; font-weight: 500; color: var(--muted);
+  background: var(--bg); border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+.t th.num { text-align: right; }
+.t td { padding: 7px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.t tbody tr:hover { background: var(--sunken); }
+.t tr.click { cursor: pointer; }
+
+/* ---- chips: a small fixed set of values becomes a visual token ---- */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 20px; padding: 0 7px; border-radius: 10px;
+  font-size: 12px; font-weight: 500; line-height: 1; white-space: nowrap;
+  color: var(--muted); background: var(--sunken);
+}
+.chip.green { color: var(--green); background: var(--green-soft); }
+.chip.amber { color: var(--amber); background: var(--amber-soft); }
+.chip.red { color: var(--red); background: var(--red-soft); }
+.chip.primary { color: var(--primary); background: var(--primary-soft); }
+
+.empty { padding: 48px 16px; text-align: center; color: var(--muted); }
+.empty strong { display: block; margin-bottom: 4px; color: var(--text); font-weight: 600; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

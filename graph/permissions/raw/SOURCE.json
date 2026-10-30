@@ -1,0 +1,14 @@
+{
+  "application": 534,
+  "commit": "56e1917fe45fb7c52c2d9845f569c2ffdb39e4d9",
+  "commitDate": "2026-10-21T09:44:23Z",
+  "delegated": 598,
+  "fetchedDate": "2026-10-28",
+  "file": {
+    "bytes": 654616,
+    "path": "permissions/permissions-descriptions.json",
+    "sha256": "0afc5904f4c9e4fc278645532f452ea03032f25b2831a84c1d1cb4da437f366b"
+  },
+  "license": "MIT (the file LICENSE in that repo). Copyright (c) 2020 Microsoft Graph.",
+  "source": "https://github.com/microsoftgraph/microsoft-graph-devx-content"
+}

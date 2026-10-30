@@ -1,0 +1,20 @@
+{
+  "article": "https://learn.microsoft.com/graph/aad-advanced-queries",
+  "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
+  "commitDate": "2026-10-26T13:31:32Z",
+  "fetchedDate": "2026-10-29",
+  "files": [
+    {
+      "path": "concepts/includes/directory-objects-filter.md",
+      "bytes": 41582,
+      "sha256": "711bd4da26e5b42bafadd2b4c165ed41d861cdff71e9b97a821a3e866827e91b"
+    },
+    {
+      "path": "concepts/includes/directory-objects-orderby.md",
+      "bytes": 3282,
+      "sha256": "a9305960ccecb445cb35640da02536f9f44eb6a2a42b9377688aaaca1f1b4c70"
+    }
+  ],
+  "license": "Documentation: CC BY 4.0 (the file LICENSE in that repo). Give credit to Microsoft when you use the data.",
+  "source": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib"
+}
