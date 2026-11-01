@@ -1,7 +1,7 @@
 ---
 name: Batch
 resource: $batch
-order: 7
+order: 8
 ---
 Run up to 20 calls in one. Microsoft describes it in [JSON batching](https://learn.microsoft.com/graph/json-batching).
 

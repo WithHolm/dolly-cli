@@ -1,7 +1,7 @@
 ---
 name: Permission grants
 resource: oauth2PermissionGrants
-order: 4
+order: 5
 ---
 Consents to delegated permissions: what a client may do for a signed-in user. The property `scope` has the permissions, separated by spaces.
 

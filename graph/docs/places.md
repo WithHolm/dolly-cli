@@ -1,6 +1,6 @@
 ---
 name: Places
-order: 6
+order: 7
 ---
 Buildings, floors, rooms, desks, and the other places of the tenant.
 
