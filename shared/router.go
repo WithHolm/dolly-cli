@@ -27,13 +27,14 @@ type Options struct {
 // RouterWith is Router with options.
 func RouterWith(opt Options, ui http.Handler, apis ...API) http.Handler {
 	guard := GuardHosts(opt.AllowedHosts)
+	cors := CORS(opt.AllowedHosts)
 	mux := http.NewServeMux()
 	names := []string{}
 	for _, a := range apis {
 		n := a.Name()
 		names = append(names, n)
 		for _, p := range a.Prefixes() {
-			mux.Handle(p, a.Handler())
+			mux.Handle(p, cors(a.Handler())) // a web app in a browser calls the API (Graph) from its own origin
 		}
 		mux.Handle("/_dolly/"+n+"/", guard(http.StripPrefix("/_dolly/"+n, a.AdminHandler())))
 	}
