@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -35,6 +36,19 @@ func (s *Server) adminRoutes() {
 		}
 		writeJSON(w, http.StatusOK, s.world.Snapshot())
 	})
+	// A profile says what a generated tenant looks like (see repo.Profile). The portal reads the default one, shows what a profile would make,
+	// and makes the data from it.
+	a.HandleFunc("GET /profile/default", func(w http.ResponseWriter, _ *http.Request) { writeJSON(w, http.StatusOK, DefaultProfile()) })
+	// The profile that the data was made from, or the default one for data that has none (data from before profiles, or from the default).
+	a.HandleFunc("GET /profile/current", func(w http.ResponseWriter, _ *http.Request) {
+		if p := s.world.CurrentProfile(); p != nil {
+			writeJSON(w, http.StatusOK, p)
+			return
+		}
+		writeJSON(w, http.StatusOK, DefaultProfile())
+	})
+	a.HandleFunc("POST /profile/preview", s.adminProfile(false))
+	a.HandleFunc("POST /generate", s.adminProfile(true))
 	a.HandleFunc("GET /history", s.adminHistory)
 	a.HandleFunc("POST /rollback", s.adminRollback)
 	a.HandleFunc("GET /api", func(w http.ResponseWriter, _ *http.Request) {
@@ -69,6 +83,10 @@ func (s *Server) adminRoutes() {
 	a.HandleFunc("GET /service-principals", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{"servicePrincipals": s.world.ListServicePrincipalInfo()})
 	})
+	// the app registrations, for the page of the same name (a service principal with the same client ID is the instance of each)
+	a.HandleFunc("GET /applications", func(w http.ResponseWriter, _ *http.Request) {
+		writeJSON(w, http.StatusOK, map[string]any{"applications": s.world.ListApplicationInfo()})
+	})
 	a.HandleFunc("PUT /service-principals/{appId}/mode", s.adminSetServicePrincipalMode)
 	a.HandleFunc("PUT /service-principals/{appId}/flags", s.adminSetServicePrincipalFlags)
 	a.HandleFunc("POST /service-principals/{appId}/credential/arm", func(w http.ResponseWriter, r *http.Request) {
@@ -101,10 +119,31 @@ func (s *Server) adminRoutes() {
 		}
 		writeJSON(w, http.StatusOK, map[string]any{"servicePrincipals": usage, "throttle": s.behavior().Throttle})
 	})
+	// the use over time, in buckets of 10 seconds: of one client (?app=<client ID>) or of all of them, with the limit of the tenant
+	a.HandleFunc("GET /usage/history", func(w http.ResponseWriter, r *http.Request) {
+		if s.limiter == nil {
+			writeError(w, apiErr(http.StatusServiceUnavailable, "serviceNotAvailable", "Dolly does not count the cost of the calls: its cost data cannot be read."))
+			return
+		}
+		out := map[string]any{"history": s.limiter.History(r.URL.Query().Get("app"))}
+		if line, ok := s.limiter.RULimit(s.world.UserCount()); ok {
+			out["limit"] = line
+		}
+		writeJSON(w, http.StatusOK, out)
+	})
+	// the permissions that the calls of a client need (see needs.go), and forget them
+	a.HandleFunc("GET /service-principals/{appId}/needs", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, http.StatusOK, s.needsOf(r.PathValue("appId")))
+	})
+	a.HandleFunc("DELETE /service-principals/{appId}/needs", func(w http.ResponseWriter, r *http.Request) {
+		s.forgetNeeds(r.PathValue("appId"))
+		w.WriteHeader(http.StatusNoContent)
+	})
 	a.HandleFunc("DELETE /usage", func(w http.ResponseWriter, _ *http.Request) {
 		if s.limiter != nil {
 			s.limiter.Reset()
 		}
+		s.forgetNeeds("") // what the clients did goes with the use
 		w.WriteHeader(http.StatusNoContent)
 	})
 	a.HandleFunc("GET /requests", s.adminRequests)
@@ -195,6 +234,57 @@ func (s *Server) adminRename(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]int{"changed": s.world.Rename(b.Field, b.From, b.To, adminActor)})
+}
+
+// adminProfile reads {"profile": {...}, "users": 200, "seed": 1}. With apply it makes the data from the profile, in place of the data that
+// the server has (and the history is gone). Without it, it only says what the profile would make. A profile from outside is checked in
+// full, and its size is limited.
+func (s *Server) adminProfile(apply bool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var b struct {
+			Profile json.RawMessage `json:"profile"`
+			Users   int             `json:"users"`
+			Seed    int64           `json:"seed"`
+		}
+		if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 2<<20)).Decode(&b); err != nil {
+			writeError(w, badRequest("The body must be JSON with a profile, and optionally users and seed."))
+			return
+		}
+		o := Options{Users: b.Users, Seed: b.Seed}
+		if len(b.Profile) > 0 && string(b.Profile) != "null" {
+			p, err := ParseProfile(bytes.NewReader(b.Profile))
+			if err != nil {
+				writeError(w, badRequest("%s", err))
+				return
+			}
+			o.Profile = p
+		}
+		if o.Users < 0 || o.Users > 100000 {
+			writeError(w, badRequest("users must be a whole number from 1 to 100000."))
+			return
+		}
+		if !apply {
+			pv, err := PreviewProfile(o.Profile, o.Users, o.Seed)
+			if err != nil {
+				writeError(w, badRequest("%s", err))
+				return
+			}
+			writeJSON(w, http.StatusOK, pv)
+			return
+		}
+		if o.Users == 0 {
+			o.Users = s.world.Snapshot().Users
+		}
+		if o.Seed == 0 {
+			o.Seed = s.world.Snapshot().Seed
+		}
+		st, err := s.world.Regenerate(o)
+		if err != nil {
+			writeError(w, apiErr(http.StatusInternalServerError, "generalException", err.Error()))
+			return
+		}
+		writeJSON(w, http.StatusOK, st)
+	}
 }
 
 func (s *Server) adminUser(w http.ResponseWriter, r *http.Request) {
