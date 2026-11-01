@@ -84,7 +84,18 @@ func (d *Data) Price(method, path string, q url.Values) Price {
 	} else {
 		p.RU, p.Write = d.Identity.MinimumRU, 1
 	}
+	// a cost that a person reported beats the table of Microsoft, and the table beats the default
+	found := false
+	for _, b := range d.over {
+		if b.method == method && (matches(b.parts, parts) || matches(b.parts, alt)) {
+			p.RU, p.Write, p.Route, found = b.cost.RU, b.cost.Write, method+" "+b.cost.Path+" (reported)", true
+			break
+		}
+	}
 	for _, b := range d.base {
+		if found {
+			break
+		}
 		if b.method == method && (matches(b.parts, parts) || matches(b.parts, alt)) {
 			p.RU, p.Write, p.Route = b.cost.RU, b.cost.Write, method+" "+b.cost.Path
 			break

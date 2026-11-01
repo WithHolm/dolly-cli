@@ -25,8 +25,10 @@ type Data struct {
 	Identity Identity  `json:"identity"`
 	Services []Service `json:"services"`
 
-	// made by Load: the patterns of Identity.BaseCosts
-	base []basePattern
+	// made by Load: the patterns of Identity.BaseCosts, and the overrides of overrides.json (overrides.go)
+	base      []basePattern
+	over      []basePattern
+	overrides []Override
 }
 
 // Source says where the data is from.
@@ -269,5 +271,14 @@ func Parse(data []byte) (*Data, error) {
 	return &d, nil
 }
 
-// Load reads the cost.json that is in the program.
-func Load() (*Data, error) { return Parse(raw) }
+// Load reads the cost.json that is in the program, and the overrides of overrides.json.
+func Load() (*Data, error) {
+	d, err := Parse(raw)
+	if err != nil {
+		return nil, err
+	}
+	if err := d.addOverrides(overridesRaw); err != nil {
+		return nil, err
+	}
+	return d, nil
+}

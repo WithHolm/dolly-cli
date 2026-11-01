@@ -109,6 +109,7 @@ type Limiter struct {
 	mu      sync.Mutex
 	windows map[string]*window
 	usage   map[string]*Usage
+	hist    history // the use over time (history.go)
 }
 
 // NewLimiter makes a limiter. now is the clock (nil is time.Now); a test moves it by hand.
@@ -116,7 +117,7 @@ func NewLimiter(d *Data, now func() time.Time) *Limiter {
 	if now == nil {
 		now = time.Now
 	}
-	return &Limiter{d: d, now: now, windows: map[string]*window{}, usage: map[string]*Usage{}}
+	return &Limiter{d: d, now: now, windows: map[string]*window{}, usage: map[string]*Usage{}, hist: newHistory()}
 }
 
 // check is one limit that a request must pass.
@@ -210,11 +211,13 @@ func (l *Limiter) Charge(r Request, enforce bool) Decision {
 	u.Calls++
 	if dec.Throttled {
 		u.Throttled++
+		l.record(r.App, now, 0, true)
 		return dec
 	}
 	for _, c := range checks {
 		win(c).add(now, c.amount)
 	}
+	l.record(r.App, now, r.Price.RU, false)
 	u.RU += r.Price.RU
 	ru := u.Routes[r.Price.Route]
 	u.Routes[r.Price.Route] = RouteUsage{ru.Calls + 1, ru.RU + r.Price.RU}
@@ -243,4 +246,5 @@ func (l *Limiter) Reset() {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	l.windows, l.usage = map[string]*window{}, map[string]*Usage{}
+	l.hist.series = map[string]*series{}
 }

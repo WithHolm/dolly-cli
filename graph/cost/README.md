@@ -7,6 +7,7 @@ Microsoft publishes how Graph throttles calls. Dolly uses it to give each call a
 raw/          Microsoft's documents, as they are. Made by 'make update-cost'. Do not edit.
 raw/SOURCE.json   the commit they come from, the date, and a hash of each file
 cost.json     the data that Dolly reads, made from raw/ (see "Make cost.json")
+overrides.json  costs that people reported, written by hand (see "Add a cost that a person reported")
 cost_test.go  checks cost.json against raw/
 fetch/        the tool that makes raw/
 ```
@@ -27,6 +28,22 @@ That is on purpose: it tells you that the data is old.
 Then make `cost.json`. In Claude Code, run **`/update-cost`**: the skill in
 `.claude/skills/update-cost` runs `make update-cost`, makes `cost.json` from this file, and runs
 the test. Or ask Claude: "Make graph/cost/cost.json from graph/cost/raw. Follow graph/cost/README.md."
+
+## Add a cost that a person reported
+
+Microsoft's table names only some calls. Any other call costs the default of its method (see `defaults` in `cost.json`), which Microsoft does not publish.
+When a person reports the cost of a route, put it in [overrides.json](overrides.json). It is written by hand, `make update-cost` never changes it, and
+`cost_test.go` still compares `cost.json` with Microsoft's table.
+
+```json
+{ "method": "GET", "path": "applications/{id}", "ru": 2, "write": 0, "source": "reported by …, issue 12, 2026-11-02" }
+```
+
+- `path` has no version, and `{id}` for a part that changes. `ru` is 1 or more. `write` is 1 for a call that counts as a write.
+- `source` is required: who reported it, and where. Never put a number in that you did not get from someone.
+- An override beats a row of Microsoft's table and the default. The options of the query (`$select`, `$expand`, `$top`) still change the cost, as for a row of the table.
+- If Microsoft's table has a row for the same route, the override needs a `note` that says why it is there.
+- The call log and `Price.Route` say `(reported)` for it, so a cost that is not Microsoft's is not shown as if it were.
 
 ## Make cost.json
 

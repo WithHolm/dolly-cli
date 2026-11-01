@@ -1,0 +1,4 @@
+{
+ "note": "Costs of routes that Microsoft's tables do not name, reported by people. Written by hand, and never changed by 'make update-cost'. Each one needs a source. See README.md.",
+ "overrides": []
+}
