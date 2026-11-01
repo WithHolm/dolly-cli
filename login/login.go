@@ -34,6 +34,9 @@ type Options struct {
 	Dir string
 	// Now is the clock. The default is time.Now.
 	Now func() time.Time
+	// CORS wraps the paths that a web app in a browser calls from its own origin: discovery, keys, and the token endpoint. The
+	// authorize page, /pwsh, and /jwtToken are not wrapped. Nil adds no CORS headers.
+	CORS func(http.Handler) http.Handler
 }
 
 // API is the sign-in API. It is a shared.API and a shared.Matcher.
@@ -42,6 +45,7 @@ type API struct {
 	key   *rsa.PrivateKey
 	kid   string
 	now   func() time.Time
+	cors  func(http.Handler) http.Handler
 
 	mu    sync.Mutex
 	log   []SignIn
@@ -60,7 +64,7 @@ func New(w *repo.World, opt Options) (*API, error) {
 	if err != nil {
 		return nil, err
 	}
-	a := &API{world: w, key: key, kid: keyID(key), now: opt.Now}
+	a := &API{world: w, key: key, kid: keyID(key), now: opt.Now, cors: opt.CORS}
 	if a.now == nil {
 		a.now = time.Now
 	}
@@ -73,7 +77,7 @@ func (a *API) Name() string { return "login" }
 // Prefixes is empty: the paths start with the tenant, so the API is a Matcher.
 func (a *API) Prefixes() []string { return nil }
 
-var pathRe = regexp.MustCompile(`^/([^/]+)/(v2\.0/\.well-known/openid-configuration|\.well-known/openid-configuration|discovery/(?:v2\.0/)?keys|oauth2/(?:v2\.0/)?(?:token|authorize))$`)
+var pathRe = regexp.MustCompile(`^/([^/]+)/(v2\.0/\.well-known/openid-configuration|\.well-known/openid-configuration|discovery/(?:v2\.0/)?keys|oauth2/(?:v2\.0/)?(?:token|authorize|logout))$`)
 
 // Owns says if the request is for the sign-in API.
 func (a *API) Owns(r *http.Request) bool {
@@ -81,7 +85,20 @@ func (a *API) Owns(r *http.Request) bool {
 }
 
 // Handler answers the sign-in paths.
-func (a *API) Handler() http.Handler { return http.HandlerFunc(a.serve) }
+func (a *API) Handler() http.Handler {
+	plain := http.HandlerFunc(a.serve)
+	if a.cors == nil {
+		return plain
+	}
+	withCORS := a.cors(plain)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if m := pathRe.FindStringSubmatch(r.URL.Path); m != nil && !strings.HasSuffix(m[2], "authorize") {
+			withCORS.ServeHTTP(w, r)
+			return
+		}
+		plain.ServeHTTP(w, r)
+	})
+}
 
 func (a *API) serve(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == pwshPath && r.Method == http.MethodGet {
@@ -109,6 +126,8 @@ func (a *API) serve(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusOK, a.jwks())
 	case strings.HasSuffix(m[2], "authorize"):
 		a.authorize(w, r, tid)
+	case strings.HasSuffix(m[2], "logout"):
+		a.logout(w, r)
 	default:
 		if r.Method != http.MethodPost {
 			w.Header().Set("Allow", "POST")
@@ -120,7 +139,7 @@ func (a *API) serve(w http.ResponseWriter, r *http.Request) {
 }
 
 // base is the address that the client used to reach Dolly.
-func base(r *http.Request) string { return "http://" + r.Host }
+func base(r *http.Request) string { return shared.Scheme(r) + "://" + r.Host }
 
 func (a *API) discovery(w http.ResponseWriter, r *http.Request, tid string, v2 bool) {
 	root := base(r) + "/" + tid
@@ -133,6 +152,9 @@ func (a *API) discovery(w http.ResponseWriter, r *http.Request, tid string, v2 b
 		"authorization_endpoint":                root + "/oauth2" + ver + "/authorize",
 		"token_endpoint":                        root + "/oauth2" + ver + "/token",
 		"jwks_uri":                              root + "/discovery" + ver + "/keys",
+		"end_session_endpoint":                  root + "/oauth2" + ver + "/logout",
+		"frontchannel_logout_supported":         true,
+		"http_logout_supported":                 true,
 		"response_types_supported":              []string{"code", "id_token", "code id_token", "id_token token"},
 		"response_modes_supported":              []string{"query", "fragment", "form_post"},
 		"subject_types_supported":               []string{"pairwise"},

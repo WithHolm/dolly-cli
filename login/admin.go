@@ -51,6 +51,8 @@ func (a *API) AdminHandler() http.Handler {
 			"jwks":      root + "/discovery/v2.0/keys",
 			"token":     root + "/oauth2/v2.0/token",
 			"keyId":     a.kid,
+			// the admin account of the owner: the quick connect signs in as it, and the page shows its name
+			"adminUser": a.world.AdminAccount(),
 		})
 	})
 	m.HandleFunc("GET /signins", func(w http.ResponseWriter, _ *http.Request) {

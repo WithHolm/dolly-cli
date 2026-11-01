@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"io"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"strings"
 	"testing"
@@ -312,6 +313,20 @@ func TestAuthorize_ResponseModes(t *testing.T) {
 	if res.StatusCode != 302 || loc.Query().Get("code") != "" || !strings.Contains(loc.Fragment, "code=") || !strings.Contains(loc.Fragment, "state=xyz") {
 		t.Errorf("fragment: %d %s", res.StatusCode, res.Header.Get("Location"))
 	}
+	// the state that a library sends (MSAL.js has base64 with = in it) must come back as it was sent, in every mode
+	const tricky = "eyJpZCI6ImExIn0=+a&b/c d%41"
+	for _, mode := range []string{"fragment", "query", ""} {
+		res := e.pick(upn, authParams(url.Values{"response_mode": {mode}, "state": {tricky}}))
+		loc, _ := url.Parse(res.Header.Get("Location"))
+		got := loc.Query()
+		if mode == "fragment" { // the client reads the fragment as a query string, with one decoding
+			_, frag, _ := strings.Cut(res.Header.Get("Location"), "#")
+			got, _ = url.ParseQuery(frag)
+		}
+		if got.Get("state") != tricky {
+			t.Errorf("mode %q: state %q, want %q (%s)", mode, got.Get("state"), tricky, res.Header.Get("Location"))
+		}
+	}
 	res = e.pick(upn, authParams(url.Values{"response_mode": {"form_post"}}))
 	if b := e.body(res); res.StatusCode != 200 || !strings.Contains(b, `action="http://localhost:3000/cb"`) || !strings.Contains(b, `name="code"`) || !strings.Contains(b, `name="state" value="xyz"`) {
 		t.Errorf("form_post: %d %s", res.StatusCode, b)
@@ -327,5 +342,91 @@ func TestMe_NeedsAUserToken(t *testing.T) {
 	}
 	if code, _ = e.graphGet("/v1.0/me", "x"); code != 400 {
 		t.Errorf("a token that Dolly did not make on /me: %d", code)
+	}
+}
+
+// A person who picked a user has a session. With the session, prompt=none and no prompt give a code at once (single sign-on), and
+// prompt=login and prompt=select_account show the page. Logout ends the session and sends the browser to post_logout_redirect_uri.
+func TestSession_SingleSignOnAndLogout(t *testing.T) {
+	e := setup(t)
+	upn := e.world.ListUsers()[0]["userPrincipalName"].(string)
+	jar, _ := cookiejar.New(nil)
+	browser := &http.Client{Jar: jar, CheckRedirect: noRedirect.CheckRedirect}
+	authURL := e.url + "/" + e.tid + "/oauth2/v2.0/authorize?"
+	get := func(extra url.Values) *http.Response {
+		res, err := browser.Get(authURL + authParams(extra).Encode())
+		if err != nil {
+			t.Fatal(err)
+		}
+		return res
+	}
+
+	// no session: prompt=none is login_required, and no prompt shows the page
+	if res := get(url.Values{"prompt": {"none"}}); !strings.Contains(res.Header.Get("Location"), "login_required") {
+		t.Errorf("prompt=none with no session: %d %s", res.StatusCode, res.Header.Get("Location"))
+	}
+	if res := get(nil); res.StatusCode != 200 {
+		t.Errorf("no session, no prompt: %d", res.StatusCode)
+	}
+
+	// the person picks a user, and the browser gets the cookie
+	res, err := browser.PostForm(authURL[:len(authURL)-1], func() url.Values { v := authParams(nil); v.Set("username", upn); return v }())
+	if err != nil || res.StatusCode != 302 {
+		t.Fatalf("pick: %v %v", err, res)
+	}
+	var cookie *http.Cookie
+	for _, c := range res.Cookies() {
+		if c.Name == "dolly_session" {
+			cookie = c
+		}
+	}
+	if cookie == nil || !cookie.HttpOnly || cookie.SameSite != http.SameSiteLaxMode {
+		t.Fatalf("the session cookie: %+v", cookie)
+	}
+
+	// single sign-on: a code at once, for the same user
+	for _, prompt := range []string{"", "none"} {
+		extra := url.Values{"prompt": {prompt}}
+		if prompt == "" {
+			extra = url.Values{"prompt": {"-"}}
+		}
+		res := get(extra)
+		loc, _ := url.Parse(res.Header.Get("Location"))
+		if res.StatusCode != 302 || loc.Query().Get("code") == "" || loc.Query().Get("state") != "xyz" {
+			t.Errorf("prompt %q with a session: %d %s", prompt, res.StatusCode, res.Header.Get("Location"))
+		}
+	}
+	// the page again, when the client asks for it
+	for _, prompt := range []string{"login", "select_account", "consent"} {
+		if res := get(url.Values{"prompt": {prompt}}); res.StatusCode != 200 {
+			t.Errorf("prompt=%s must show the page: %d", prompt, res.StatusCode)
+		}
+	}
+	// a disabled user has no session any more
+	e.world.SetUser(upn, map[string]any{"accountEnabled": false}, graph.Actor{Source: "admin"})
+	if res := get(url.Values{"prompt": {"none"}}); !strings.Contains(res.Header.Get("Location"), "login_required") {
+		t.Errorf("a disabled user: %s", res.Header.Get("Location"))
+	}
+	e.world.SetUser(upn, map[string]any{"accountEnabled": true}, graph.Actor{Source: "admin"})
+
+	// logout ends the session, and the browser goes back with the state
+	logout, err := browser.Get(e.url + "/" + e.tid + "/oauth2/v2.0/logout?" + url.Values{"post_logout_redirect_uri": {"http://localhost:3000/bye"}, "state": {"s1"}}.Encode())
+	if err != nil || logout.StatusCode != 302 || logout.Header.Get("Location") != "http://localhost:3000/bye?state=s1" {
+		t.Errorf("logout: %v %v %s", err, logout.StatusCode, logout.Header.Get("Location"))
+	}
+	if res := get(url.Values{"prompt": {"none"}}); !strings.Contains(res.Header.Get("Location"), "login_required") {
+		t.Errorf("after logout there is no session: %s", res.Header.Get("Location"))
+	}
+	// no address, or one that is not http(s): a page, and no redirect
+	for _, q := range []string{"", "?post_logout_redirect_uri=javascript:alert(1)"} {
+		out, err := browser.Get(e.url + "/" + e.tid + "/oauth2/v2.0/logout" + q)
+		if err != nil || out.StatusCode != 200 || !strings.Contains(e.body(out), "You signed out") {
+			t.Errorf("logout %q: %v %v", q, err, out)
+		}
+	}
+	// discovery names the logout path
+	d, _ := http.Get(e.url + "/" + e.tid + "/v2.0/.well-known/openid-configuration")
+	if !strings.Contains(e.body(d), `"end_session_endpoint":"`+e.url+"/"+e.tid+`/oauth2/v2.0/logout"`) {
+		t.Error("discovery lacks end_session_endpoint")
 	}
 }

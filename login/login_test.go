@@ -633,7 +633,13 @@ func TestJwtToken(t *testing.T) {
 	if code, _ := get("?hint=" + url.QueryEscape("nobody@nowhere.example")); code != http.StatusNotFound {
 		t.Errorf("a user that is not there: %d", code)
 	}
-	if list := e.admin("GET", "/_dolly/login/signins")["signins"].([]any); len(list) != 0 {
-		t.Errorf("a ready-made token is not a sign-in: %v", list)
+	// asking for the token is a sign-in of the user
+	list := e.admin("GET", "/_dolly/login/signins")["signins"].([]any)
+	if len(list) == 0 {
+		t.Fatal("a ready-made token must be in the list of sign-ins")
+	}
+	last := list[0].(map[string]any)
+	if last["grant"] != "jwtToken" || last["user"] != repo.AdminUPN || last["result"] != "issued" || last["appId"] != repo.GraphPowerShellAppID {
+		t.Errorf("the sign-in: %v", last)
 	}
 }

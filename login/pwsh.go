@@ -31,7 +31,7 @@ const tokenLifetime = 10 * 365 * 24 * time.Hour
 // userFor finds the user of a hint (or the admin account with no hint). It writes the 404 itself.
 func (a *API) userFor(w http.ResponseWriter, hint string) (map[string]any, string, bool) {
 	if hint == "" {
-		hint = repo.AdminUPN
+		hint = a.world.AdminAccount()
 	}
 	u, ok := a.world.GetUser(hint)
 	upn, _ := u["userPrincipalName"].(string)
@@ -64,8 +64,8 @@ func (a *API) pwsh(w http.ResponseWriter, r *http.Request) {
 }
 
 // jwtToken gives a delegated access token for a user, with a long life. It is what the password grant gives, for the client of
-// Microsoft Graph PowerShell, and it does not go in the list of sign-ins. The text has no line break at the end: a script puts it
-// in a SecureString as it is.
+// Microsoft Graph PowerShell, and it is a sign-in of the user in the list (grant jwtToken). The text has no line break at the end:
+// a script puts it in a SecureString as it is.
 func (a *API) jwtToken(w http.ResponseWriter, r *http.Request) {
 	user, _, ok := a.userFor(w, r.URL.Query().Get("hint"))
 	if !ok {
@@ -81,8 +81,18 @@ func (a *API) jwtToken(w http.ResponseWriter, r *http.Request) {
 		"message": "Thank you for using this application!",
 		"hello":   "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 	}
+	// the user signs in when the token is asked for, so the page of sign-ins shows it
+	_, existed := a.world.FindServicePrincipal(client)
+	sp, spErr := a.world.EnsureServicePrincipal(client, repo.Actor{Source: "login", Agent: r.UserAgent()})
+	if spErr != nil {
+		http.Error(w, "The service principal of the client could not be made.", http.StatusInternalServerError)
+		return
+	}
+	si := SignIn{AppID: client, App: sp.Name, Registered: !existed, Grant: "jwtToken", Credential: "none"}
 	scope := []string{"User.Read", "User.Read.All", "Group.Read.All", "Directory.Read.All"}
-	if e := a.userTokens(&SignIn{}, claims, map[string]any{}, user, client, tid, scope, ""); e != nil {
+	if e := a.userTokens(&si, claims, map[string]any{}, user, client, tid, scope, ""); e != nil {
+		si.Result, si.Message = "AADSTS"+itoa(e.aadsts), e.desc
+		a.record(si)
 		a.fail(w, e)
 		return
 	}
@@ -91,6 +101,8 @@ func (a *API) jwtToken(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	si.Result = "issued"
+	a.record(si)
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-store")
 	_, _ = w.Write([]byte(tok))

@@ -19,7 +19,7 @@ type authParams struct {
 	clientID, redirect, responseType, mode, scope, state, nonce, challenge, method string
 }
 
-var keptParams = []string{"client_id", "redirect_uri", "response_type", "response_mode", "scope", "state", "nonce", "code_challenge", "code_challenge_method"}
+var keptParams = []string{"client_id", "redirect_uri", "response_type", "response_mode", "scope", "state", "nonce", "code_challenge", "code_challenge_method", "prompt"}
 
 func paramsOf(f url.Values) authParams {
 	return authParams{
@@ -64,16 +64,24 @@ func (a *API) authorize(w http.ResponseWriter, r *http.Request, tid string) {
 		a.back(w, r, p, url.Values{"error": {e.code}, "error_description": {"AADSTS" + itoa(e.aadsts) + ": " + e.desc}})
 		return
 	}
-	if r.Form.Get("prompt") == "none" {
-		a.back(w, r, p, url.Values{"error": {"login_required"}, "error_description": {"AADSTS50058: Dolly has no session. The person must pick a user."}})
-		return
-	}
-
 	_, existed := a.world.FindServicePrincipal(p.clientID)
 	sp, spErr := a.world.EnsureServicePrincipal(p.clientID, repo.Actor{Source: "login", Agent: r.UserAgent()})
 	if spErr != nil {
 		errorPage(w, http.StatusBadRequest, 700016, "The client ID must be a GUID.")
 		return
+	}
+
+	// A browser with a session signs in at once (single sign-on), unless the client asks for the page with prompt=login,
+	// select_account, or consent. With prompt=none and no session, the client gets login_required.
+	if prompt := r.Form.Get("prompt"); r.Method != http.MethodPost && (prompt == "" || prompt == "none") {
+		if user, ok := a.sessionUser(r); ok {
+			a.complete(w, r, p, SignIn{AppID: p.clientID, App: sp.Name, Registered: !existed, Grant: "authorize", Credential: "none"}, user)
+			return
+		}
+		if prompt == "none" {
+			a.back(w, r, p, url.Values{"error": {"login_required"}, "error_description": {"AADSTS50058: A silent sign-in request was sent but no user is signed in. The browser has no session. The person must pick a user."}})
+			return
+		}
 	}
 
 	if r.Method == http.MethodPost && r.Form.Get("username") != "" {
@@ -89,13 +97,8 @@ func (a *API) authorize(w http.ResponseWriter, r *http.Request, tid string) {
 			a.record(si)
 			errorPage(w, http.StatusBadRequest, 50057, "The user account is disabled.")
 		default:
-			si.User, si.Result = str(user["userPrincipalName"]), "issued"
-			a.record(si)
-			code := a.newCode(authCode{
-				clientID: p.clientID, userID: str(user["id"]), redirect: p.redirect, scope: p.scope, nonce: p.nonce,
-				challenge: p.challenge, method: cmpOr(p.method, "plain"),
-			})
-			a.back(w, r, p, url.Values{"code": {code}, "session_state": {guid()}})
+			a.setSession(w, r, str(user["id"]))
+			a.complete(w, r, p, si, user)
 		}
 		return
 	}
@@ -129,6 +132,17 @@ func cmpOr(a, b string) string {
 
 // back sends the browser to the redirect address of the client, with the answer in the query, the
 // fragment, or a form that posts, as response_mode says.
+// complete signs the user in: it records the sign-in, makes the code, and sends the browser back to the client.
+func (a *API) complete(w http.ResponseWriter, r *http.Request, p authParams, si SignIn, user map[string]any) {
+	si.User, si.Result = str(user["userPrincipalName"]), "issued"
+	a.record(si)
+	code := a.newCode(authCode{
+		clientID: p.clientID, userID: str(user["id"]), redirect: p.redirect, scope: p.scope, nonce: p.nonce,
+		challenge: p.challenge, method: cmpOr(p.method, "plain"),
+	})
+	a.back(w, r, p, url.Values{"code": {code}, "session_state": {guid()}})
+}
+
 func (a *API) back(w http.ResponseWriter, r *http.Request, p authParams, vals url.Values) {
 	if p.state != "" {
 		vals.Set("state", p.state)
@@ -145,7 +159,11 @@ func (a *API) back(w http.ResponseWriter, r *http.Request, p authParams, vals ur
 		_ = postPage.Execute(w, map[string]any{"Action": p.redirect, "Fields": vals})
 		return
 	case "fragment":
-		u.Fragment = vals.Encode()
+		// the fragment is written as it is: u.Fragment would escape the % of a value that is encoded already
+		u.Fragment, u.RawFragment = "", ""
+		w.Header().Set("Cache-Control", "no-store")
+		http.Redirect(w, r, u.String()+"#"+vals.Encode(), http.StatusFound)
+		return
 	default:
 		q := u.Query()
 		for k, v := range vals {
