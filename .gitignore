@@ -7,4 +7,10 @@
 # the packages of the portal (npm ci makes them); ui/dist is the build, and it is kept
 /ui/node_modules/
 
+# the packages of the library checks (docs/compat); the lock file is kept
+/docs/compat/node_modules/
+
 /dolly-data/
+/.playwright-mcp/
+/.impeccable/
+/bin/

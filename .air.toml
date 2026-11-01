@@ -15,7 +15,7 @@ tmp_dir = "tmp"
   include_ext = ["go", "svelte", "ts", "css", "html", "json", "md"]
   include_file = ["ui/index.html", "go.mod"]
   # ui/dist is where the portal build writes: watching it would start the build again
-  exclude_dir = ["tmp", "bin", "dolly-data", "graft", "ui/dist", "ui/node_modules", ".git", ".claude"]
+  exclude_dir = ["tmp", "bin", "dolly-data", "graft", "ui/dist", "ui/node_modules", ".git", ".claude", ".playwright-mcp", ".impeccable"]
   exclude_regex = ["_test\\.go$", "\\.test\\.ts$"]
   delay = 500
   stop_on_error = true
