@@ -35,7 +35,7 @@ To be truly helpful, ive also designed in a "tenant profile" where you can go th
 
 A not very well represented part of graph, is api cost.
 
-Every serviceprincipal have a set limit of data cost tokens available at any given time and each time they call graph they use these tokens to "pay" for resource usage.
+Every serviceprincipal have a set limit of data cost tokens available at any given time and each time they call graph they use these tokens to "pay" for resource usage. this number varias on size of tenant, where the upper limit is at 500 users.
 
 On Graph side there is a rolling window that takes in these tokens and holds them for a given timeframe. when the rolling window is passed, the tokens is returned to the service principals account ready to be reused.
 
@@ -63,7 +63,9 @@ you can run this in a container as a stand alone service. but please remember, t
 
 ### TLS
 
-With the nature of a local cli running as a web service, tls isnt normally first priority, however since some OpenID or cli connectors (pwsh graph or azcli) require tls to get the full authentication roundtrip capturing a token, when you run `dolly serve --tls` dolly generates its own local CA cert with a 10 year ttl you can trust and a server cert for the current running instance. you only need to trust the ca cert to make it work. any other cert generated from this would be applicable for https..
+dollycli runs on plain http by default, and most of the time thats fine. pwsh graph doesnt care (its what [easy connect](#easy-connect) below uses). but MSAL, @azure/identity and the azure cli flat out refuse a plain http authority, so for those you start it with `dolly serve --tls`. it makes a small local CA in the data folder, signs its own cert with it, and you can trust that CA once.
+
+i wasnt comfortable asking you to trust a CA that could sign for anything, so i locked it down. it can only sign for `localhost`, loopback and the hosts you give it, so if the key ever leaks nobody can use it to impersonate a real site. i only verified that with go's verifier though, not with browsers or curl, so dont take my word for those. the CA lives one year, the key stays in your data folder, and `dolly tls remove` deletes it and tells you how to untrust it. its a local dev tool, so please dont put it on a network.
 
 ### Reset/Rollback
 
@@ -74,7 +76,7 @@ It supports full auditing history of all items with a button to roll back before
 
 ### Easy connect
 
-I also added easy connect options for powershell where you would only need to run `iwr 'http://127.0.0.1:8650/pwsh' | iex` to connect via powershell graph. Other easy connect options is soon to come..
+I also added easy connect options for powershell where you would only need to run `iwr 'http://127.0.0.1:8650/pwsh' | iex` to connect via powershell graph. ofcourse you could also add the connect profile to your local graph, grab a premade token (honestly any token works, but premade jwt gives you a actual user), and then connect using token. If you have tls enabled the actual connect-mggraph with login should work
 
 
 ### try it out
