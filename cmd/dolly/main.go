@@ -153,7 +153,7 @@ func main() {
 	}
 	graph.AddCommand(serveCmd(&s, "graph"), showCmd(&s), renameCmd(&s), moveCmd(&s), resetCmd(&s),
 		historyCmd(&s), rollbackCmd(&s), generateCmd(&s))
-	root.AddCommand(serveCmd(&s, ""), graph, healthCmd(&s), profileCmd())
+	root.AddCommand(serveCmd(&s, ""), graph, healthCmd(&s), profileCmd(), tlsCmd(&s))
 
 	if err := root.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, "dolly:", err)
