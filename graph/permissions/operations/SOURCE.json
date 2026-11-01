@@ -1,0 +1,589 @@
+{
+  "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
+  "commitDate": "2026-10-26T13:31:32Z",
+  "fetchedDate": "2026-11-01",
+  "files": [
+    {
+      "path": "api-reference/v1.0/api/application-delete.md",
+      "bytes": 4297,
+      "sha256": "77ddaf46e2b3a3940bb2588950060f4a3db4945d5bc2499bf24e6b91fa62cc39"
+    },
+    {
+      "path": "api-reference/v1.0/api/application-get.md",
+      "bytes": 10873,
+      "sha256": "47fd9afa919ad8f2c6248256d2619d540b0f29656854748b6dda3a63d5a8d8b0"
+    },
+    {
+      "path": "api-reference/v1.0/api/application-list.md",
+      "bytes": 21668,
+      "sha256": "db23c3a1d016736867b65c593f301236b908fb09107fbf8346e3efd629520409"
+    },
+    {
+      "path": "api-reference/v1.0/api/application-post-applications.md",
+      "bytes": 10688,
+      "sha256": "e884ddb194f531867cdf1a3492a5c8663f4660401254cece598a392ca3d8f945"
+    },
+    {
+      "path": "api-reference/v1.0/api/application-update.md",
+      "bytes": 22186,
+      "sha256": "1d8fba1c3fec4ba9caff2fd06bf4e4ddc36c4e192e1170c43b76c889185beb89"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-delete-members.md",
+      "bytes": 5772,
+      "sha256": "2315a8541685c72ac016ec5da3d4a86744f7453afc5c85567260b3b1488242ed"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-delete-owners.md",
+      "bytes": 6097,
+      "sha256": "808bd5c6335d1733f779072fbd30cc6f8ed244ce8a8889a910967a0718d46aa8"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-delete.md",
+      "bytes": 4446,
+      "sha256": "a9d0762a0a1a04b245bd39fdb3771bc995e7eb42e792257f0287f25efd592743"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-delta.md",
+      "bytes": 17026,
+      "sha256": "824c60b492ae6bce7d9b42db26c665c00d457def5594c268dd0dbb58a5ab3a4a"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-get.md",
+      "bytes": 12112,
+      "sha256": "26f20152079406bfbd40bf76730055665df3e9c3e5598ebe2498bbe18111bf2c"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-list-approleassignments.md",
+      "bytes": 5114,
+      "sha256": "bb5765e92ebe4072511d234875edbf57f3a3b3231996f8f0b2fde98f921a41ea"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-list-memberof.md",
+      "bytes": 10638,
+      "sha256": "b654ab060a4238bbe7ca64a52902dac305eeac9e067373fe4cd363a332989b55"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-list-members.md",
+      "bytes": 16846,
+      "sha256": "6077fdae14c628c570a679e0d8d9bb83e271d33077b20070a3c9af5c92512751"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-list-owners.md",
+      "bytes": 6979,
+      "sha256": "cc7ee9e71348f0967ffb029632e65d5c825dc81a46131782f72b6dfd5b5464f4"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-list-transitivememberof.md",
+      "bytes": 9354,
+      "sha256": "5458e2a1af860c4b598be47db008389e0da1bb1b3e77dd760f1f2fbeb4e5476c"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-list-transitivemembers.md",
+      "bytes": 15852,
+      "sha256": "4b6ac5b21977ca50b7289a7e1a66232a4b4b34d356b68144b6b2ece6837201ab"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-list.md",
+      "bytes": 27780,
+      "sha256": "c9197e84ad59b726817d70103a2aeecab97386dde45d1a40ae5d60cadb51d628"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-post-groups.md",
+      "bytes": 21107,
+      "sha256": "b551a5eaa846bcf9014fcb769fb332462a45b5292b487aa723c88fa37f3896fb"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-post-members.md",
+      "bytes": 12200,
+      "sha256": "244a3d5297be1adfd7fd45c592bbb81f416b47da4249977d9014f4a6941e798e"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-post-owners.md",
+      "bytes": 7010,
+      "sha256": "11e768f2bdf356bbcf964cd55f1e7793e0ac57ec6c0974f65de890ff4c9d825f"
+    },
+    {
+      "path": "api-reference/v1.0/api/group-update.md",
+      "bytes": 14189,
+      "sha256": "288229afcd8b60a65c9979cecd61e2bef6012432f6817701d0aed3d1664181ef"
+    },
+    {
+      "path": "api-reference/v1.0/api/oauth2permissiongrant-delete.md",
+      "bytes": 4882,
+      "sha256": "1519c917451cff1a5f7a14e18b6ecf249999f4e23ff0a1df383b220733edde56"
+    },
+    {
+      "path": "api-reference/v1.0/api/oauth2permissiongrant-get.md",
+      "bytes": 5540,
+      "sha256": "8c312b750599c277c14bdf3a6247e5f0b723328717799f24daaf32b3c2009814"
+    },
+    {
+      "path": "api-reference/v1.0/api/oauth2permissiongrant-list.md",
+      "bytes": 6804,
+      "sha256": "ee0a2fdbf71c16fa04fc57619565b236ec896b082acb79b002592c27186b363f"
+    },
+    {
+      "path": "api-reference/v1.0/api/oauth2permissiongrant-post.md",
+      "bytes": 7025,
+      "sha256": "c6c3f6707aaf03c57e7c7a0afe9cf88603159f1481bf154d1c024561b50ba676"
+    },
+    {
+      "path": "api-reference/v1.0/api/oauth2permissiongrant-update.md",
+      "bytes": 5092,
+      "sha256": "69c9f82abe66217c9b5109569f5d999103bc21a62d01af1c4644e28de43c44b6"
+    },
+    {
+      "path": "api-reference/v1.0/api/organization-get.md",
+      "bytes": 7119,
+      "sha256": "1442168f24c43caa138dcdfd5fda7dc858ec0f78dc0d0824d7a970842bd1b6ff"
+    },
+    {
+      "path": "api-reference/v1.0/api/organization-list.md",
+      "bytes": 7599,
+      "sha256": "8085bada150232f6e8f602cdf3c7c700990c0f01316dd738bb76c6e5960fe659"
+    },
+    {
+      "path": "api-reference/v1.0/api/organization-update.md",
+      "bytes": 5190,
+      "sha256": "62e937a73ae1aab6f8e3bd24607f6d185d0c11c11f9ec5d0bc4caa215cee701b"
+    },
+    {
+      "path": "api-reference/v1.0/api/place-delete.md",
+      "bytes": 3705,
+      "sha256": "504be40596b838dc9187c92103ed74aad3cabb2a151de1c25446cfea045a5320"
+    },
+    {
+      "path": "api-reference/v1.0/api/place-get.md",
+      "bytes": 19436,
+      "sha256": "a05f0af753c8dfcb19e683d76d06416222e7121ccebe92e1e417500eac1ae157"
+    },
+    {
+      "path": "api-reference/v1.0/api/place-list.md",
+      "bytes": 31813,
+      "sha256": "4f92c846c786f6c25fcc12c55fc24c350c6cb9cf546f6a883784d1ca0876a490"
+    },
+    {
+      "path": "api-reference/v1.0/api/place-post.md",
+      "bytes": 16838,
+      "sha256": "1e70ff82370bb5f6604f0c9c799684543548b6278d90dc3448ff1a4ce5b9fcd6"
+    },
+    {
+      "path": "api-reference/v1.0/api/place-update.md",
+      "bytes": 22262,
+      "sha256": "049150a2ad2ce74326cb88332f6372fdd0cd5069e610363cc27fc2deb06e333d"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-delete-approleassignedto.md",
+      "bytes": 5128,
+      "sha256": "2cc004ba7981b6dc739bdf192fa2402769ebf22ea5c04b8e93c0491c15472cd0"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-delete-approleassignments.md",
+      "bytes": 5047,
+      "sha256": "799220834ae8859393aa38222d73cf6a147ec7b6e5d572d128f4776899709375"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-delete.md",
+      "bytes": 4232,
+      "sha256": "8a0e0cc96e74c755fc6addd4cad165b8cda37cff2efc47128749b7e80b164783"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-delta.md",
+      "bytes": 7679,
+      "sha256": "69adb149a99d6e71220f2622e64cf832dbfd8da230e3290e02e316c871c3eb25"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-get.md",
+      "bytes": 15425,
+      "sha256": "f4a45dd2c7517d1b1e9bb326f93691ff00bfce590139a8fced2c0a98211d988c"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-list-approleassignedto.md",
+      "bytes": 6399,
+      "sha256": "ad5b249669be5dd5af6ca8dabba6c3d63b35ef11f2649dd4c67a49b4a7d46943"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-list-approleassignments.md",
+      "bytes": 6174,
+      "sha256": "4c5dfc53428c04ef6c2a2605a4f0de7a3b6cba1792bf520ee20e1df58c9f661e"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-list.md",
+      "bytes": 18072,
+      "sha256": "24d4289f88845cdb0f15388400c16f49cc718d50d77cc54b73874b47ba14b9ef"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-post-approleassignedto.md",
+      "bytes": 6500,
+      "sha256": "9c52e12eface6c2a7f03c5b225982ee032703d5d3ea2c14141c1a730c4a762e0"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-post-approleassignments.md",
+      "bytes": 6785,
+      "sha256": "af7dd2cee3fb4ca76dbb07df0426828133eefa5dc7d251e96b7139072455f12e"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-post-serviceprincipals.md",
+      "bytes": 6022,
+      "sha256": "f06ca876cfa8d514c643d2b58c17b57ab8c32546d8dcbb4575d5f31c8b32e064"
+    },
+    {
+      "path": "api-reference/v1.0/api/serviceprincipal-update.md",
+      "bytes": 13982,
+      "sha256": "b586b902a6f362e182696b24cecd5dd007662eaa412ed0222485203e04107f19"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-delete-manager.md",
+      "bytes": 3539,
+      "sha256": "cd99040d471d9290045678542a96d5a4fa64741d74b21ef7b5d07df676077897"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-delete.md",
+      "bytes": 4923,
+      "sha256": "76974a76b6531e588df4a4aeb0dee1e779d2cd3f21d1ba88256b012b57d85446"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-delta.md",
+      "bytes": 15212,
+      "sha256": "14f6531095d4806d5f016a9e72cc7e77248ff5d3efa261cf4bc15c48dc2eac96"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-get.md",
+      "bytes": 21083,
+      "sha256": "0d52a532c95acc9e75a245cd9b74f52d46d430ed3d73f0467ce0b58a9d09158c"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-list-approleassignments.md",
+      "bytes": 8792,
+      "sha256": "7eaaf924c37f72cb928edaf35162945cf1bd1dc3490a11a856d20197ef7e058e"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-list-directreports.md",
+      "bytes": 6140,
+      "sha256": "5f7e9d23bda4d8a5120543c1b292e4bf65a03ae06673d4e34d1de8b6a2da674a"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-list-manager.md",
+      "bytes": 8425,
+      "sha256": "9abb534043f75c57366ff0cac08d8b528f014ee1ce69e2da70b240ce9ba48793"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-list-memberof.md",
+      "bytes": 13001,
+      "sha256": "7d084602e768d6e67df6e9229caac89fccb51274b8a4df99ec9ea0a93298fee2"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-list-transitivememberof.md",
+      "bytes": 10150,
+      "sha256": "720165b03bae5179eb7123e30429d8c635b4d4f91adfde04e35247936a93983c"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-list.md",
+      "bytes": 42023,
+      "sha256": "661f314057a72ad6c5f7146c9193296848bec4050074324f2fafea4509ae750d"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-post-manager.md",
+      "bytes": 4293,
+      "sha256": "b2a1369b4cccd674bcd18c0e73466aacdfce11fb291f1c05f206d3c20e86fe9b"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-post-users.md",
+      "bytes": 14323,
+      "sha256": "0900560cf0454ba5bfbc216a78e185e57eab7c4acae42d79aaa0617487c886c1"
+    },
+    {
+      "path": "api-reference/v1.0/api/user-update.md",
+      "bytes": 29848,
+      "sha256": "f63b46f616b963d82339db1891c46975ea6da0e05461c65fe4a461d0c8cca2fa"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/application-delete-permissions.md",
+      "bytes": 443,
+      "sha256": "f124f253c720bf67924025c71a5d34294216302af911824fa86a3e47b99508d9"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/application-get-permissions.md",
+      "bytes": 567,
+      "sha256": "f6dfc48dfae246b467835a648bf03b373a411b041df5167a7edb10d99112d6e5"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/application-list-permissions.md",
+      "bytes": 569,
+      "sha256": "d3c2bb10f1d0137efc1a7ed7a25d7dbb4d51c6fee75fa4d6d338237d3ba18512"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/application-post-applications-permissions.md",
+      "bytes": 475,
+      "sha256": "408fcea22eec39e50bc8c4b9a05a0103f55d95b4edabbc1ef73dfb3062cec008"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/application-update-permissions.md",
+      "bytes": 443,
+      "sha256": "f124f253c720bf67924025c71a5d34294216302af911824fa86a3e47b99508d9"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-delete-members-permissions.md",
+      "bytes": 477,
+      "sha256": "c2bbde6800be01a78d3ac52e91c1cfa109a888a04d7259a88faf8b13d321014c"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-delete-owners-permissions.md",
+      "bytes": 423,
+      "sha256": "55b82fce6b2773664b87042c7ebc6467e99c7b8f5a48aa9cddbc477540555215"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-delete-permissions.md",
+      "bytes": 405,
+      "sha256": "7e9d19677009639000b6e9cf6ff2b8a755eaeb46bb5a3980136b25afe3b29108"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-delta-permissions.md",
+      "bytes": 653,
+      "sha256": "06ba59f5d9aa57dfc4f4f3f8bf273569e9c56bbcb80fd26b8065bd4007067382"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-get-permissions.md",
+      "bytes": 867,
+      "sha256": "70f1fe45bde94fba158f0acb35b99da048235c0352e5d95090ebdb2ce811bada"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-list-approleassignments-permissions.md",
+      "bytes": 487,
+      "sha256": "ccce68cc2e08eb6062416eb7a9394c2064cfe72a9eb30aced2fa9426b86a3475"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-list-memberof-permissions.md",
+      "bytes": 593,
+      "sha256": "02db8e543c11ac414f15231ef9cb5a55761d8b59335e0d64ebb5e091af6e1425"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-list-members-permissions.md",
+      "bytes": 639,
+      "sha256": "6b19cb484d806ee9239820f84cfaa7b151515e28c120e3398e8bea0b7dbbfa2a"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-list-owners-permissions.md",
+      "bytes": 543,
+      "sha256": "020ea4493db684223557e724bfc1e883ce9a50f22168d29df7d8eacb03d0da81"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-list-permissions.md",
+      "bytes": 795,
+      "sha256": "00f0baac82598b5c91277fe53306cb852bff6046c0c72393283f2d0912fbadbc"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-list-transitivememberof-permissions.md",
+      "bytes": 555,
+      "sha256": "7866fd910157b7b54faa5e4c968267da930ed220e35823a019045589d34c5a88"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-list-transitivemembers-permissions.md",
+      "bytes": 639,
+      "sha256": "6b19cb484d806ee9239820f84cfaa7b151515e28c120e3398e8bea0b7dbbfa2a"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-post-groups-permissions.md",
+      "bytes": 523,
+      "sha256": "3b8774daae7e2ae8942c15d9b69cbaa0ca10b9b19508db4fd2c3b670b915d051"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-post-owners-permissions.md",
+      "bytes": 423,
+      "sha256": "55b82fce6b2773664b87042c7ebc6467e99c7b8f5a48aa9cddbc477540555215"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/group-update-permissions.md",
+      "bytes": 637,
+      "sha256": "389086eec666d3745018b3c41c4af6d1a8e590cf73420bbd0854647c80a6d4fe"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/oauth2permissiongrant-delete-permissions.md",
+      "bytes": 461,
+      "sha256": "bf905b90dfea611be6fa11a9e28d3ad6bfa30afafd8140929f65f55ffe41af61"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/oauth2permissiongrant-get-permissions.md",
+      "bytes": 501,
+      "sha256": "e4a3a60f790c47950b06b12f60e2cbd6ab60406f1022ccb2d63cb5cd61c46fd6"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/oauth2permissiongrant-list-permissions.md",
+      "bytes": 501,
+      "sha256": "e4a3a60f790c47950b06b12f60e2cbd6ab60406f1022ccb2d63cb5cd61c46fd6"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/oauth2permissiongrant-post-permissions.md",
+      "bytes": 461,
+      "sha256": "bf905b90dfea611be6fa11a9e28d3ad6bfa30afafd8140929f65f55ffe41af61"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/oauth2permissiongrant-update-permissions.md",
+      "bytes": 461,
+      "sha256": "bf905b90dfea611be6fa11a9e28d3ad6bfa30afafd8140929f65f55ffe41af61"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/organization-update-permissions.md",
+      "bytes": 299,
+      "sha256": "cd9957fe359c2941b4343c9154731909e256292341a116551575ded52e6ae989"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/place-delete-permissions.md",
+      "bytes": 405,
+      "sha256": "12e862f64b4a2424463e9fe1e1e979666a03793ff85215219dfed68df1c05df5"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/place-get-permissions.md",
+      "bytes": 405,
+      "sha256": "7adc51711d3c31c2cd463cb8ba6241603bb0d73021ff41b58a9131f7387c41c6"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/place-list-permissions.md",
+      "bytes": 405,
+      "sha256": "7adc51711d3c31c2cd463cb8ba6241603bb0d73021ff41b58a9131f7387c41c6"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/place-post-permissions.md",
+      "bytes": 405,
+      "sha256": "12e862f64b4a2424463e9fe1e1e979666a03793ff85215219dfed68df1c05df5"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/place-update-permissions.md",
+      "bytes": 405,
+      "sha256": "12e862f64b4a2424463e9fe1e1e979666a03793ff85215219dfed68df1c05df5"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-delete-approleassignedto-permissions.md",
+      "bytes": 451,
+      "sha256": "5cefbe01e5c08bc41025d5f796d63bdbfc1f72e930008cde2b37951ff43e27e8"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-delete-approleassignments-permissions.md",
+      "bytes": 451,
+      "sha256": "5cefbe01e5c08bc41025d5f796d63bdbfc1f72e930008cde2b37951ff43e27e8"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-delete-permissions.md",
+      "bytes": 466,
+      "sha256": "981fc6f19327ffb5aa78c22acbb288a5565a441e48370e69b3136817c7dc0eb0"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-delta-permissions.md",
+      "bytes": 550,
+      "sha256": "01b0846c99ec0bbd9769441e1cef58eb82347cd8af1fe8ac5eef2e13aad64951"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-get-permissions.md",
+      "bytes": 550,
+      "sha256": "8a87348ce164e1ab7921aeb69af60f6bcd8427121931cf1388ab4a4adc520fcf"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-list-approleassignedto-permissions.md",
+      "bytes": 550,
+      "sha256": "b0e2eeb56fc9d9aaa09d77b58ee899253b5cbfaf8d78f4b4626f81f0051433f0"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-list-approleassignments-permissions.md",
+      "bytes": 550,
+      "sha256": "b0e2eeb56fc9d9aaa09d77b58ee899253b5cbfaf8d78f4b4626f81f0051433f0"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-list-permissions.md",
+      "bytes": 525,
+      "sha256": "2d338258be116f0e6377025335bfd59099c84e1279e06b2089a343f114c1f210"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-post-approleassignedto-permissions.md",
+      "bytes": 613,
+      "sha256": "b974701342ae9afd48fca2145e8163501f299b64352f0058365f89d432d3d78a"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-post-approleassignments-permissions.md",
+      "bytes": 613,
+      "sha256": "b974701342ae9afd48fca2145e8163501f299b64352f0058365f89d432d3d78a"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-post-serviceprincipals-permissions.md",
+      "bytes": 466,
+      "sha256": "981fc6f19327ffb5aa78c22acbb288a5565a441e48370e69b3136817c7dc0eb0"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/serviceprincipal-update-permissions.md",
+      "bytes": 524,
+      "sha256": "002d16ce79089d9a1aa4498de7a48358ab72b8869500c6de8232cbd12499e341"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-delete-manager-permissions.md",
+      "bytes": 559,
+      "sha256": "e90a22c1bc15620c3e13af48115a6ee6bb4e87332d5efcf4beadbbfb66de2192"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-delete-permissions.md",
+      "bytes": 283,
+      "sha256": "5ac7a81a952775ed9981e746d69078abae95ba4cc7b8b201b26830cd962329da"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-delta-permissions.md",
+      "bytes": 629,
+      "sha256": "3c9e0248e8d08843a50d77cd64637d9c66515dde3448a2bb6339b4080741dc25"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-get-permissions.md",
+      "bytes": 413,
+      "sha256": "90780e39ca2f8f6f8e69bc596f79760edd395a868856019a4a44522cfef86f73"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-list-approleassignments-permissions.md",
+      "bytes": 437,
+      "sha256": "6dca60b2d795d9c08018b1ae190dd791f295b6f20efd64c5ceba4eca2a4b42fc"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-list-directreports-permissions.md",
+      "bytes": 524,
+      "sha256": "35db1d1f4fe55472c31316645571f2a567daf632e83b2b50f3501731cac2d605"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-list-manager-permissions.md",
+      "bytes": 512,
+      "sha256": "71f77fbfe4768e52cd9580b8ea922448a09de80d1234bffe214631b3a4f96f48"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-list-memberof-2-permissions.md",
+      "bytes": 458,
+      "sha256": "99e19fdef6bb96b6e5687d6c6a21ac11d6f4aaddf56887501cc7ad571f1dccfe"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-list-memberof-permissions.md",
+      "bytes": 441,
+      "sha256": "b373d1ba19914d822e857a7cca223daa162a08cde525f9357fe64621eef3d35d"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-list-transitivememberof-2-permissions.md",
+      "bytes": 527,
+      "sha256": "c0f074bf10ce640629275d926bd95ca83839bc03d87aedc6cce8c7e719d7cab2"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-list-transitivememberof-permissions.md",
+      "bytes": 472,
+      "sha256": "e74466e6c75bb840f942e2114181ea8f5478925646c8274e46242959ba7ec7dd"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-post-manager-permissions.md",
+      "bytes": 559,
+      "sha256": "e90a22c1bc15620c3e13af48115a6ee6bb4e87332d5efcf4beadbbfb66de2192"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-post-users-permissions.md",
+      "bytes": 328,
+      "sha256": "bfc23c1b39535e333186d8807a0116e6a87d7385f34fe51739daf1eb72014bc5"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/user-update-permissions.md",
+      "bytes": 343,
+      "sha256": "5b6a681c4f167ddcb5fb70ddcaccdb1fc5dc2669fca0d61f00086c70cb1f09e1"
+    }
+  ],
+  "license": "Documentation: CC BY 4.0 (the file LICENSE in that repo). Give credit to Microsoft when you use the data.",
+  "source": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib"
+}

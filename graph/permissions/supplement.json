@@ -1,0 +1,28 @@
+{
+ "source": "Permissions that the permissions reference of Microsoft Learn documents (concepts/permissions-reference.md), and that raw/permissions-descriptions.json does not have yet. Written by hand from that page. A permission that the file gets later wins, and its entry here is ignored.",
+ "delegatedScopesList": [
+  {
+   "id": "f8b099f1-a6ce-4e00-8fff-5f783ff4faeb",
+   "value": "User.ReadUpdate.All",
+   "isAdmin": true,
+   "isEnabled": true,
+   "adminConsentDisplayName": "Read and update users",
+   "adminConsentDescription": "Allows the app to read and update users, on behalf of the signed-in user.",
+   "consentDisplayName": null,
+   "consentDescription": null
+  }
+ ],
+ "applicationScopesList": [
+  {
+   "id": "5639c449-cfd9-4088-bc48-3e16da108bf8",
+   "value": "User.ReadUpdate.All",
+   "isAdmin": true,
+   "isEnabled": true,
+   "adminConsentDisplayName": "Read and update users",
+   "adminConsentDescription": "Allows the app to read and update users, without a signed-in user.",
+   "consentDisplayName": null,
+   "consentDescription": null,
+   "allowedMemberTypes": ["Application"]
+  }
+ ]
+}

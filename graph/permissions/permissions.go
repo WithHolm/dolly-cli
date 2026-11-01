@@ -54,6 +54,8 @@ type Permission struct {
 	AllowedMemberTypes      []string `json:"allowedMemberTypes,omitempty"` // application permissions: ["Application"]
 
 	Kind Kind `json:"-"`
+	// IDMade is true when the ID is made by dollycli (MadeID), because the source of the permission has no ID. It is not Microsoft's ID.
+	IDMade bool `json:"-"`
 }
 
 // Scope is the name of the permission as a client asks for it: the namespace of the resource, a
@@ -79,6 +81,9 @@ type Catalog struct {
 	Delegated   []Permission `json:"delegatedScopesList"`
 	Application []Permission `json:"applicationScopesList"`
 	Source      Source       `json:"-"`
+	Added       int          `json:"-"` // permissions from supplement.json, that are not in the file of Microsoft
+	Named       int          `json:"-"` // permissions from names.json, that have no ID: dollycli made one
+	Extra       *Extra       `json:"-"` // the file of the person, when there is one (SetExtra)
 
 	byValue map[string]*Permission
 	byID    map[string]*Permission
@@ -95,21 +100,58 @@ func Parse(data []byte) (*Catalog, error) {
 	if err := dec.Decode(&c); err != nil {
 		return nil, fmt.Errorf("permissions: %w", err)
 	}
+	if err := c.index(); err != nil {
+		return nil, err
+	}
+	return &c, nil
+}
+
+func (c *Catalog) index() error {
 	c.byValue, c.byID = map[string]*Permission{}, map[string]*Permission{}
 	for k, list := range map[Kind][]Permission{Delegated: c.Delegated, Application: c.Application} {
 		for i := range list {
 			p := &list[i]
 			p.Kind = k
 			if p.ID == "" || p.Value == "" {
-				return nil, fmt.Errorf("permissions: a %s permission has no ID or no value: %+v", k, *p)
+				return fmt.Errorf("permissions: a %s permission has no ID or no value: %+v", k, *p)
 			}
 			if c.byValue[key(k, p.Value)] != nil || c.byID[key(k, p.ID)] != nil {
-				return nil, fmt.Errorf("permissions: the %s permission %s (%s) is twice", k, p.Value, p.ID)
+				return fmt.Errorf("permissions: the %s permission %s (%s) is twice", k, p.Value, p.ID)
 			}
 			c.byValue[key(k, p.Value)], c.byID[key(k, p.ID)] = p, p
 		}
 	}
-	return &c, nil
+	return nil
+}
+
+//go:embed supplement.json
+var supplementData []byte
+
+// addSupplement adds the permissions of supplement.json that the file of Microsoft does not have yet.
+func (c *Catalog) addSupplement() error {
+	var s struct {
+		Source      string       `json:"source"`
+		Delegated   []Permission `json:"delegatedScopesList"`
+		Application []Permission `json:"applicationScopesList"`
+	}
+	dec := json.NewDecoder(bytes.NewReader(supplementData))
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(&s); err != nil {
+		return fmt.Errorf("permissions: supplement.json: %w", err)
+	}
+	for _, p := range s.Delegated {
+		if _, ok := c.Find(Delegated, p.Value); !ok {
+			c.Delegated = append(c.Delegated, p)
+			c.Added++
+		}
+	}
+	for _, p := range s.Application {
+		if _, ok := c.Find(Application, p.Value); !ok {
+			c.Application = append(c.Application, p)
+			c.Added++
+		}
+	}
+	return c.index()
 }
 
 // Load reads the catalog that is in the program.
@@ -120,6 +162,15 @@ func Load() (*Catalog, error) {
 	}
 	if err := json.Unmarshal(rawSource, &c.Source); err != nil {
 		return nil, fmt.Errorf("permissions: SOURCE.json: %w", err)
+	}
+	if err := c.addSupplement(); err != nil {
+		return nil, err
+	}
+	if err := c.addNames(); err != nil {
+		return nil, err
+	}
+	if err := c.addExtra(); err != nil {
+		return nil, err
 	}
 	return c, nil
 }

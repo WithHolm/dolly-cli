@@ -23,6 +23,8 @@ const (
 	repo   = "microsoftgraph/microsoft-graph-devx-content"
 	branch = "master"
 	file   = "permissions/permissions-descriptions.json"
+	// newFile has more permissions than file, and no IDs.
+	newFile = "permissions/new/permissions.json"
 )
 
 func main() {
@@ -40,6 +42,23 @@ func run(out string) error {
 		return err
 	}
 	data, err := ghraw.Raw(repo, sha, file)
+	if err != nil {
+		return err
+	}
+	// the newer list: names and texts of more permissions, with no IDs. Only the texts are kept (the file is 3 MB, most of it the calls of each permission).
+	newData, err := ghraw.Raw(repo, sha, newFile)
+	if err != nil {
+		return err
+	}
+	var full struct {
+		Permissions map[string]struct {
+			Schemes map[string]json.RawMessage `json:"schemes"`
+		} `json:"permissions"`
+	}
+	if err := json.Unmarshal(newData, &full); err != nil || len(full.Permissions) == 0 {
+		return fmt.Errorf("%s has changed its form (no permissions): update this tool", newFile)
+	}
+	names, err := json.MarshalIndent(full, "", " ")
 	if err != nil {
 		return err
 	}
@@ -62,8 +81,18 @@ func run(out string) error {
 	if err := os.WriteFile(filepath.Join(out, name), data, 0o644); err != nil {
 		return err
 	}
-	sum := sha256.Sum256(data)
+	if err := os.WriteFile(filepath.Join(out, "names.json"), append(names, '\n'), 0o644); err != nil {
+		return err
+	}
+	sum, newSum := sha256.Sum256(data), sha256.Sum256(newData)
 	meta, _ := json.MarshalIndent(map[string]any{
+		"names": map[string]any{
+			"note":        "names.json is " + newFile + " with only the schemes (the texts) of each permission kept. It has no IDs.",
+			"path":        newFile,
+			"bytes":       len(newData),
+			"sha256":      hex.EncodeToString(newSum[:]),
+			"permissions": len(full.Permissions),
+		},
 		"source":      "https://github.com/" + repo,
 		"license":     "MIT (the file LICENSE in that repo). Copyright (c) 2020 Microsoft Graph.",
 		"commit":      sha,

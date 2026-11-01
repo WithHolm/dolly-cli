@@ -21,15 +21,53 @@ func load(t *testing.T) *permissions.Catalog {
 
 func TestCatalog_MatchesItsSource(t *testing.T) {
 	c := load(t)
-	if len(c.Delegated) != c.Source.Delegated || len(c.Application) != c.Source.Application {
-		t.Errorf("SOURCE.json says %d delegated and %d application, the file has %d and %d",
-			c.Source.Delegated, c.Source.Application, len(c.Delegated), len(c.Application))
+	// the file of Microsoft, and the permissions of supplement.json that it does not have yet
+	if len(c.Delegated)+len(c.Application) != c.Source.Delegated+c.Source.Application+c.Added+c.Named {
+		t.Errorf("SOURCE.json says %d delegated and %d application, %d were added, and %d have a made ID: the catalog has %d and %d",
+			c.Source.Delegated, c.Source.Application, c.Added, c.Named, len(c.Delegated), len(c.Application))
+	}
+	if p, ok := c.Find(permissions.Application, "user.readupdate.all"); !ok || p.ID != "5639c449-cfd9-4088-bc48-3e16da108bf8" || p.Kind != permissions.Application {
+		t.Errorf("User.ReadUpdate.All (supplement.json): %+v %v", p, ok)
 	}
 	if len(c.Delegated) < 500 || len(c.Application) < 400 {
 		t.Errorf("only %d delegated and %d application permissions: has the file changed?", len(c.Delegated), len(c.Application))
 	}
 	if c.Source.Commit == "" || !strings.Contains(c.Source.License, "MIT") {
 		t.Errorf("source: %+v", c.Source)
+	}
+}
+
+// A permission that only the list of names has gets an ID that dollycli makes: always the same one, and marked. The permissions that have a real ID keep it.
+func TestCatalog_MadeIDs(t *testing.T) {
+	c := load(t)
+	if c.Named < 100 {
+		t.Fatalf("only %d permissions have a made ID: has names.json changed?", c.Named)
+	}
+	made := 0
+	for _, k := range []permissions.Kind{permissions.Delegated, permissions.Application} {
+		list := c.Delegated
+		if k == permissions.Application {
+			list = c.Application
+		}
+		for _, p := range list {
+			if p.IDMade {
+				made++
+				if p.ID != permissions.MadeID(k, p.Value) { // some of them have no texts: the list of names has none for them
+					t.Errorf("%s %s: %+v", k, p.Value, p)
+				}
+			}
+		}
+	}
+	if made != c.Named {
+		t.Errorf("%d are marked, %d were counted", made, c.Named)
+	}
+	for _, real := range []string{"User.Read.All", "Mail.Read", "User.ReadUpdate.All"} {
+		if p, ok := c.Find(permissions.Application, real); !ok || p.IDMade {
+			t.Errorf("%s has a real ID: %+v %v", real, p, ok)
+		}
+	}
+	if id := permissions.MadeID(permissions.Application, "Made.Up.All"); id != permissions.MadeID(permissions.Application, "made.up.all") || id == permissions.MadeID(permissions.Delegated, "Made.Up.All") || len(id) != 36 {
+		t.Errorf("a made ID is stable, in any case, and different for each kind: %s", id)
 	}
 }
 

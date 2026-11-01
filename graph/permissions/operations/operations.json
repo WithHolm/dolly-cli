@@ -1,0 +1,1520 @@
+{
+  "source": {
+    "repo": "microsoftgraph/microsoft-graph-docs-contrib",
+    "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
+    "commitDate": "2026-10-26T13:31:32Z",
+    "license": "Documentation: CC BY 4.0 (the file LICENSE in that repo). Give credit to Microsoft when you use the data."
+  },
+  "pages": {
+    "application-delete": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.ReadWrite.OwnedBy"
+        ],
+        "higher": [
+          "Application.ReadWrite.All"
+        ]
+      }
+    },
+    "application-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.OwnedBy",
+          "Application.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "application-list": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Directory.ReadWrite.All",
+          "Directory.Read.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.OwnedBy",
+          "Application.ReadWrite.All",
+          "Directory.Read.All"
+        ]
+      }
+    },
+    "application-post-applications": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "AppRegistration.Create"
+        ],
+        "higher": [
+          "Application.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "AppRegistration.Create"
+        ],
+        "higher": [
+          "Application.ReadWrite.OwnedBy",
+          "Application.ReadWrite.All"
+        ]
+      }
+    },
+    "application-update": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.ReadWrite.OwnedBy"
+        ],
+        "higher": [
+          "Application.ReadWrite.All"
+        ]
+      }
+    },
+    "group-delete": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Group.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Group.ReadWrite.All"
+        ]
+      }
+    },
+    "group-delete-members": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "GroupMember.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All",
+          "Group.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "GroupMember.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All",
+          "Group.ReadWrite.All"
+        ]
+      }
+    },
+    "group-delete-owners": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Group.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Group.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "group-delta": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Group-NestingSupport.ReadWrite.All"
+        ],
+        "higher": [
+          "Group.ReadBasic.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group.Read.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Group-NestingSupport.ReadWrite.All"
+        ],
+        "higher": [
+          "Group.ReadBasic.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group.Read.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All"
+        ]
+      }
+    },
+    "group-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Group-NestingSupport.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group-PreferredDataLocation.ReadWrite.All",
+          "Group-XTenantIdentitySync.Read.All",
+          "Group.ManageProtection.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Group-NestingSupport.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group-PreferredDataLocation.ReadWrite.All",
+          "Group-XTenantIdentitySync.Read.All",
+          "Group.ManageProtection.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All"
+        ]
+      }
+    },
+    "group-list": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Group-NestingSupport.ReadWrite.All"
+        ],
+        "higher": [
+          "Group.ReadBasic.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group-PreferredDataLocation.ReadWrite.All",
+          "Group.ManageProtection.All",
+          "Group.Read.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Group-NestingSupport.ReadWrite.All"
+        ],
+        "higher": [
+          "Group.ReadBasic.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group-PreferredDataLocation.ReadWrite.All",
+          "Group.ManageProtection.All",
+          "Group.Read.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All"
+        ]
+      }
+    },
+    "group-list-approleassignments": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Directory.Read.All"
+        ],
+        "higher": [
+          "AppRoleAssignment.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Directory.Read.All"
+        ],
+        "higher": [
+          "AppRoleAssignment.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "group-list-memberof": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "GroupMember.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "GroupMember.Read.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "GroupMember.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "GroupMember.Read.All"
+        ]
+      }
+    },
+    "group-list-members": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "GroupMember.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All",
+          "GroupMember.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "GroupMember.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All",
+          "GroupMember.ReadWrite.All"
+        ]
+      }
+    },
+    "group-list-owners": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "GroupMember.Read.All"
+        ],
+        "higher": [
+          "Group.ReadWrite.All",
+          "Directory.Read.All",
+          "Group.Read.All",
+          "GroupMember.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "GroupMember.Read.All"
+        ],
+        "higher": [
+          "Group.ReadWrite.All",
+          "Directory.Read.All",
+          "Group.Read.All",
+          "GroupMember.ReadWrite.All"
+        ]
+      }
+    },
+    "group-list-transitivememberof": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "GroupMember.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "GroupMember.Read.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "GroupMember.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "Group.ReadBasic.All"
+        ]
+      }
+    },
+    "group-list-transitivemembers": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "GroupMember.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All",
+          "GroupMember.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "GroupMember.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Group.Read.All",
+          "Group.ReadBasic.All",
+          "Group.ReadWrite.All",
+          "GroupMember.Read.All",
+          "GroupMember.ReadWrite.All"
+        ]
+      }
+    },
+    "group-post-groups": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Group.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All",
+          "Group-PreferredDataLocation.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Group.Create"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All",
+          "Group-PreferredDataLocation.ReadWrite.All",
+          "Group.ReadWrite.All"
+        ]
+      }
+    },
+    "group-post-members": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "resource": "device",
+          "delegated": {
+            "least": [
+              "GroupMember.ReadWrite.All and Device.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "GroupMember.ReadWrite.All and Device.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "group",
+          "delegated": {
+            "least": [
+              "GroupMember.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "GroupMember.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "orgContact",
+          "delegated": {
+            "least": [
+              "GroupMember.ReadWrite.All and OrgContact.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "GroupMember.ReadWrite.All and OrgContact.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "servicePrincipal",
+          "delegated": {
+            "least": [
+              "GroupMember.ReadWrite.All and Application.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "GroupMember.ReadWrite.All and Application.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "user",
+          "delegated": {
+            "least": [
+              "GroupMember.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "GroupMember.ReadWrite.All"
+            ]
+          }
+        }
+      ]
+    },
+    "group-post-owners": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Group.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Group.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "group-update": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Group-NestingSupport.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All",
+          "Group-PreferredDataLocation.ReadWrite.All",
+          "Group.ManageProtection.All",
+          "Group.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Group-NestingSupport.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All",
+          "Group-PreferredDataLocation.ReadWrite.All",
+          "Group.ManageProtection.All",
+          "Group.ReadWrite.All"
+        ]
+      }
+    },
+    "oauth2permissiongrant-delete": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "DelegatedPermissionGrant.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "DelegatedPermissionGrant.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "oauth2permissiongrant-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Directory.Read.All"
+        ],
+        "higher": [
+          "DelegatedPermissionGrant.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Directory.Read.All"
+        ],
+        "higher": [
+          "DelegatedPermissionGrant.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "oauth2permissiongrant-list": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Directory.Read.All"
+        ],
+        "higher": [
+          "DelegatedPermissionGrant.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Directory.Read.All"
+        ],
+        "higher": [
+          "DelegatedPermissionGrant.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "oauth2permissiongrant-post": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "DelegatedPermissionGrant.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "DelegatedPermissionGrant.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "oauth2permissiongrant-update": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "DelegatedPermissionGrant.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "DelegatedPermissionGrant.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "organization-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.Read"
+        ],
+        "higher": [
+          "Organization.Read.All",
+          "Directory.Read.All",
+          "Organization.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Organization.Read.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Organization.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "organization-list": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.Read"
+        ],
+        "higher": [
+          "Organization.Read.All",
+          "Directory.Read.All",
+          "Organization.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Organization.Read.All"
+        ],
+        "higher": [
+          "Directory.Read.All",
+          "Organization.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "organization-update": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Organization.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Organization.ReadWrite.All"
+        ]
+      }
+    },
+    "place-delete": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Place.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Place.ReadWrite.All"
+        ]
+      }
+    },
+    "place-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Place.Read.All"
+        ],
+        "higher": [
+          "Place.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Place.Read.All"
+        ],
+        "higher": [
+          "Place.ReadWrite.All"
+        ]
+      }
+    },
+    "place-list": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Place.Read.All"
+        ],
+        "higher": [
+          "Place.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Place.Read.All"
+        ],
+        "higher": [
+          "Place.ReadWrite.All"
+        ]
+      }
+    },
+    "place-post": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Place.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Place.ReadWrite.All"
+        ]
+      }
+    },
+    "place-update": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Place.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Place.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-delete": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.ReadWrite.OwnedBy"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-delete-approleassignedto": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-delete-approleassignments": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-delta": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Directory.Read.All"
+        ],
+        "higher": [
+          "Application.Read.All",
+          "Application.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.ReadWrite.OwnedBy"
+        ],
+        "higher": [
+          "Application.Read.All",
+          "Application.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.OwnedBy",
+          "Application.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-list": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.OwnedBy",
+          "Application.ReadWrite.All",
+          "Directory.Read.All"
+        ]
+      }
+    },
+    "serviceprincipal-list-approleassignedto": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Application.ReadWrite.OwnedBy",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-list-approleassignments": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.Read.All"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Application.ReadWrite.OwnedBy",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-post-approleassignedto": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All and Application.Read.All"
+        ],
+        "higher": [
+          "AppRoleAssignment.ReadWrite.All and Directory.Read.All",
+          "Application.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All and Application.Read.All"
+        ],
+        "higher": [
+          "AppRoleAssignment.ReadWrite.All and Directory.Read.All",
+          "Application.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-post-approleassignments": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All and Application.Read.All"
+        ],
+        "higher": [
+          "AppRoleAssignment.ReadWrite.All and Directory.Read.All",
+          "Application.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All and Application.Read.All"
+        ],
+        "higher": [
+          "AppRoleAssignment.ReadWrite.All and Directory.Read.All",
+          "Application.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-post-serviceprincipals": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.ReadWrite.OwnedBy"
+        ],
+        "higher": [
+          "Application.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "serviceprincipal-update": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Application.ReadWrite.All"
+        ],
+        "higher": [
+          "AgentIdentity.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Application.ReadWrite.OwnedBy"
+        ],
+        "higher": [
+          "AgentIdentity.ReadWrite.All",
+          "Application.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "user-delete": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.ReadWrite.All"
+        ]
+      }
+    },
+    "user-delete-manager": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.ReadWrite.All"
+        ],
+        "higher": [
+          "AgentIdUser.ReadWrite.All",
+          "AgentIdUser.ReadWrite.IdentityParentedBy",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.ReadWrite.All"
+        ],
+        "higher": [
+          "AgentIdUser.ReadWrite.All",
+          "AgentIdUser.ReadWrite.IdentityParentedBy",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "user-delta": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.Read.All"
+        ],
+        "higher": [
+          "AgentIdUser.ReadWrite.All",
+          "AgentIdUser.ReadWrite.IdentityParentedBy",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "User.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.Read.All"
+        ],
+        "higher": [
+          "AgentIdUser.ReadWrite.All",
+          "AgentIdUser.ReadWrite.IdentityParentedBy",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "User.ReadWrite.All"
+        ]
+      }
+    },
+    "user-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.Read"
+        ],
+        "higher": [
+          "User.ReadWrite",
+          "User.ReadBasic.All",
+          "User.Read.All",
+          "User.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.Read.All"
+        ],
+        "higher": [
+          "User.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "user-list": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.ReadBasic.All"
+        ],
+        "higher": [
+          "User.Read.All",
+          "User.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.Read.All"
+        ],
+        "higher": [
+          "User.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "user-list-approleassignments": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "AppRoleAssignment.ReadWrite.All"
+        ],
+        "higher": [
+          "Directory.Read.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Directory.Read.All"
+        ],
+        "higher": [
+          "AppRoleAssignment.ReadWrite.All"
+        ]
+      }
+    },
+    "user-list-directreports": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.Read and User.ReadBasic.All"
+        ],
+        "higher": [
+          "Directory.ReadWrite.All",
+          "Directory.Read.All",
+          "User.ReadWrite.All",
+          "User.Read.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.Read.All"
+        ],
+        "higher": [
+          "User.ReadWrite.All",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "user-list-manager": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.Read.All"
+        ],
+        "higher": [
+          "AgentIdUser.ReadWrite.All",
+          "AgentIdUser.ReadWrite.IdentityParentedBy",
+          "Directory.Read.All",
+          "Directory.ReadWrite.All",
+          "User.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "notSupported": true
+      }
+    },
+    "user-list-memberof": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "scenario": "Permissions for the signed-in user's direct memberships",
+          "delegated": {
+            "least": [
+              "User.Read"
+            ],
+            "higher": [
+              "Directory.Read.All",
+              "Directory.ReadWrite.All",
+              "GroupMember.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "scenario": "Permissions for another user's direct memberships",
+          "delegated": {
+            "least": [
+              "User.Read.All"
+            ],
+            "higher": [
+              "Directory.Read.All",
+              "Directory.ReadWrite.All",
+              "GroupMember.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Directory.Read.All"
+            ],
+            "higher": [
+              "Directory.ReadWrite.All"
+            ]
+          }
+        }
+      ]
+    },
+    "user-list-transitivememberof": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "scenario": "Permissions for the signed-in user's memberships",
+          "delegated": {
+            "least": [
+              "User.Read"
+            ],
+            "higher": [
+              "Directory.Read.All",
+              "Directory.ReadWrite.All",
+              "Group.Read.All",
+              "GroupMember.Read.All",
+              "User.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "scenario": "Permissions for another user's memberships",
+          "delegated": {
+            "least": [
+              "User.Read.All"
+            ],
+            "higher": [
+              "Directory.Read.All",
+              "Directory.ReadWrite.All",
+              "Group.Read.All",
+              "GroupMember.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "User.Read.All"
+            ],
+            "higher": [
+              "Directory.Read.All",
+              "Directory.ReadWrite.All",
+              "Group.Read.All",
+              "GroupMember.Read.All"
+            ]
+          }
+        }
+      ]
+    },
+    "user-post-manager": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.ReadWrite.All"
+        ],
+        "higher": [
+          "AgentIdUser.ReadWrite.All",
+          "AgentIdUser.ReadWrite.IdentityParentedBy",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.ReadWrite.All"
+        ],
+        "higher": [
+          "AgentIdUser.ReadWrite.All",
+          "AgentIdUser.ReadWrite.IdentityParentedBy",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "user-post-users": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.Create"
+        ],
+        "higher": [
+          "User.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.Create"
+        ],
+        "higher": [
+          "User.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "user-update": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "User.ReadUpdate.All"
+        ],
+        "higher": [
+          "User.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "User.ReadUpdate.All"
+        ],
+        "higher": [
+          "User.ReadWrite.All",
+          "Directory.ReadWrite.All"
+        ]
+      }
+    }
+  },
+  "routes": {
+    "DELETE /v1.0/applications/{id}": "application-delete",
+    "DELETE /v1.0/groups/{id}": "group-delete",
+    "DELETE /v1.0/groups/{id}/members/{member}/$ref": "group-delete-members",
+    "DELETE /v1.0/groups/{id}/owners/{owner}/$ref": "group-delete-owners",
+    "DELETE /v1.0/oauth2PermissionGrants/{id}": "oauth2permissiongrant-delete",
+    "DELETE /v1.0/places/{id}": "place-delete",
+    "DELETE /v1.0/servicePrincipals/{id}": "serviceprincipal-delete",
+    "DELETE /v1.0/servicePrincipals/{id}/appRoleAssignedTo/{assignmentId}": "serviceprincipal-delete-approleassignedto",
+    "DELETE /v1.0/servicePrincipals/{id}/appRoleAssignments/{assignmentId}": "serviceprincipal-delete-approleassignments",
+    "DELETE /v1.0/users/{id}": "user-delete",
+    "DELETE /v1.0/users/{id}/manager/$ref": "user-delete-manager",
+    "GET /v1.0/applications": "application-list",
+    "GET /v1.0/applications/$count": "application-list",
+    "GET /v1.0/applications/{id}": "application-get",
+    "GET /v1.0/groups": "group-list",
+    "GET /v1.0/groups/$count": "group-list",
+    "GET /v1.0/groups/delta": "group-delta",
+    "GET /v1.0/groups/delta()": "group-delta",
+    "GET /v1.0/groups/{id}": "group-get",
+    "GET /v1.0/groups/{id}/appRoleAssignments": "group-list-approleassignments",
+    "GET /v1.0/groups/{id}/memberOf": "group-list-memberof",
+    "GET /v1.0/groups/{id}/memberOf/$count": "group-list-memberof",
+    "GET /v1.0/groups/{id}/memberOf/microsoft.graph.group": "group-list-memberof",
+    "GET /v1.0/groups/{id}/members": "group-list-members",
+    "GET /v1.0/groups/{id}/members/$count": "group-list-members",
+    "GET /v1.0/groups/{id}/members/{type}": "group-list-members",
+    "GET /v1.0/groups/{id}/members/{type}/$count": "group-list-members",
+    "GET /v1.0/groups/{id}/owners": "group-list-owners",
+    "GET /v1.0/groups/{id}/transitiveMemberOf": "group-list-transitivememberof",
+    "GET /v1.0/groups/{id}/transitiveMemberOf/$count": "group-list-transitivememberof",
+    "GET /v1.0/groups/{id}/transitiveMemberOf/microsoft.graph.group": "group-list-transitivememberof",
+    "GET /v1.0/groups/{id}/transitiveMembers": "group-list-transitivemembers",
+    "GET /v1.0/groups/{id}/transitiveMembers/$count": "group-list-transitivemembers",
+    "GET /v1.0/groups/{id}/transitiveMembers/{type}": "group-list-transitivemembers",
+    "GET /v1.0/groups/{id}/transitiveMembers/{type}/$count": "group-list-transitivemembers",
+    "GET /v1.0/me": "user-get",
+    "GET /v1.0/me/appRoleAssignments": "user-list-approleassignments",
+    "GET /v1.0/me/directReports": "user-list-directreports",
+    "GET /v1.0/me/directReports/$count": "user-list-directreports",
+    "GET /v1.0/me/manager": "user-list-manager",
+    "GET /v1.0/me/memberOf": "user-list-memberof",
+    "GET /v1.0/me/memberOf/$count": "user-list-memberof",
+    "GET /v1.0/me/memberOf/microsoft.graph.group": "user-list-memberof",
+    "GET /v1.0/me/transitiveMemberOf": "user-list-transitivememberof",
+    "GET /v1.0/me/transitiveMemberOf/$count": "user-list-transitivememberof",
+    "GET /v1.0/me/transitiveMemberOf/microsoft.graph.group": "user-list-transitivememberof",
+    "GET /v1.0/oauth2PermissionGrants": "oauth2permissiongrant-list",
+    "GET /v1.0/oauth2PermissionGrants/$count": "oauth2permissiongrant-list",
+    "GET /v1.0/oauth2PermissionGrants/{id}": "oauth2permissiongrant-get",
+    "GET /v1.0/organization": "organization-list",
+    "GET /v1.0/organization/$count": "organization-list",
+    "GET /v1.0/organization/{id}": "organization-get",
+    "GET /v1.0/places/microsoft.graph.building": "place-list",
+    "GET /v1.0/places/microsoft.graph.desk": "place-list",
+    "GET /v1.0/places/microsoft.graph.floor": "place-list",
+    "GET /v1.0/places/microsoft.graph.room": "place-list",
+    "GET /v1.0/places/microsoft.graph.roomList": "place-get",
+    "GET /v1.0/places/microsoft.graph.section": "place-list",
+    "GET /v1.0/places/microsoft.graph.workspace": "place-list",
+    "GET /v1.0/places/{id}": "place-get",
+    "GET /v1.0/places/{list}/microsoft.graph.roomList/rooms": "place-list",
+    "GET /v1.0/places/{list}/microsoft.graph.roomList/workspaces": "place-list",
+    "GET /v1.0/places/{list}/microsoft.graph.roomlist/rooms": "place-list",
+    "GET /v1.0/places/{list}/microsoft.graph.roomlist/workspaces": "place-list",
+    "GET /v1.0/servicePrincipals": "serviceprincipal-list",
+    "GET /v1.0/servicePrincipals/$count": "serviceprincipal-list",
+    "GET /v1.0/servicePrincipals/delta": "serviceprincipal-delta",
+    "GET /v1.0/servicePrincipals/delta()": "serviceprincipal-delta",
+    "GET /v1.0/servicePrincipals/{id}": "serviceprincipal-get",
+    "GET /v1.0/servicePrincipals/{id}/appRoleAssignedTo": "serviceprincipal-list-approleassignedto",
+    "GET /v1.0/servicePrincipals/{id}/appRoleAssignments": "serviceprincipal-list-approleassignments",
+    "GET /v1.0/users": "user-list",
+    "GET /v1.0/users/$count": "user-list",
+    "GET /v1.0/users/delta": "user-delta",
+    "GET /v1.0/users/delta()": "user-delta",
+    "GET /v1.0/users/{id}": "user-get",
+    "GET /v1.0/users/{id}/appRoleAssignments": "user-list-approleassignments",
+    "GET /v1.0/users/{id}/directReports": "user-list-directreports",
+    "GET /v1.0/users/{id}/directReports/$count": "user-list-directreports",
+    "GET /v1.0/users/{id}/manager": "user-list-manager",
+    "GET /v1.0/users/{id}/memberOf": "user-list-memberof",
+    "GET /v1.0/users/{id}/memberOf/$count": "user-list-memberof",
+    "GET /v1.0/users/{id}/memberOf/microsoft.graph.group": "user-list-memberof",
+    "GET /v1.0/users/{id}/transitiveMemberOf": "user-list-transitivememberof",
+    "GET /v1.0/users/{id}/transitiveMemberOf/$count": "user-list-transitivememberof",
+    "GET /v1.0/users/{id}/transitiveMemberOf/microsoft.graph.group": "user-list-transitivememberof",
+    "PATCH /v1.0/applications/{id}": "application-update",
+    "PATCH /v1.0/groups/{id}": "group-update",
+    "PATCH /v1.0/me": "user-update",
+    "PATCH /v1.0/oauth2PermissionGrants/{id}": "oauth2permissiongrant-update",
+    "PATCH /v1.0/organization/{id}": "organization-update",
+    "PATCH /v1.0/places/{id}": "place-update",
+    "PATCH /v1.0/servicePrincipals/{id}": "serviceprincipal-update",
+    "PATCH /v1.0/users/{id}": "user-update",
+    "POST /v1.0/applications": "application-post-applications",
+    "POST /v1.0/groups": "group-post-groups",
+    "POST /v1.0/groups/{id}/members/$ref": "group-post-members",
+    "POST /v1.0/groups/{id}/owners/$ref": "group-post-owners",
+    "POST /v1.0/oauth2PermissionGrants": "oauth2permissiongrant-post",
+    "POST /v1.0/places": "place-post",
+    "POST /v1.0/servicePrincipals": "serviceprincipal-post-serviceprincipals",
+    "POST /v1.0/servicePrincipals/{id}/appRoleAssignedTo": "serviceprincipal-post-approleassignedto",
+    "POST /v1.0/servicePrincipals/{id}/appRoleAssignments": "serviceprincipal-post-approleassignments",
+    "POST /v1.0/users": "user-post-users",
+    "PUT /v1.0/me/manager/$ref": "user-post-manager",
+    "PUT /v1.0/users/{id}/manager/$ref": "user-post-manager"
+  },
+  "inherited": {
+    "GET /v1.0/applications/$count": "GET /v1.0/applications",
+    "GET /v1.0/groups/$count": "GET /v1.0/groups",
+    "GET /v1.0/groups/{id}/memberOf/$count": "GET /v1.0/groups/{id}/memberOf",
+    "GET /v1.0/groups/{id}/members/$count": "GET /v1.0/groups/{id}/members",
+    "GET /v1.0/groups/{id}/members/{type}/$count": "GET /v1.0/groups/{id}/members/{type}",
+    "GET /v1.0/groups/{id}/transitiveMemberOf/$count": "GET /v1.0/groups/{id}/transitiveMemberOf",
+    "GET /v1.0/groups/{id}/transitiveMemberOf/microsoft.graph.group": "GET /v1.0/groups/{id}/transitiveMemberOf",
+    "GET /v1.0/groups/{id}/transitiveMembers/$count": "GET /v1.0/groups/{id}/transitiveMembers",
+    "GET /v1.0/groups/{id}/transitiveMembers/{type}/$count": "GET /v1.0/groups/{id}/transitiveMembers/{type}",
+    "GET /v1.0/me/directReports/$count": "GET /v1.0/me/directReports",
+    "GET /v1.0/me/memberOf/$count": "GET /v1.0/me/memberOf",
+    "GET /v1.0/me/memberOf/microsoft.graph.group": "GET /v1.0/me/memberOf",
+    "GET /v1.0/me/transitiveMemberOf/$count": "GET /v1.0/me/transitiveMemberOf",
+    "GET /v1.0/me/transitiveMemberOf/microsoft.graph.group": "GET /v1.0/me/transitiveMemberOf",
+    "GET /v1.0/oauth2PermissionGrants/$count": "GET /v1.0/oauth2PermissionGrants",
+    "GET /v1.0/organization/$count": "GET /v1.0/organization",
+    "GET /v1.0/servicePrincipals/$count": "GET /v1.0/servicePrincipals",
+    "GET /v1.0/users/$count": "GET /v1.0/users",
+    "GET /v1.0/users/{id}/directReports/$count": "GET /v1.0/users/{id}/directReports",
+    "GET /v1.0/users/{id}/memberOf/$count": "GET /v1.0/users/{id}/memberOf",
+    "GET /v1.0/users/{id}/transitiveMemberOf/$count": "GET /v1.0/users/{id}/transitiveMemberOf",
+    "GET /v1.0/users/{id}/transitiveMemberOf/microsoft.graph.group": "GET /v1.0/users/{id}/transitiveMemberOf",
+    "PUT /v1.0/me/manager/$ref": "PUT /v1.0/users/{id}/manager/$ref"
+  },
+  "noPage": [
+    "POST /v1.0/$batch"
+  ]
+}

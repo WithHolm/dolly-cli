@@ -1,0 +1,6 @@
+{
+ "User.ReadUpdate.All": {
+  "includes": ["User.Read.All", "User.ReadBasic.All"],
+  "note": "Microsoft describes it as \"Read and update users\", so it is assumed to include reading users. Microsoft's tables name it only for the call that updates a user."
+ }
+}
