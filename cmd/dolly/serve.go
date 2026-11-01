@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -18,6 +19,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/withholm/dolly-cli/graph"
+	"github.com/withholm/dolly-cli/graph/permissions"
 	"github.com/withholm/dolly-cli/login"
 	"github.com/withholm/dolly-cli/shared"
 	"github.com/withholm/dolly-cli/ui"
@@ -41,7 +43,7 @@ func openLogin(s *settings, running []shared.API) (shared.API, func(), error) {
 			if s.root != "" {
 				dir = filepath.Join(s.root, "login")
 			}
-			l, err := login.New(g.World(), login.Options{Dir: dir})
+			l, err := login.New(g.World(), login.Options{Dir: dir, CORS: shared.CORS(s.allowHosts)})
 			if err != nil {
 				return nil, nil, err
 			}
@@ -52,18 +54,47 @@ func openLogin(s *settings, running []shared.API) (shared.API, func(), error) {
 	return nil, nil, errors.New("the sign-in API needs the Graph API")
 }
 
+// useTenantPermissions adds the permissions that the person downloaded from their own tenant (docs/permissions.md): the file of --permissions, or
+// permissions/graph.json in the data folder when it is there. It stops with a message when the file cannot be read: a catalog with a part missing
+// would hide that.
+func useTenantPermissions(s *settings) error {
+	path := s.permissionsPath
+	if path == "" && s.root != "" {
+		if p := filepath.Join(s.root, "permissions", "graph.json"); fileExists(p) {
+			path = p
+		}
+	}
+	permissions.SetExtra(path)
+	c, err := permissions.Load()
+	if err != nil {
+		return err
+	}
+	if c.Extra != nil {
+		slog.Info("Dolly adds the permissions of your tenant.", "file", c.Extra.Path, "delegated", c.Extra.Delegated, "application", c.Extra.Application, "written", c.Extra.Date.Format(time.DateOnly))
+	}
+	return nil
+}
+
+func fileExists(path string) bool {
+	st, err := os.Stat(path)
+	return err == nil && !st.IsDir()
+}
+
 func openGraph(s *settings, _ []shared.API) (shared.API, func(), error) {
+	if err := useTenantPermissions(s); err != nil {
+		return nil, nil, err
+	}
 	var world *graph.World
 	if s.dir == "" {
-		world = graph.NewMemory(graph.Options{Users: s.users, Seed: s.seed})
+		world = graph.NewMemory(graph.Options{Users: s.users, Seed: s.seed, Profile: s.profile})
 	} else {
 		var err error
-		if world, err = graph.Open(s.dir, graph.OpenOptions{Users: s.users, Seed: s.seed}); err != nil {
+		if world, err = graph.Open(s.dir, graph.OpenOptions{Users: s.users, Seed: s.seed, Profile: s.profile}); err != nil {
 			return nil, nil, err
 		}
 		slog.Info("Dolly keeps its data here.", "api", "graph", "folder", s.dir, "changes", len(world.History()))
 	}
-	opt := graph.ServerOptions{PageSize: s.pageSize, Throttle: s.throttle}
+	opt := graph.ServerOptions{PageSize: s.pageSize, Throttle: s.throttle, UsageHistory: s.usageHistory}
 	if s.docs != "" {
 		if _, err := os.Stat(s.docs); err != nil {
 			_ = world.Close()
@@ -95,6 +126,34 @@ func isLoopback(host string) bool {
 	}
 	ip := net.ParseIP(host)
 	return ip != nil && ip.IsLoopback()
+}
+
+// tlsConfig gives the TLS settings for --tls or --tls-cert, and the CA (PEM) that signed the certificate, if dollycli made it.
+func tlsConfig(s *settings) (*tls.Config, []byte, error) {
+	cfg := &tls.Config{MinVersion: tls.VersionTLS12, NextProtos: []string{"http/1.1"}}
+	if s.tlsCert != "" {
+		cert, err := tls.LoadX509KeyPair(s.tlsCert, s.tlsKey)
+		if err != nil {
+			return nil, nil, fmt.Errorf("--tls-cert: %w", err)
+		}
+		cfg.Certificates = []tls.Certificate{cert}
+		return cfg, nil, nil
+	}
+	dir := ""
+	if s.root != "" {
+		dir = filepath.Join(s.root, "tls")
+	}
+	cert, ca, err := shared.LocalCert(dir, append([]string{s.host}, s.allowHosts...))
+	if err != nil {
+		return nil, nil, fmt.Errorf("--tls: %w", err)
+	}
+	cfg.Certificates = []tls.Certificate{cert}
+	if dir != "" {
+		slog.Info("Dolly serves https. Trust this file once, and a client trusts it.", "ca", filepath.Join(dir, "ca.pem"))
+	} else {
+		slog.Warn("Dolly serves https with a CA in memory (no data folder). A new CA is made at each start, so nothing can trust it.")
+	}
+	return cfg, ca, nil
 }
 
 // serveCmd runs the APIs on one address. With only set, it runs that API alone.
@@ -130,7 +189,19 @@ func serveCmd(s *settings, only string) *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("dolly cannot listen on %s: %w. Use --port to pick another port, or --host to pick another address", net.JoinHostPort(s.host, strconv.Itoa(s.port)), err)
 			}
-			addr := "http://" + reachable(ln.Addr())
+			scheme := "http"
+			var caPEM []byte
+			if s.https() {
+				scheme = "https"
+				cfg, ca, err := tlsConfig(s)
+				if err != nil {
+					_ = ln.Close()
+					return err
+				}
+				caPEM = ca
+				ln = tls.NewListener(ln, cfg)
+			}
+			addr := scheme + "://" + reachable(ln.Addr())
 			if !isLoopback(s.host) {
 				slog.Warn("Dolly listens on an address that other machines can reach. Anyone who can reach it can read and change the data.",
 					"host", s.host, "adminHosts", append([]string{"localhost", "127.0.0.1"}, s.allowHosts...))
@@ -142,7 +213,20 @@ func serveCmd(s *settings, only string) *cobra.Command {
 					slog.Info("Dolly Graph.", "graph", addr+graph.BasePath, "users", st.Users, "groups", st.Groups, "servicePrincipals", st.ServicePrincipals)
 				}
 			}
-			hs := &http.Server{Handler: shared.RouterWith(shared.Options{AllowedHosts: s.allowHosts}, ui.Handler(), running...), ReadHeaderTimeout: 10 * time.Second}
+			router := shared.RouterWith(shared.Options{AllowedHosts: s.allowHosts}, ui.Handler(), running...)
+			hs := &http.Server{Handler: router, ReadHeaderTimeout: 10 * time.Second}
+			if caPEM != nil {
+				// the CA is public: a browser or a script can fetch it from here, to trust it
+				hs.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					if r.URL.Path == "/dolly-ca.pem" && r.Method == http.MethodGet {
+						w.Header().Set("Content-Type", "application/x-pem-file")
+						w.Header().Set("Content-Disposition", `attachment; filename="dollycli-ca.pem"`)
+						_, _ = w.Write(caPEM)
+						return
+					}
+					router.ServeHTTP(w, r)
+				})
+			}
 
 			// Ctrl+C is os.Interrupt. 'docker stop' sends SIGTERM: without this the data is not closed and the lock stays.
 			ctx, stop := signal.NotifyContext(cmd.Context(), os.Interrupt, syscall.SIGTERM)

@@ -4,12 +4,15 @@ import (
 	"bufio"
 	"bytes"
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -63,7 +66,7 @@ func generate(in *os.File, out io.Writer, s *settings, force bool) error {
 			return nil
 		}
 	}
-	st, err := graph.Replace(s.dir, graph.OpenOptions{Users: s.users, Seed: s.seed})
+	st, err := graph.Replace(s.dir, graph.OpenOptions{Users: s.users, Seed: s.seed, Profile: s.profile})
 	if err != nil {
 		return err
 	}
@@ -81,7 +84,25 @@ func address(s *settings) string {
 			return url
 		}
 	}
+	if s.https() {
+		return fmt.Sprintf("https://127.0.0.1:%d", s.port)
+	}
 	return fmt.Sprintf("http://127.0.0.1:%d", s.port)
+}
+
+// localClient talks to the dolly on this machine. With --tls its certificate is signed by the local CA of dollycli (tls/ca.pem in
+// the data folder), which this machine may not trust yet, so the client checks the certificate against that file as well.
+func localClient(s *settings) *http.Client {
+	pool, err := x509.SystemCertPool()
+	if err != nil || pool == nil {
+		pool = x509.NewCertPool()
+	}
+	if s.root != "" {
+		if ca, err := os.ReadFile(filepath.Join(s.root, "tls", "ca.pem")); err == nil {
+			pool.AppendCertsFromPEM(ca)
+		}
+	}
+	return &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{RootCAs: pool, MinVersion: tls.VersionTLS12}}}
 }
 
 // healthCmd checks that a dolly answers. A container runs it as its health check: the image has no shell, no curl.
@@ -100,7 +121,7 @@ func healthCmd(s *settings) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := http.DefaultClient.Do(req)
+			res, err := localClient(s).Do(req)
 			if err != nil {
 				return fmt.Errorf("dolly does not answer at %s: %w", base, err)
 			}
@@ -127,7 +148,7 @@ func adminCall(ctx context.Context, s *settings, method, path string, body, out 
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	res, err := http.DefaultClient.Do(req)
+	res, err := localClient(s).Do(req)
 	if err != nil {
 		return fmt.Errorf("dolly cannot reach the server at %s: %w. Run 'dolly graph serve' first", base, err)
 	}
