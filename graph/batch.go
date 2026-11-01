@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/withholm/dolly-cli/graph/api"
+	"github.com/withholm/dolly-cli/shared"
 )
 
 // maxBatch is the most requests in one $batch call, as in Graph.
@@ -48,7 +49,8 @@ func (s *Server) batch(w http.ResponseWriter, r *http.Request) {
 		if len(br.Body) > 0 && string(br.Body) != "null" {
 			body = bytes.NewReader(br.Body)
 		}
-		inner := httptest.NewRequest(strings.ToUpper(br.Method), "http://"+r.Host+BasePath+br.URL, body)
+		inner := httptest.NewRequest(strings.ToUpper(br.Method), shared.Scheme(r)+"://"+r.Host+BasePath+br.URL, body)
+		inner.TLS = r.TLS // a link in the answer (the next page) starts with the scheme of the request
 		inner.Header.Set("Authorization", r.Header.Get("Authorization"))
 		for k, v := range br.Headers {
 			inner.Header.Set(k, v)
