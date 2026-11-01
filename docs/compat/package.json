@@ -1,0 +1,17 @@
+{
+  "name": "dollycli-compat",
+  "private": true,
+  "type": "module",
+  "description": "Checks that sign-in libraries work against dollycli. See README.md.",
+  "scripts": {
+    "check": "node run.mjs"
+  },
+  "dependencies": {
+    "@azure/identity": "4.14.1",
+    "@azure/msal-browser": "5.27.0",
+    "@azure/msal-node": "7.1.2",
+    "oidc-client-ts": "3.5.0",
+    "openid-client": "6.8.8",
+    "puppeteer-core": "25.16.0"
+  }
+}
