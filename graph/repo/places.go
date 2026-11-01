@@ -169,7 +169,7 @@ func (w *World) placeDefaults(p Object, kind string) {
 	switch kind {
 	case "room", "workspace":
 		if p["emailAddress"] == nil {
-			p["emailAddress"] = fmt.Sprintf("%s%s@acme.example", mailSlug(name), strings.ReplaceAll(str(p["id"]), "-", "")[:8])
+			p["emailAddress"] = fmt.Sprintf("%s%s@%s", mailSlug(name), strings.ReplaceAll(str(p["id"]), "-", "")[:8], w.defaultDomain())
 		}
 		if p["nickname"] == nil {
 			p["nickname"] = name

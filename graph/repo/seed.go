@@ -4,48 +4,45 @@ import (
 	"fmt"
 	"maps"
 	"math/rand/v2"
+	"slices"
 	"strings"
 	"time"
 )
 
-// Department has the job titles that people in it can have. The sets are fixed,
-// so a demo or a test knows the values. Names, phones, and IDs are made up.
+// Department has the job titles that people in it can have. This is the set of the default profile (profile.go), so a demo or a
+// test knows the values. Another profile has other departments. Names, phones, and IDs are made up.
 type Department struct {
 	Name   string
 	Titles []string
 	Weight int // how common the department is
 }
 
-// Departments is the fixed set of departments.
-var Departments = []Department{
-	{"Sales", []string{"Account Executive", "Sales Manager", "Sales Development Representative"}, 14},
-	{"Engineering", []string{"Software Engineer", "Senior Software Engineer", "Engineering Manager", "DevOps Engineer"}, 22},
-	{"Marketing", []string{"Marketing Specialist", "Content Manager", "Brand Manager"}, 8},
-	{"Finance", []string{"Accountant", "Financial Analyst", "Finance Manager"}, 7},
-	{"Human Resources", []string{"HR Business Partner", "Recruiter", "HR Manager"}, 5},
-	{"IT", []string{"IT Support Specialist", "Systems Administrator", "Security Analyst"}, 7},
-	{"Customer Support", []string{"Support Agent", "Support Team Lead"}, 12},
-	{"Legal", []string{"Legal Counsel", "Compliance Officer"}, 3},
-	{"Operations", []string{"Operations Coordinator", "Logistics Manager", "Operations Manager"}, 10},
-	{"Product", []string{"Product Manager", "Product Designer", "UX Researcher"}, 6},
-}
+// Departments is the set of departments of the default profile.
+var Departments = func() []Department {
+	var out []Department
+	for _, d := range DefaultProfile().Departments {
+		titles := make([]string, len(d.Titles))
+		for i, t := range d.Titles {
+			titles[i] = t.Name
+		}
+		out = append(out, Department{d.Name, titles, d.Weight})
+	}
+	return out
+}()
 
 // Office is an office location.
 type Office struct {
 	Name, City, Country, Usage, Postal string
 }
 
-// Offices is the fixed set of office locations.
-var Offices = []Office{
-	{"Stockholm HQ", "Stockholm", "Sweden", "SE", "111 22"},
-	{"Gothenburg", "Gothenburg", "Sweden", "SE", "411 03"},
-	{"Oslo", "Oslo", "Norway", "NO", "0150"},
-	{"Copenhagen", "Copenhagen", "Denmark", "DK", "1050"},
-	{"Helsinki", "Helsinki", "Finland", "FI", "00100"},
-	{"London", "London", "United Kingdom", "GB", "EC2A 4NE"},
-	{"Berlin", "Berlin", "Germany", "DE", "10117"},
-	{"Amsterdam", "Amsterdam", "Netherlands", "NL", "1012 AB"},
-}
+// Offices is the set of office locations of the default profile.
+var Offices = func() []Office {
+	var out []Office
+	for _, o := range DefaultProfile().Offices {
+		out = append(out, Office{o.Name, o.City, o.Country, o.Usage, o.Postal})
+	}
+	return out
+}()
 
 var firstNames = strings.Fields(`Anna Erik Maria Lars Sofia Johan Elin Oskar Ida Nils Klara Anders Linnea Mats Hanna
 	Viktor Emma Henrik Julia Fredrik Alice Magnus Sara Daniel Frida Karl Nora Simon Tilda Jonas Olivia Peter Maja
@@ -55,28 +52,60 @@ var lastNames = strings.Fields(`Andersson Johansson Karlsson Nilsson Eriksson La
 	Pettersson Jonsson Jansson Hansson Bengtsson Lindberg Lindqvist Lindgren Berg Axelsson Bergstrom Lundberg
 	Lundgren Mattsson Berglund Fredriksson Sandberg Henriksson Forsberg Sjoberg Wallin Engstrom Eklund Danielsson`)
 
-// apps are the demo apps. Each gets role groups and three target groups.
-var apps = []struct {
-	Name        string
-	Title       string
-	Contributor []string // departments whose people are contributors
-	Reader      []string
-}{
-	{"acme", "Acme Portal", []string{"Sales", "Marketing"}, []string{"Customer Support", "Legal"}},
-	{"contoso", "Contoso Planner", []string{"Engineering", "Product"}, []string{"Operations", "Human Resources"}},
-	{"globex", "Globex Ledger", []string{"Finance", "Operations"}, []string{"Sales", "Legal"}},
-}
-
-// Options sets the size of a new world.
+// Options sets the size of a new world, and what it looks like.
 type Options struct {
 	Users int
 	Seed  int64
+	// Profile says what the tenant looks like. nil is the default profile. Check a profile from outside with ParseProfile first.
+	Profile *Profile
 }
 
 type gen struct {
 	rng *rand.Rand
 	w   *World
+	p   *Profile
 }
+
+// weighted picks the index of one item, by weight. One draw, so a list of equal weights picks as a plain choice from the list does.
+func (g *gen) weighted(n int, weight func(i int) int) int {
+	total := 0
+	for i := 0; i < n; i++ {
+		total += weight(i)
+	}
+	pick := g.rng.IntN(total)
+	for i := 0; i < n; i++ {
+		if pick < weight(i) {
+			return i
+		}
+		pick -= weight(i)
+	}
+	return 0
+}
+
+func (g *gen) office() ProfileOffice {
+	offices := g.p.Offices
+	return offices[g.weighted(len(offices), func(i int) int { return offices[i].Weight })]
+}
+
+func (g *gen) title(d ProfileDepartment) string {
+	return d.Titles[g.weighted(len(d.Titles), func(i int) int { return d.Titles[i].Weight })].Name
+}
+
+func (g *gen) language() string {
+	langs := g.p.People.Languages
+	return langs[g.weighted(len(langs), func(i int) int { return langs[i].Weight })].Code
+}
+
+// userLanguage is the language that was picked before the names, or a new pick (at the place in the draws where it always was).
+func userLanguage(g *gen, picked string) string {
+	if picked != "" {
+		return picked
+	}
+	return g.language()
+}
+
+// dcOf writes a domain as the parts of a distinguished name: acme.example is DC=acme,DC=example.
+func dcOf(domain string) string { return "DC=" + strings.ReplaceAll(domain, ".", ",DC=") }
 
 func (g *gen) guid() string {
 	var b [16]byte
@@ -98,56 +127,82 @@ func Generate(o Options) *World {
 	if o.Seed == 0 {
 		o.Seed = 1
 	}
-	g := &gen{rng: rand.New(rand.NewPCG(uint64(o.Seed), 0x9e3779b97f4a7c15)), w: &World{Seed: o.Seed, Managers: map[string]string{}}}
+	given := o.Profile // the seed keeps a profile that was given, and not the default one: its data is the same as before profiles
+	if o.Profile == nil {
+		o.Profile = DefaultProfile()
+	}
+	g := &gen{rng: rand.New(rand.NewPCG(uint64(o.Seed), 0x9e3779b97f4a7c15)), w: &World{Seed: o.Seed, Managers: map[string]string{}}, p: o.Profile}
+	g.w.Profile = given
 	g.users(o.Users)
 	g.managers()
 	g.groups()
 	g.apps()
 	g.places()
-	g.w.Organization = newOrganization()
+	g.w.Organization = newOrganization(o.Profile)
+	if admin := adminUPN(o.Profile); admin != AdminUPN {
+		g.w.Admin = admin // a world with the default admin account has no field: its seed is the same as it was before profiles
+	}
 	g.w.index()
 	return g.w
+}
+
+// GenerateChecked is Generate for a profile that may not be valid. It checks the profile first, and gives the error that says which field.
+func GenerateChecked(o Options) (*World, error) {
+	if o.Profile != nil {
+		if err := o.Profile.Clone().Validate(); err != nil {
+			return nil, err
+		}
+	}
+	return Generate(o), nil
 }
 
 func slug(s string) string {
 	return strings.ToLower(strings.NewReplacer(" ", "-", "&", "and").Replace(s))
 }
 
-func (g *gen) department() Department {
-	total := 0
-	for _, d := range Departments {
-		total += d.Weight
-	}
-	n := g.rng.IntN(total)
-	for _, d := range Departments {
-		if n < d.Weight {
-			return d
-		}
-		n -= d.Weight
-	}
-	return Departments[0]
+func (g *gen) department() ProfileDepartment {
+	deps := g.p.Departments
+	return deps[g.weighted(len(deps), func(i int) int { return deps[i].Weight })]
 }
 
 func (g *gen) users(n int) {
 	taken := map[string]int{}
 	for i := 0; i < n; i++ {
-		first, last := g.pick(firstNames), g.pick(lastNames)
-		nick := strings.ToLower(first + "." + last)
+		// With names by language the language is picked first, and the names follow it. Without them the draws are in the order they always were.
+		var lang, first, last string
+		if byLanguage := len(g.p.Names.ByLanguage) > 0; byLanguage {
+			lang = g.language()
+			set := g.p.Names.nameSet(lang)
+			first, last = g.pick(set.First), g.pick(set.Last)
+		} else {
+			first, last = g.pick(g.p.Names.First), g.pick(g.p.Names.Last)
+		}
+		nick := ascii(strings.ToLower(first)) + "." + ascii(strings.ToLower(last)) // no accents in an address: Håkon is hakon
 		if taken[nick]++; taken[nick] > 1 {
 			nick = fmt.Sprintf("%s%d", nick, taken[nick])
 		}
 		dept := g.department()
-		office := Offices[g.rng.IntN(len(Offices))]
-		guest := g.rng.IntN(100) < 3
-		upn := nick + "@acme.example"
+		office := g.office()
+		guest := g.rng.IntN(100) < g.p.People.GuestPercent
+		org := g.p.Organization
+		// a domain is picked by weight only when there is a choice, so a profile with one domain draws the same numbers as before
+		domain := org.Domain
+		if ds := g.p.memberDomains(); !guest && len(ds) > 1 {
+			domain = ds[g.weighted(len(ds), func(i int) int { return ds[i].Weight })].Name
+		}
+		upn := nick + "@" + domain
 		mail := upn
 		userType := "Member"
 		if guest {
 			userType = "Guest"
-			upn = fmt.Sprintf("%s_partner.example#EXT#@acme.onmicrosoft.com", nick)
-			mail = nick + "@partner.example"
+			guestDomain := g.p.guestDomains()[0].Name
+			if ds := g.p.guestDomains(); len(ds) > 1 {
+				guestDomain = ds[g.weighted(len(ds), func(i int) int { return ds[i].Weight })].Name
+			}
+			upn = fmt.Sprintf("%s_%s#EXT#@%s", nick, guestDomain, org.InitialDomain)
+			mail = nick + "@" + guestDomain
 		}
-		synced := !guest && g.rng.IntN(100) < 60
+		synced := !guest && g.rng.IntN(100) < g.p.People.SyncedPercent
 		u := Object{
 			"id":                            g.guid(),
 			"displayName":                   first + " " + last,
@@ -157,17 +212,17 @@ func (g *gen) users(n int) {
 			"mail":                          mail,
 			"mailNickname":                  nick,
 			"department":                    dept.Name,
-			"jobTitle":                      dept.Titles[g.rng.IntN(len(dept.Titles))],
+			"jobTitle":                      g.title(dept),
 			"officeLocation":                office.Name,
 			"city":                          office.City,
 			"country":                       office.Country,
 			"usageLocation":                 office.Usage,
 			"postalCode":                    office.Postal,
-			"companyName":                   "Acme",
-			"employeeId":                    fmt.Sprintf("E%05d", 10000+i),
-			"mobilePhone":                   fmt.Sprintf("+%s 7%d %03d %02d %02d", map[string]string{"SE": "46", "NO": "47", "DK": "45", "FI": "358", "GB": "44", "DE": "49", "NL": "31"}[office.Usage], g.rng.IntN(10), g.rng.IntN(1000), g.rng.IntN(100), g.rng.IntN(100)),
-			"preferredLanguage":             map[bool]string{true: "en-US", false: "sv-SE"}[g.rng.IntN(100) < 40],
-			"accountEnabled":                g.rng.IntN(100) < 97,
+			"companyName":                   org.CompanyName,
+			"employeeId":                    numbered(g.p.Formats.EmployeeID.Pattern, g.p.Formats.EmployeeID.Start+i),
+			"mobilePhone":                   g.pattern(g.p.Formats.MobilePhone, map[string]string{"cc": office.CallingCode}),
+			"preferredLanguage":             userLanguage(g, lang),
+			"accountEnabled":                g.rng.IntN(100) < g.p.People.EnabledPercent,
 			"userType":                      userType,
 			"passwordPolicies":              "None",
 			"onPremisesSyncEnabled":         nil,
@@ -176,14 +231,14 @@ func (g *gen) users(n int) {
 		g.moreFields(u, i, dept, office, guest, mail)
 		if synced {
 			u["onPremisesSyncEnabled"] = true
-			u["onPremisesDistinguishedName"] = fmt.Sprintf("CN=%s %s,OU=%s,DC=acme,DC=example", first, last, dept.Name)
+			u["onPremisesDistinguishedName"] = fmt.Sprintf("CN=%s %s,OU=%s,%s", first, last, dept.Name, dcOf(org.Domain))
 			u["onPremisesSecurityIdentifier"] = fmt.Sprintf("S-1-5-21-1004336348-1177238915-682003330-%d", 1000+i)
 		}
 		switch i {
 		case n - 1:
-			makeOwner(u) // the last user is the owner of this Dolly, so the count of users is as asked
+			makeOwner(u, g.p) // the last user is the owner of this Dolly, so the count of users is as asked
 		case n - 2:
-			makeAdmin(u) // the one before is the admin account of the owner
+			makeAdmin(u, g.p) // the one before is the admin account of the owner
 		}
 		g.w.Users = append(g.w.Users, u)
 	}
@@ -198,41 +253,52 @@ const (
 
 // makeOwner turns a generated user into the owner. It draws nothing from the random numbers, so every other user of a
 // seed is the same as it was before the owner was added. Only the fields that say who the person is change.
-func makeOwner(u Object) {
+// The owner is always Philip Meholm. The profile says the domain of the address, and where he works.
+func makeOwner(u Object, p *Profile) {
+	upn := "philip.meholm@" + p.Organization.Domain
 	u["displayName"], u["givenName"], u["surname"] = OwnerName, "Philip", "Meholm"
-	u["userPrincipalName"], u["mail"], u["mailNickname"] = OwnerUPN, OwnerUPN, "philip.meholm"
-	u["department"], u["jobTitle"] = "Engineering", "Tech Lead"
+	u["userPrincipalName"], u["mail"], u["mailNickname"] = upn, upn, "philip.meholm"
+	u["department"], u["jobTitle"] = p.Owner.Department, p.Owner.JobTitle
 	u["accountEnabled"], u["userType"] = true, "Member"
-	u["proxyAddresses"] = []any{"SMTP:" + OwnerUPN}
+	u["proxyAddresses"] = []any{"SMTP:" + upn}
 	u["showInAddressList"], u["creationType"], u["externalUserState"] = true, nil, nil
 	if org, ok := u["employeeOrgData"].(Object); ok {
-		org["division"] = "Engineering"
+		org["division"] = p.Owner.Department
 	}
 	if _, synced := u["onPremisesDistinguishedName"]; synced {
-		u["onPremisesDistinguishedName"] = "CN=Philip Meholm,OU=Engineering,DC=acme,DC=example"
+		u["onPremisesDistinguishedName"] = fmt.Sprintf("CN=%s,OU=%s,%s", OwnerName, p.Owner.Department, dcOf(p.Organization.Domain))
 	}
 }
 
-// AdminName and AdminUPN are the admin account of the owner, as many companies make one (a. and the name). The quick connect
-// for PowerShell signs in as this user. A world of one user has no admin account.
+// AdminName and AdminUPN are the admin account of the owner in the default profile, as many companies make one (a. and the name). The
+// quick connect for PowerShell signs in as this user. A world of one user has no admin account. Another profile names its admin accounts
+// in its own way (admin.userPrincipalName), and World.AdminAccount gives the address.
 const (
 	AdminName = "Philip (admin)"
 	AdminUPN  = "a.philip@acme.example"
 )
 
-// makeAdmin turns a generated user into the admin account of the owner. Like makeOwner, it draws nothing from the random numbers.
-func makeAdmin(u Object) {
-	u["displayName"], u["givenName"], u["surname"] = AdminName, "Philip", "Meholm"
-	u["userPrincipalName"], u["mail"], u["mailNickname"] = AdminUPN, AdminUPN, "a.philip"
-	u["department"], u["jobTitle"] = "IT", "Administrator"
+// adminUPN is the user principal name of the admin account that a profile makes for the owner.
+func adminUPN(p *Profile) string {
+	return adminName(p.Admin.UserPrincipalName, "Philip", "Meholm") + "@" + p.Organization.Domain
+}
+
+// makeAdmin turns a generated user into the admin account of the owner. Like makeOwner, it draws nothing from the random numbers. The
+// profile says how the account is named, and the name is the name of the owner.
+func makeAdmin(u Object, p *Profile) {
+	upn := adminUPN(p)
+	name := adminName(p.Admin.DisplayName, "Philip", "Meholm")
+	u["displayName"], u["givenName"], u["surname"] = name, "Philip", "Meholm"
+	u["userPrincipalName"], u["mail"], u["mailNickname"] = upn, upn, strings.TrimSuffix(upn, "@"+p.Organization.Domain)
+	u["department"], u["jobTitle"] = p.Admin.Department, p.Admin.JobTitle
 	u["accountEnabled"], u["userType"] = true, "Member"
-	u["proxyAddresses"] = []any{"SMTP:" + AdminUPN}
+	u["proxyAddresses"] = []any{"SMTP:" + upn}
 	u["showInAddressList"], u["creationType"], u["externalUserState"] = false, nil, nil
 	if org, ok := u["employeeOrgData"].(Object); ok {
-		org["division"] = "IT"
+		org["division"] = p.Admin.Department
 	}
 	if _, synced := u["onPremisesDistinguishedName"]; synced {
-		u["onPremisesDistinguishedName"] = "CN=Philip (admin),OU=IT,DC=acme,DC=example"
+		u["onPremisesDistinguishedName"] = fmt.Sprintf("CN=%s,OU=%s,%s", name, p.Admin.Department, dcOf(p.Organization.Domain))
 	}
 }
 
@@ -245,25 +311,22 @@ func (g *gen) extensionAttributes() Object {
 	for i := 1; i <= 15; i++ {
 		ext[fmt.Sprintf("extensionAttribute%d", i)] = nil
 	}
-	ext["extensionAttribute1"] = fmt.Sprintf("CC-%d", 100+g.rng.IntN(20))
-	ext["extensionAttribute2"] = map[bool]string{true: "Contractor", false: "Employee"}[g.rng.IntN(100) < 12]
-	ext["extensionAttribute3"] = g.pick([]string{"North", "South", "East", "West", "HQ"})
-	ext["extensionAttribute4"] = fmt.Sprintf("SITE-%02d", 1+g.rng.IntN(12))
-	ext["extensionAttribute5"] = g.pick([]string{"L1", "L2", "L3", "L4"})
-	if g.rng.IntN(100) < 40 {
-		ext["extensionAttribute6"] = g.pick([]string{"remote", "hybrid", "office"})
-	}
-	if g.rng.IntN(100) < 25 {
-		ext["extensionAttribute7"] = fmt.Sprintf("PRJ-%03d", g.rng.IntN(60))
-	}
-	if g.rng.IntN(100) < 15 {
-		ext["extensionAttribute8"] = "pilot"
-	}
-	if g.rng.IntN(100) < 10 {
-		ext["extensionAttribute9"] = "VIP"
-	}
-	if g.rng.IntN(100) < 30 {
-		ext["extensionAttribute10"] = g.pick([]string{"A", "B", "C"})
+	// the attributes of the profile, from the first to the last. One draw for the fill (when it is not 100), then one for the value.
+	attrs := slices.Clone(g.p.Extension)
+	slices.SortStableFunc(attrs, func(a, b ProfileExtension) int { return a.Index - b.Index })
+	for _, a := range attrs {
+		if a.Fill != nil && *a.Fill < 100 && g.rng.IntN(100) >= *a.Fill {
+			continue
+		}
+		name := fmt.Sprintf("extensionAttribute%d", a.Index)
+		switch {
+		case a.Pattern != "":
+			ext[name] = g.pattern(a.Pattern, nil)
+		case len(a.Values) == 1:
+			ext[name] = a.Values[0].Value // one value: nothing to choose, so no draw (the default profile has two such attributes)
+		default:
+			ext[name] = a.Values[g.weighted(len(a.Values), func(i int) int { return a.Values[i].Weight })].Value
+		}
 	}
 	return ext
 }
@@ -274,16 +337,16 @@ var seedEpoch = time.Date(2022, 3, 1, 8, 0, 0, 0, time.UTC)
 // moreFields adds the other properties that people use in a tenant: employee
 // type and hire date, address, phones, other mail, the org data, and when the
 // account was made. Guests have the properties of an invited user.
-func (g *gen) moreFields(u Object, i int, dept Department, office Office, guest bool, mail string) {
+func (g *gen) moreFields(u Object, i int, dept ProfileDepartment, office ProfileOffice, guest bool, mail string) {
 	created := seedEpoch.Add(time.Duration(i) * 9 * time.Hour)
 	u["createdDateTime"] = created.Format(time.RFC3339)
 	u["lastPasswordChangeDateTime"] = created.Add(time.Duration(g.rng.IntN(400)) * 24 * time.Hour).Format(time.RFC3339)
-	u["employeeType"] = map[bool]string{true: "Contractor", false: "Employee"}[g.rng.IntN(100) < 12]
+	u["employeeType"] = map[bool]string{true: "Contractor", false: "Employee"}[g.rng.IntN(100) < g.p.People.ContractorPercent]
 	u["employeeHireDate"] = created.AddDate(0, 0, -g.rng.IntN(30)).Format(time.RFC3339)
-	u["employeeOrgData"] = Object{"division": dept.Name, "costCenter": fmt.Sprintf("CC-%d", 100+g.rng.IntN(20))}
-	u["streetAddress"] = fmt.Sprintf("%d %s", 1+g.rng.IntN(200), g.pick([]string{"Main Street", "Harbour Road", "Station Way", "Park Avenue"}))
+	u["employeeOrgData"] = Object{"division": dept.Name, "costCenter": g.pattern(g.p.Formats.CostCenter, nil)}
+	u["streetAddress"] = fmt.Sprintf("%d %s", 1+g.rng.IntN(200), g.pick(g.p.Formats.Streets))
 	u["state"] = office.City
-	u["businessPhones"] = []any{fmt.Sprintf("+%d %d %03d %03d", 40+g.rng.IntN(10), 8, g.rng.IntN(1000), g.rng.IntN(1000))}
+	u["businessPhones"] = []any{g.pattern(g.p.Formats.BusinessPhone, nil)}
 	u["otherMails"] = []any{}
 	u["proxyAddresses"] = []any{"SMTP:" + mail}
 	u["faxNumber"] = nil
@@ -325,7 +388,7 @@ func (g *gen) managers() {
 		people := byDept[d]
 		var mgrs []Object
 		for _, u := range people {
-			if strings.Contains(str(u["jobTitle"]), "Manager") {
+			if strings.Contains(str(u["jobTitle"]), g.p.People.ManagerWord) {
 				mgrs = append(mgrs, u)
 			}
 		}
@@ -341,7 +404,7 @@ func (g *gen) managers() {
 		for _, u := range people {
 			switch {
 			case u["id"] == head["id"]:
-			case strings.Contains(str(u["jobTitle"]), "Manager") || len(mgrs) == 0:
+			case strings.Contains(str(u["jobTitle"]), g.p.People.ManagerWord) || len(mgrs) == 0:
 				link(u, head)
 			default:
 				link(u, mgrs[g.rng.IntN(len(mgrs))])
@@ -356,11 +419,11 @@ func (g *gen) managers() {
 func (g *gen) places() {
 	g.w.RoomListMembersOf = map[string][]string{}
 	for b := 0; b < 2; b++ {
-		office := Offices[b]
+		office := g.p.Offices[b]
 		building := g.place("building", office.Name, "", Object{
 			"address": Object{"street": fmt.Sprintf("%d Main Street", 10+b), "city": office.City, "postalCode": office.Postal, "countryOrRegion": office.Country},
 		})
-		list := g.place("roomList", office.Name+" rooms", "", Object{"emailAddress": fmt.Sprintf("rooms-%s@acme.example", slug(office.Name))})
+		list := g.place("roomList", office.Name+" rooms", "", Object{"emailAddress": fmt.Sprintf("rooms-%s@%s", slug(office.Name), g.p.Organization.Domain)})
 		listKey := strings.ToLower(str(list["id"]))
 		for f := 1; f <= 3; f++ {
 			floor := g.place("floor", fmt.Sprintf("%d", f), str(building["id"]), Object{"sortOrder": float64(f)})
@@ -394,7 +457,7 @@ func (g *gen) place(kind, name, parent string, extra Object) Object {
 	maps.Copy(p, extra)
 	g.w.placeDefaults(p, kind)
 	if mail := str(p["emailAddress"]); mail != "" && kind != "roomList" {
-		p["emailAddress"] = strings.ToLower(mailSlug(name)) + "@acme.example"
+		p["emailAddress"] = strings.ToLower(mailSlug(name)) + "@" + g.p.Organization.Domain
 	}
 	g.w.Places = append(g.w.Places, p)
 	return p
@@ -433,19 +496,28 @@ func inDepts(depts ...string) func(Object) bool {
 
 // groups makes the groups from the departments and the offices.
 func (g *gen) groups() {
-	for _, d := range Departments {
-		g.group("grp.dept."+slug(d.Name), g.usersWhere(inDepts(d.Name)))
+	gp := g.p.Groups
+	if gp.DepartmentGroups {
+		for _, d := range g.p.Departments {
+			g.group(gp.Prefix+"dept."+slug(d.Name), g.usersWhere(inDepts(d.Name)))
+		}
 	}
-	for _, o := range Offices {
-		g.group("grp.loc."+slug(o.City), g.usersWhere(func(u Object) bool { return u["officeLocation"] == o.Name }))
+	if gp.OfficeGroups {
+		for _, o := range g.p.Offices {
+			g.group(gp.Prefix+"loc."+slug(o.City), g.usersWhere(func(u Object) bool { return u["officeLocation"] == o.Name }))
+		}
 	}
 	// A dynamic group: Entra decides its members, so nobody can change them by hand.
-	dyn := g.group("grp.dyn.engineering", g.usersWhere(inDepts("Engineering")))
-	dyn.Dynamic = true
-	dyn.Rule = `(user.department -eq "Engineering")`
+	if gp.DynamicDepartment != "" {
+		dyn := g.group(gp.Prefix+"dyn."+slug(gp.DynamicDepartment), g.usersWhere(inDepts(gp.DynamicDepartment)))
+		dyn.Dynamic = true
+		dyn.Rule = fmt.Sprintf(`(user.department -eq %q)`, gp.DynamicDepartment)
+	}
 	// A Microsoft 365 group holds users only.
-	m365 := g.group("grp.m365.announcements", g.usersWhere(inDepts("Marketing", "Human Resources")))
-	m365.Security, m365.Mail, m365.Unified = false, true, true
+	if len(gp.Microsoft365) > 0 {
+		m365 := g.group(gp.Prefix+"m365.announcements", g.usersWhere(inDepts(gp.Microsoft365...)))
+		m365.Security, m365.Mail, m365.Unified = false, true, true
+	}
 }
 
 // byName finds a group made earlier.
@@ -462,26 +534,30 @@ func (g *gen) byName(name string) *Group {
 // groups that hold the role groups (and some users who should not be there),
 // an enterprise application, and the role assignments of the role groups.
 func (g *gen) apps() {
-	admins := g.usersWhere(inDepts("IT"))
-	for _, a := range apps {
+	gp := g.p.Groups
+	admins := g.usersWhere(inDepts(gp.AdminDepartment))
+	var firstEnterprise *ServicePrincipal // the one that is also an app registration of this tenant
+	for _, a := range gp.Apps {
 		contrib := g.usersWhere(inDepts(a.Contributor...))
 		readers := g.usersWhere(inDepts(a.Reader...))
-		cGroup := g.group("grp.app."+a.Name+".contributor", contrib)
-		rGroup := g.group("grp.app."+a.Name+".reader", firstN(readers, 60))
+		cGroup := g.group(gp.Prefix+"app."+a.Name+".contributor", contrib)
+		rGroup := g.group(gp.Prefix+"app."+a.Name+".reader", firstN(readers, 60))
 		// A group inside a group: the readers also hold a whole department group.
-		rGroup.Members = append(rGroup.Members, g.byName("grp.dept.legal").ID)
-		aGroup := g.group("grp.app."+a.Name+".admin", firstN(admins, 6))
+		if legal := g.byName(gp.Prefix + "dept." + slug(gp.LegalDepartment)); legal != nil {
+			rGroup.Members = append(rGroup.Members, legal.ID)
+		}
+		aGroup := g.group(gp.Prefix+"app."+a.Name+".admin", firstN(admins, 6))
 
 		for _, env := range []string{"main", "uat", "prod"} {
 			// The target holds the role groups, a part of their users (as an old run left
 			// it), and a few users from nowhere. A run then has users to add and remove.
-			t := g.group("grp.app."+a.Name+"."+env, []string{cGroup.ID, rGroup.ID, aGroup.ID})
+			t := g.group(gp.Prefix+"app."+a.Name+"."+env, []string{cGroup.ID, rGroup.ID, aGroup.ID})
 			for i, id := range contrib {
 				if i%3 != 0 {
 					t.Members = append(t.Members, id)
 				}
 			}
-			for _, id := range firstN(g.usersWhere(inDepts("Legal", "Human Resources")), 4) {
+			for _, id := range firstN(g.usersWhere(inDepts(gp.StrayDepartments...)), 4) {
 				if !t.has(id) {
 					t.Members = append(t.Members, id)
 				}
@@ -492,6 +568,9 @@ func (g *gen) apps() {
 			{g.guid(), "Admin"}, {g.guid(), "Contributor"}, {g.guid(), "Reader"},
 		}}
 		g.w.SPs = append(g.w.SPs, sp)
+		if firstEnterprise == nil {
+			firstEnterprise = sp
+		}
 		for i, grp := range []*Group{aGroup, cGroup, rGroup} {
 			g.w.Assignments = append(g.w.Assignments, Assignment{sp.ID, grp.ID, "Group", sp.Roles[i].ID})
 		}
@@ -500,7 +579,26 @@ func (g *gen) apps() {
 		}
 	}
 	// An app that is not an enterprise application: the finder must leave it out.
-	g.w.SPs = append(g.w.SPs, &ServicePrincipal{ID: g.guid(), Name: "Acme Backend Service", AppID: g.guid()})
+	backend := &ServicePrincipal{ID: g.guid(), Name: g.p.Organization.CompanyName + " Backend Service", AppID: g.guid()}
+	g.w.SPs = append(g.w.SPs, backend)
+	// The app registrations of this tenant (no draw of the random generator: the IDs come from the client IDs). The first enterprise application is
+	// registered here as well, and the backend service is registered with a service principal that has no enterprise tag. The other enterprise
+	// applications are apps of other tenants: a service principal and no registration.
+	g.w.Applications = nil
+	for i, sp := range []*ServicePrincipal{firstEnterprise, backend} {
+		if sp == nil {
+			continue
+		}
+		app := g.w.newApplication(stableGUID("dolly/application/"+sp.AppID), sp.AppID, sp.Name, seedEpoch.Add(time.Duration(i+1)*24*time.Hour))
+		var roles []any
+		for _, r := range sp.Roles {
+			roles = append(roles, Object{"allowedMemberTypes": []any{"User"}, "description": r.Name, "displayName": r.Name, "id": r.ID, "isEnabled": true, "origin": "Application", "value": nil})
+		}
+		if roles != nil {
+			app["appRoles"] = roles
+		}
+		g.w.Applications = append(g.w.Applications, app)
+	}
 
 	// The portal of Dolly, as a client of the Graph API. It has the same IDs in every world, and no draw of the random
 	// generator, so the rest of the data does not change. Its calls are not throttled and not in the list of calls.

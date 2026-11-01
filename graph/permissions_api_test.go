@@ -109,7 +109,8 @@ func TestGraphAPI_PermissionGrants(t *testing.T) {
 		Oauth2PermissionScopes []any `json:"oauth2PermissionScopes"`
 	}
 	decode(t, rec.Body.String(), &one)
-	if len(one.AppRoles) != 534 || len(one.Oauth2PermissionScopes) != 598 {
+	cat, _ := permissions.Load()
+	if len(one.AppRoles) != len(cat.Application) || len(one.Oauth2PermissionScopes) != len(cat.Delegated) {
 		t.Errorf("%d roles and %d scopes", len(one.AppRoles), len(one.Oauth2PermissionScopes))
 	}
 }
@@ -117,6 +118,7 @@ func TestGraphAPI_PermissionGrants(t *testing.T) {
 // The admin API of the page: pick a resource, pick permissions, grant, and read the strings to copy.
 func TestAdminAPI_Permissions(t *testing.T) {
 	h, _, _, _ := permServer(t)
+	cat, _ := permissions.Load()
 
 	var res struct {
 		Resources []struct {
@@ -125,7 +127,7 @@ func TestAdminAPI_Permissions(t *testing.T) {
 		}
 	}
 	decode(t, send(h, "GET", "/_dolly/resources", "").Body.String(), &res)
-	if len(res.Resources) < 2 || res.Resources[0].AppID != permissions.GraphAppID || res.Resources[0].Namespace != "https://graph.microsoft.com" || res.Resources[0].Delegated != 598 {
+	if len(res.Resources) < 2 || res.Resources[0].AppID != permissions.GraphAppID || res.Resources[0].Namespace != "https://graph.microsoft.com" || res.Resources[0].Delegated != len(cat.Delegated) {
 		t.Fatalf("resources: %+v", res.Resources)
 	}
 

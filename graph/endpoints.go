@@ -78,6 +78,7 @@ func (s *Server) track(r *http.Request, status int) {
 			pattern = strings.Replace(pattern, BasePath+"/users/{id}", BasePath+"/me", 1)
 		}
 		s.stats.add(s.stats.routes, pattern, status)
+		s.noteNeed(r, pattern, status) // the permissions that the call needs (needs.go): its own lock, and the stats lock is never taken inside it
 		return
 	}
 	key := r.Method + " " + normalize(r.URL.Path)
@@ -121,7 +122,7 @@ type EndpointInfo struct {
 
 // schemaOf gives the schema of the objects of a resource, by the first part of its path.
 var schemaOf = map[string]string{
-	"users": "user", "groups": "group", "servicePrincipals": "servicePrincipal",
+	"users": "user", "groups": "group", "servicePrincipals": "servicePrincipal", "applications": "application",
 	"organization": "organization", "oauth2PermissionGrants": "oAuth2PermissionGrant", "places": "place",
 }
 

@@ -22,6 +22,7 @@ func (s *Server) mountAPI() {
 		api.Users(s.world),
 		api.Groups(s.world),
 		api.ServicePrincipals(s.world),
+		api.Applications(s.world),
 		api.OAuth2PermissionGrants(s.world),
 		api.Places(s.world),
 		api.Organization(s.world),

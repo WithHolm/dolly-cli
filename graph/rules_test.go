@@ -209,9 +209,13 @@ func TestCount_OnDirectoryObjects(t *testing.T) {
 	if rec = sendWith(h, "GET", "/v1.0/users/$count?$filter="+url.QueryEscape("department ne 'Legal'"), map[string]string{"ConsistencyLevel": "eventual"}); rec.Code != 200 {
 		t.Errorf("/users/$count with ne: %d %s", rec.Code, rec.Body)
 	}
-	for _, path := range []string{"/v1.0/organization/$count", "/v1.0/oauth2PermissionGrants/$count"} {
-		if rec = sendWith(h, "GET", path, nil); rec.Code != 200 {
-			t.Errorf("%s needs no header: %d %s", path, rec.Code, rec.Body)
+	if rec = sendWith(h, "GET", "/v1.0/oauth2PermissionGrants/$count", nil); rec.Code != 200 {
+		t.Errorf("/oauth2PermissionGrants/$count needs no header: %d %s", rec.Code, rec.Body)
+	}
+	// Graph does not count the organizations at all, with the header or without it
+	for _, hdr := range []map[string]string{nil, {"ConsistencyLevel": "eventual"}} {
+		if rec = sendWith(h, "GET", "/v1.0/organization/$count", hdr); rec.Code != 400 || !strings.Contains(rec.Body.String(), "unsupported entity 'Organization'") {
+			t.Errorf("/organization/$count %v: %d %s", hdr, rec.Code, rec.Body)
 		}
 	}
 	// something that is not a directory object counts with no header

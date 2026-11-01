@@ -74,7 +74,9 @@ func TestAppRoleAssignments_ApplicationPermissionsOfGraph(t *testing.T) {
 	if _, err := w.AssignAppRole(gid, client.ID, userReadAll, admin); err == nil || !strings.Contains(err.Error(), "already exists") {
 		t.Errorf("twice: %v", err)
 	}
-	if _, err := w.AssignAppRole(gid, client.ID, "11111111-1111-1111-1111-111111111111", admin); err == nil || !strings.Contains(err.Error(), "was not found on application '"+permissions.GraphAppID+"'") {
+	// an ID that dollycli does not know, for Microsoft Graph: a 404 that says what to do (Graph itself says 400 "Permission being assigned was not found")
+	if _, err := w.AssignAppRole(gid, client.ID, "11111111-1111-1111-1111-111111111111", admin); err == nil || err.Status != 404 || err.Code != "Request_ResourceNotFound" ||
+		!strings.Contains(err.Message, "does not know a permission of Microsoft Graph with the ID '11111111-1111-1111-1111-111111111111'") || !strings.Contains(err.Message, "use the permission names") {
 		t.Errorf("a role that is not there: %v", err)
 	}
 	users := w.Users[0]["id"].(string)

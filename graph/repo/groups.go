@@ -378,6 +378,9 @@ func (w *World) dropReferences(id string) int {
 	n := 0
 	for _, g := range w.Groups {
 		before := len(g.Members) + len(g.Owners)
+		if slices.ContainsFunc(g.Members, func(m string) bool { return isID(m, id) }) {
+			w.noteMember(g.ID, id, true) // delta query: the group lost this member
+		}
 		g.removeMember(id)
 		g.Owners = slices.DeleteFunc(g.Owners, func(o string) bool { return isID(o, id) })
 		if len(g.Members)+len(g.Owners) != before {

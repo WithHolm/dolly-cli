@@ -96,8 +96,11 @@ func TestSpec_GeneratedObjectsHaveOnlyGraphProperties(t *testing.T) {
 			}
 		}
 	}
+	// The real Graph gives these two for an organization (checked with the sample tenant of Graph Explorer), and the description
+	// of Graph that the extract is made from does not have them.
+	notInTheDescription := map[string]bool{"isMultipleDataLocationsForServicesEnabled": true, "onPremisesSyncStatus": true}
 	for k := range w.Organization {
-		if _, ok := s.Schemas["organization"][k]; !ok {
+		if _, ok := s.Schemas["organization"][k]; !ok && !notInTheDescription[k] {
 			unknown["organization."+k] = true
 		}
 	}

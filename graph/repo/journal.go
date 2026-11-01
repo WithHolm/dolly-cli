@@ -53,6 +53,8 @@ type Event struct {
 	From    string `json:"from,omitempty"`
 	To      string `json:"to,omitempty"`
 	Changed int    `json:"changed,omitempty"`
+	// Users has the object IDs of the users that a rename changed. Delta query reads it. A file from before it has none: the replay finds them.
+	Users []string `json:"users,omitempty"`
 
 	// user
 	User     string         `json:"user,omitempty"` // the object ID
@@ -73,6 +75,10 @@ type Event struct {
 	// place.create (Object has the whole place), place.update (Set), place.delete
 	Place     string `json:"place,omitempty"`
 	PlaceName string `json:"placeName,omitempty"`
+
+	// application.create (Object has the whole application), application.update (Set), application.delete. App is the object ID.
+	App     string `json:"app,omitempty"`
+	AppName string `json:"appName,omitempty"`
 
 	// rollback: the Seq of the last change that is kept. 0 is the seed.
 	Target int `json:"target,omitempty"`
@@ -106,7 +112,7 @@ func (e Event) Text() string {
 		return fmt.Sprintf("Went back to the state after change %d", e.Target)
 	}
 	// the events of the resources: each file says its own
-	for _, text := range []func(Event) (string, bool){userEventText, managerEventText, groupEventText, memberEventText, ownerEventText, placeEventText, principalEventText, grantEventText} {
+	for _, text := range []func(Event) (string, bool){userEventText, managerEventText, groupEventText, memberEventText, ownerEventText, placeEventText, principalEventText, servicePrincipalWriteText, applicationEventText, grantEventText, organizationEventText} {
 		if s, ok := text(e); ok {
 			return s
 		}
@@ -152,6 +158,8 @@ type journal struct {
 type OpenOptions struct {
 	Users int
 	Seed  int64
+	// Profile says what a new seed looks like. nil is the default profile. It counts only when the folder has no seed file.
+	Profile *Profile
 	// Now gives the time of a change. nil uses the clock. Tests set it.
 	Now func() time.Time
 }
@@ -206,7 +214,10 @@ func open(dir string, opt OpenOptions) (*World, error) {
 	baseline, err := os.ReadFile(seedPath)
 	switch {
 	case errors.Is(err, os.ErrNotExist):
-		fresh := Generate(Options{Users: opt.Users, Seed: opt.Seed})
+		fresh, err := GenerateChecked(Options{Users: opt.Users, Seed: opt.Seed, Profile: opt.Profile})
+		if err != nil {
+			return nil, fmt.Errorf("dolly: the profile is not valid: %w", err)
+		}
 		if baseline, err = json.MarshalIndent(fresh, "", "  "); err != nil {
 			return nil, err
 		}
@@ -216,6 +227,8 @@ func open(dir string, opt OpenOptions) (*World, error) {
 		slog.Info("Dolly made the seed data.", "file", seedPath, "users", opt.Users)
 	case err != nil:
 		return nil, fmt.Errorf("dolly: reading %q: %w", seedPath, err)
+	case opt.Profile != nil:
+		slog.Warn("Dolly has data in this folder already, so it leaves the profile out. A profile makes a new seed only. Use 'dolly graph generate --force --profile <file>' to replace the data.", "folder", dir)
 	}
 
 	statePath := filepath.Join(dir, stateFile)
@@ -315,6 +328,7 @@ func (w *World) now() time.Time {
 // keeps no record.
 func (w *World) record(e Event) {
 	if w.j == nil {
+		w.noteChange(w.delta.seq+1, e) // no history, but delta query keeps its log
 		return
 	}
 	w.j.mu.Lock()
@@ -331,6 +345,7 @@ func (w *World) record(e Event) {
 		return
 	}
 	w.j.events = append(w.j.events, e)
+	w.noteChange(e.Seq, e)
 }
 
 // History gives the changes, oldest first.
@@ -352,12 +367,16 @@ func replay(baseline []byte, events []Event, n int) (*World, error) {
 	if err != nil {
 		return nil, err
 	}
+	base, resets := seedBase(baseline), 0 // the epoch of the log of changes: the seed, and how many times the data went back
+	w.delta.restart(base, resets, 0)
 	for _, e := range events[:n] {
 		switch e.Type {
 		case evReset:
 			if w, err = loadBytes(baseline); err != nil {
 				return nil, err
 			}
+			resets++
+			w.delta.restart(base, resets, e.Seq)
 		case evRollback:
 			if e.Target < 0 || e.Target >= e.Seq {
 				return nil, fmt.Errorf("change %d goes back to change %d, which is not before it", e.Seq, e.Target)
@@ -365,6 +384,8 @@ func replay(baseline []byte, events []Event, n int) (*World, error) {
 			if w, err = replay(baseline, events, e.Target); err != nil {
 				return nil, err
 			}
+			resets++
+			w.delta.restart(base, resets, e.Seq)
 		default:
 			w.apply(e)
 		}
@@ -375,9 +396,13 @@ func replay(baseline []byte, events []Event, n int) (*World, error) {
 // apply does a change on a world that nobody else uses. The change was right when
 // it was made, so a problem now (a group that is gone) is not an error.
 func (w *World) apply(e Event) {
+	if e.Type == evRename && e.Users == nil { // a file from before the event had the IDs: find the users that the rename changes
+		e.Users = w.usersWith(e.Field, e.From)
+	}
+	defer w.noteChange(e.Seq, e) // the log of delta query
 	// the events of the resources: each file does its own
 	switch {
-	case w.applyUserEvent(e), w.applyManagerEvent(e), w.applyGroupEvent(e), w.applyMemberEvent(e), w.applyOwnerEvent(e), w.applyPlaceEvent(e), w.applyPrincipalEvent(e), w.applyGrantEvent(e):
+	case w.applyUserEvent(e), w.applyManagerEvent(e), w.applyGroupEvent(e), w.applyMemberEvent(e), w.applyOwnerEvent(e), w.applyPlaceEvent(e), w.applyPrincipalEvent(e), w.applyServicePrincipalWriteEvent(e), w.applyApplicationEvent(e), w.applyGrantEvent(e), w.applyOrganizationEvent(e):
 	}
 	// The members of a dynamic group are not in the history: they are worked out again, as
 	// they were when the change was made (a paused group keeps the members that it had).

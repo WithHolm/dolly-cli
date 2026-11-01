@@ -1,9 +1,11 @@
 package repo
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/withholm/dolly-cli/graph/permissions"
 )
@@ -20,6 +22,8 @@ type ResourceInfo struct {
 	Builtin     string `json:"builtin,omitempty"`
 	Application int    `json:"application"` // how many application permissions (roles) it has
 	Delegated   int    `json:"delegated"`   // how many delegated permissions (scopes) it has
+	// Source says where the permissions of Microsoft Graph are from, when the person added their own file (docs/permissions.md).
+	Source string `json:"source,omitempty"`
 }
 
 // PermissionInfo is a permission of a resource, with the scope that a client writes to ask for it.
@@ -81,6 +85,9 @@ func (sp *ServicePrincipal) resourceInfo() ResourceInfo {
 		Application: len(sp.Roles), Delegated: len(sp.Scopes)}
 	if sp.Builtin == BuiltinGraph {
 		r.Application, r.Delegated = len(catalogOnce().Application), len(catalogOnce().Delegated)
+		if x := catalogOnce().Extra; x != nil {
+			r.Source = fmt.Sprintf("Built-in list, with %d delegated and %d application permissions from your tenant (file written %s).", x.Delegated, x.Application, x.Date.Format(time.DateOnly))
+		}
 	}
 	return r
 }

@@ -22,13 +22,14 @@ import (
 )
 
 // prefixes are the paths that dolly has, or may have soon.
-var prefixes = []string{"/users", "/groups", "/servicePrincipals", "/places", "/organization", "/oauth2PermissionGrants", "/me"}
+var prefixes = []string{"/users", "/groups", "/servicePrincipals", "/applications", "/places", "/organization", "/oauth2PermissionGrants", "/me"}
 
 // schemas are the schemas that give the properties.
 var schemas = map[string]string{
 	"user": "microsoft.graph.user", "group": "microsoft.graph.group",
 	"servicePrincipal": "microsoft.graph.servicePrincipal", "directoryObject": "microsoft.graph.directoryObject",
-	"place": "microsoft.graph.place", "room": "microsoft.graph.room", "roomList": "microsoft.graph.roomList",
+	"application": "microsoft.graph.application",
+	"place":       "microsoft.graph.place", "room": "microsoft.graph.room", "roomList": "microsoft.graph.roomList",
 	"building": "microsoft.graph.building", "floor": "microsoft.graph.floor", "section": "microsoft.graph.section",
 	"desk": "microsoft.graph.desk", "workspace": "microsoft.graph.workspace",
 	"physicalAddress": "microsoft.graph.physicalAddress", "outlookGeoCoordinates": "microsoft.graph.outlookGeoCoordinates",

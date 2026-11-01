@@ -79,6 +79,22 @@ func (w *World) refreshGroup(g *Group, env rule.Env) {
 			members = append(members, strings.ToLower(str(u["id"])))
 		}
 	}
+	// the members that came and went are changes for delta query. They have no event of their own.
+	had, has := map[string]bool{}, map[string]bool{}
+	for _, m := range g.Members {
+		had[strings.ToLower(m)] = true
+	}
+	for _, m := range members {
+		has[m] = true
+		if !had[m] {
+			w.noteMember(g.ID, m, false)
+		}
+	}
+	for _, m := range g.Members {
+		if !has[strings.ToLower(m)] {
+			w.noteMember(g.ID, m, true)
+		}
+	}
 	g.Members = members
 }
 

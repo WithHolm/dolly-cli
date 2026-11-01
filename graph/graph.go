@@ -20,7 +20,22 @@ type (
 	ValueCount = repo.ValueCount
 	// UserInfo is a user in a list of the page.
 	UserInfo = repo.UserInfo
+	// Profile says what a generated tenant looks like (see repo.Profile).
+	Profile = repo.Profile
+	// ProfilePreview is what a profile would make.
+	ProfilePreview = repo.ProfilePreview
 )
+
+// DefaultProfile is the tenant that dollycli makes when it is given no profile.
+func DefaultProfile() *Profile { return repo.DefaultProfile() }
+
+// ParseProfile reads a profile from JSON, and checks it.
+var ParseProfile = repo.ParseProfile
+
+// PreviewProfile makes a world from a profile in memory, and says what it has.
+func PreviewProfile(p *Profile, users int, seed int64) (*ProfilePreview, error) {
+	return repo.PreviewProfile(p, users, seed)
+}
 
 // Departments and Offices are the fixed sets of the generated data.
 var (

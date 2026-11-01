@@ -35,7 +35,7 @@ const (
 
 // The modes of a service principal.
 const (
-	ModeOpen    = "open"    // everything is allowed, and the calls are recorded. The default.
+	ModeOpen    = "open"    // everything is allowed, whatever is granted. The default. (The permissions that the calls need are shown by the portal: graph/needs.go.)
 	ModeEnforce = "enforce" // only what is granted to the service principal is allowed
 )
 
@@ -72,6 +72,10 @@ type ServicePrincipalInfo struct {
 	Builtin    string    `json:"builtin,omitempty"` // graph: Microsoft Graph, whose permissions are the catalog
 	Mode       string    `json:"mode"`
 	Credential CredState `json:"credential"`
+	// Enterprise is the tag WindowsAzureActiveDirectoryIntegratedApp: only a service principal with it is an enterprise application in Entra.
+	Enterprise bool `json:"enterprise"`
+	// Application is the object ID of the app registration with the same appId in this tenant. Empty: the app is registered in another tenant.
+	Application string `json:"application,omitempty"`
 
 	System             bool `json:"system"`
 	ExemptFromThrottle bool `json:"exemptFromThrottle"`
@@ -80,7 +84,7 @@ type ServicePrincipalInfo struct {
 
 func (sp *ServicePrincipal) info() ServicePrincipalInfo {
 	i := ServicePrincipalInfo{
-		ID: sp.ID, AppID: sp.AppID, Name: sp.Name, Auto: sp.Auto, Builtin: sp.Builtin, Mode: sp.Mode, Credential: CredState{State: CredAny},
+		ID: sp.ID, AppID: sp.AppID, Name: sp.Name, Auto: sp.Auto, Builtin: sp.Builtin, Mode: sp.Mode, Credential: CredState{State: CredAny}, Enterprise: sp.Enterprise,
 		System: sp.System, ExemptFromThrottle: sp.ExemptFromThrottle, HideCalls: sp.HideCalls,
 	}
 	if i.Mode == "" {
@@ -148,7 +152,16 @@ func (w *World) FindServicePrincipal(appID string) (ServicePrincipalInfo, bool) 
 	if sp == nil {
 		return ServicePrincipalInfo{}, false
 	}
-	return sp.info(), true
+	return w.spInfo(sp), true
+}
+
+// spInfo is sp.info() with what the world adds: the app registration of the same appId, if this tenant has one. Call it with the lock held.
+func (w *World) spInfo(sp *ServicePrincipal) ServicePrincipalInfo {
+	i := sp.info()
+	if app := w.appsByAppID[strings.ToLower(sp.AppID)]; app != nil {
+		i.Application = str(app["id"])
+	}
+	return i
 }
 
 // ListServicePrincipalInfo gives every service principal, in the order of the data.
@@ -157,7 +170,7 @@ func (w *World) ListServicePrincipalInfo() []ServicePrincipalInfo {
 	defer w.mu.RUnlock()
 	out := make([]ServicePrincipalInfo, len(w.SPs))
 	for i, sp := range w.SPs {
-		out[i] = sp.info()
+		out[i] = w.spInfo(sp)
 	}
 	return out
 }
@@ -173,16 +186,19 @@ func (w *World) EnsureServicePrincipal(appID string, a Actor) (ServicePrincipalI
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	if sp := w.spByAppID(appID); sp != nil {
-		return sp.info(), nil
+		return w.spInfo(sp), nil
 	}
 	sp := &ServicePrincipal{
 		ID: newGUID(), AppID: appID, Auto: true, Mode: ModeOpen,
 		Name: "Auto-created service principal (" + appID[:8] + ")",
 	}
+	if app := w.appsByAppID[appID]; app != nil {
+		sp.Name = str(app["displayName"]) // the app is registered in this tenant: its service principal has its name
+	}
 	w.addServicePrincipal(sp)
 	cp := *sp
 	w.record(Event{Type: evSPCreate, Actor: a, AppID: appID, SP: &cp})
-	return sp.info(), nil
+	return w.spInfo(sp), nil
 }
 
 func (w *World) addServicePrincipal(sp *ServicePrincipal) {
@@ -331,6 +347,9 @@ func principalEventText(e Event) (string, bool) {
 		name := e.AppID
 		if e.SP != nil {
 			name = e.SP.Name
+		}
+		if e.Field == "graph" { // made by POST /servicePrincipals
+			return fmt.Sprintf("Created the service principal %s (client ID %s)", name, e.AppID), true
 		}
 		return fmt.Sprintf("Created the service principal %s (client ID %s) when it signed in the first time", name, e.AppID), true
 	case evSPMode:

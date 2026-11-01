@@ -3,6 +3,1063 @@
  "operations": [
   {
    "method": "GET",
+   "path": "/applications",
+   "summary": "List applications",
+   "doc": "https://learn.microsoft.com/graph/api/application-list?view=graph-rest-1.0",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications",
+   "summary": "Create application",
+   "doc": "https://learn.microsoft.com/graph/api/application-post-applications?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/$count",
+   "summary": "Get the number of the resource",
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/delta()",
+   "summary": "Invoke function delta",
+   "doc": "https://learn.microsoft.com/graph/api/application-delta?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$orderby",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/getAvailableExtensionProperties",
+   "summary": "Invoke action getAvailableExtensionProperties",
+   "doc": "https://learn.microsoft.com/graph/api/directoryobject-getavailableextensionproperties?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/getByIds",
+   "summary": "Invoke action getByIds",
+   "doc": "https://learn.microsoft.com/graph/api/directoryobject-getbyids?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/validateProperties",
+   "summary": "Invoke action validateProperties",
+   "doc": "https://learn.microsoft.com/graph/api/directoryobject-validateproperties?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}",
+   "summary": "Delete application",
+   "doc": "https://learn.microsoft.com/graph/api/application-delete?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}",
+   "summary": "Get application",
+   "doc": "https://learn.microsoft.com/graph/api/application-get?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}",
+   "summary": "Upsert application",
+   "doc": "https://learn.microsoft.com/graph/api/application-upsert?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/addKey",
+   "summary": "Invoke action addKey",
+   "doc": "https://learn.microsoft.com/graph/api/application-addkey?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/addPassword",
+   "summary": "Invoke action addPassword",
+   "doc": "https://learn.microsoft.com/graph/api/application-addpassword?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/appManagementPolicies",
+   "summary": "Get appManagementPolicies from applications",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/appManagementPolicies/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/appManagementPolicies/$ref",
+   "summary": "Remove appliesTo",
+   "doc": "https://learn.microsoft.com/graph/api/appmanagementpolicy-delete-appliesto?view=graph-rest-1.0",
+   "query": [
+    "@id"
+   ],
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/appManagementPolicies/$ref",
+   "summary": "Get ref of appManagementPolicies from applications",
+   "query": [
+    "$orderby"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/appManagementPolicies/$ref",
+   "summary": "Assign appliesTo",
+   "doc": "https://learn.microsoft.com/graph/api/appmanagementpolicy-post-appliesto?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/appManagementPolicies/{appManagementPolicy-id}/$ref",
+   "summary": "Remove appliesTo",
+   "doc": "https://learn.microsoft.com/graph/api/appmanagementpolicy-delete-appliesto?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/checkMemberGroups",
+   "summary": "Invoke action checkMemberGroups",
+   "doc": "https://learn.microsoft.com/graph/api/directoryobject-checkmembergroups?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/checkMemberObjects",
+   "summary": "Invoke action checkMemberObjects"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/createdOnBehalfOf",
+   "summary": "Get createdOnBehalfOf from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/extensionProperties",
+   "summary": "List extensionProperties (directory extensions)",
+   "doc": "https://learn.microsoft.com/graph/api/application-list-extensionproperty?view=graph-rest-1.0",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/extensionProperties",
+   "summary": "Create extensionProperty (directory extension)",
+   "doc": "https://learn.microsoft.com/graph/api/application-post-extensionproperty?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/extensionProperties/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/extensionProperties/{extensionProperty-id}",
+   "summary": "Delete extensionProperty (directory extension)",
+   "doc": "https://learn.microsoft.com/graph/api/extensionproperty-delete?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/extensionProperties/{extensionProperty-id}",
+   "summary": "Get extensionProperty (directory extension)",
+   "doc": "https://learn.microsoft.com/graph/api/extensionproperty-get?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/extensionProperties/{extensionProperty-id}",
+   "summary": "Update the navigation property extensionProperties in applications"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/federatedIdentityCredentials",
+   "summary": "List federatedIdentityCredential objects",
+   "doc": "https://learn.microsoft.com/graph/api/federatedidentitycredential-list?view=graph-rest-1.0",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/federatedIdentityCredentials",
+   "summary": "Create federatedIdentityCredential",
+   "doc": "https://learn.microsoft.com/graph/api/federatedidentitycredential-post?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/federatedIdentityCredentials(name='{name}')",
+   "summary": "Delete federatedIdentityCredential",
+   "doc": "https://learn.microsoft.com/graph/api/federatedidentitycredential-delete?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/federatedIdentityCredentials(name='{name}')",
+   "summary": "Get federatedIdentityCredential",
+   "doc": "https://learn.microsoft.com/graph/api/federatedidentitycredential-get?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/federatedIdentityCredentials(name='{name}')",
+   "summary": "Upsert federatedIdentityCredential",
+   "doc": "https://learn.microsoft.com/graph/api/federatedidentitycredential-upsert?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/federatedIdentityCredentials/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/federatedIdentityCredentials/{federatedIdentityCredential-id}",
+   "summary": "Delete federatedIdentityCredential",
+   "doc": "https://learn.microsoft.com/graph/api/federatedidentitycredential-delete?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/federatedIdentityCredentials/{federatedIdentityCredential-id}",
+   "summary": "Get federatedIdentityCredential",
+   "doc": "https://learn.microsoft.com/graph/api/federatedidentitycredential-get?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/federatedIdentityCredentials/{federatedIdentityCredential-id}",
+   "summary": "Upsert federatedIdentityCredential",
+   "doc": "https://learn.microsoft.com/graph/api/federatedidentitycredential-upsert?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/getMemberGroups",
+   "summary": "Invoke action getMemberGroups",
+   "doc": "https://learn.microsoft.com/graph/api/directoryobject-getmembergroups?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/getMemberObjects",
+   "summary": "Invoke action getMemberObjects",
+   "doc": "https://learn.microsoft.com/graph/api/directoryobject-getmemberobjects?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/homeRealmDiscoveryPolicies",
+   "summary": "Get homeRealmDiscoveryPolicies from applications",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/homeRealmDiscoveryPolicies/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/homeRealmDiscoveryPolicies/{homeRealmDiscoveryPolicy-id}",
+   "summary": "Get homeRealmDiscoveryPolicies from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/logo",
+   "summary": "Delete logo for application in applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/logo",
+   "summary": "Get logo for application from applications"
+  },
+  {
+   "method": "PUT",
+   "path": "/applications/{application-id}/logo",
+   "summary": "Update logo for application in applications"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners",
+   "summary": "List owners of an application",
+   "doc": "https://learn.microsoft.com/graph/api/application-list-owners?view=graph-rest-1.0",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/$count",
+   "summary": "Get the number of the resource",
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/owners/$ref",
+   "summary": "Remove application owner",
+   "doc": "https://learn.microsoft.com/graph/api/application-delete-owners?view=graph-rest-1.0",
+   "query": [
+    "@id"
+   ],
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/$ref",
+   "summary": "List owners of an application",
+   "doc": "https://learn.microsoft.com/graph/api/application-list-owners?view=graph-rest-1.0",
+   "query": [
+    "$orderby"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/owners/$ref",
+   "summary": "Add owner",
+   "doc": "https://learn.microsoft.com/graph/api/application-post-owners?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/graph.appRoleAssignment",
+   "summary": "Get the items of type microsoft.graph.appRoleAssignment in the microsoft.graph.directoryObject collection",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/graph.appRoleAssignment/$count",
+   "summary": "Get the number of the resource",
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/graph.endpoint",
+   "summary": "Get the items of type microsoft.graph.endpoint in the microsoft.graph.directoryObject collection",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/graph.endpoint/$count",
+   "summary": "Get the number of the resource",
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/graph.servicePrincipal",
+   "summary": "Get the items of type microsoft.graph.servicePrincipal in the microsoft.graph.directoryObject collection",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/graph.servicePrincipal/$count",
+   "summary": "Get the number of the resource",
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/graph.user",
+   "summary": "Get the items of type microsoft.graph.user in the microsoft.graph.directoryObject collection",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/graph.user/$count",
+   "summary": "Get the number of the resource",
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/owners/{directoryObject-id}/$ref",
+   "summary": "Remove application owner",
+   "doc": "https://learn.microsoft.com/graph/api/application-delete-owners?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/{directoryObject-id}/graph.appRoleAssignment",
+   "summary": "Get the item of type microsoft.graph.directoryObject as microsoft.graph.appRoleAssignment",
+   "query": [
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/{directoryObject-id}/graph.endpoint",
+   "summary": "Get the item of type microsoft.graph.directoryObject as microsoft.graph.endpoint",
+   "query": [
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/{directoryObject-id}/graph.servicePrincipal",
+   "summary": "Get the item of type microsoft.graph.directoryObject as microsoft.graph.servicePrincipal",
+   "query": [
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/owners/{directoryObject-id}/graph.user",
+   "summary": "Get the item of type microsoft.graph.directoryObject as microsoft.graph.user",
+   "query": [
+    "$select",
+    "$expand"
+   ],
+   "headers": [
+    "ConsistencyLevel"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/removeKey",
+   "summary": "Invoke action removeKey",
+   "doc": "https://learn.microsoft.com/graph/api/agentidentityblueprint-removekey?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/removePassword",
+   "summary": "Invoke action removePassword",
+   "doc": "https://learn.microsoft.com/graph/api/application-removepassword?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/restore",
+   "summary": "Invoke action restore",
+   "doc": "https://learn.microsoft.com/graph/api/directory-deleteditems-restore?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/setVerifiedPublisher",
+   "summary": "Invoke action setVerifiedPublisher",
+   "doc": "https://learn.microsoft.com/graph/api/agentidentityblueprint-setverifiedpublisher?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization",
+   "summary": "Delete navigation property synchronization for applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization",
+   "summary": "Get synchronization from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PUT",
+   "path": "/applications/{application-id}/synchronization",
+   "summary": "Update the navigation property synchronization in applications"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/acquireAccessToken",
+   "summary": "Invoke action acquireAccessToken",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronization-acquireaccesstoken?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs",
+   "summary": "Get jobs from applications",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs",
+   "summary": "Create new navigation property to jobs for applications"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/validateCredentials",
+   "summary": "Invoke action validateCredentials"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}",
+   "summary": "Delete navigation property jobs for applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}",
+   "summary": "Get jobs from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}",
+   "summary": "Update the navigation property jobs in applications"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/bulkUpload",
+   "summary": "Delete navigation property bulkUpload for applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/bulkUpload",
+   "summary": "Get bulkUpload from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/bulkUpload",
+   "summary": "Update the navigation property bulkUpload in applications"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/bulkUpload/$value",
+   "summary": "Delete media content for the navigation property bulkUpload in applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/bulkUpload/$value",
+   "summary": "Get media content for the navigation property bulkUpload from applications"
+  },
+  {
+   "method": "PUT",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/bulkUpload/$value",
+   "summary": "Update media content for the navigation property bulkUpload in applications"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/pause",
+   "summary": "Invoke action pause",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationjob-pause?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/provisionOnDemand",
+   "summary": "Invoke action provisionOnDemand",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationjob-provisionondemand?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/restart",
+   "summary": "Invoke action restart",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationjob-restart?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema",
+   "summary": "Delete navigation property schema for applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema",
+   "summary": "Get schema from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema",
+   "summary": "Update the navigation property schema in applications"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/directories",
+   "summary": "Get directories from applications",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/directories",
+   "summary": "Create new navigation property to directories for applications"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/directories/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/directories/{directoryDefinition-id}",
+   "summary": "Delete navigation property directories for applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/directories/{directoryDefinition-id}",
+   "summary": "Get directories from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/directories/{directoryDefinition-id}",
+   "summary": "Update the navigation property directories in applications"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/directories/{directoryDefinition-id}/discover",
+   "summary": "Invoke action discover",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-directorydefinition-discover?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/filterOperators()",
+   "summary": "Invoke function filterOperators",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationschema-filteroperators?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$orderby",
+    "$expand"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/functions()",
+   "summary": "Invoke function functions",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationschema-functions?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$orderby",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/schema/parseExpression",
+   "summary": "Invoke action parseExpression",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationschema-parseexpression?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/start",
+   "summary": "Invoke action start",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationjob-start?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/jobs/{synchronizationJob-id}/validateCredentials",
+   "summary": "Invoke action validateCredentials",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationjob-validatecredentials?view=graph-rest-1.0"
+  },
+  {
+   "method": "PUT",
+   "path": "/applications/{application-id}/synchronization/secrets",
+   "summary": "Update property secrets value."
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/secrets/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates",
+   "summary": "Get templates from applications",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/templates",
+   "summary": "Create new navigation property to templates for applications"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}",
+   "summary": "Delete navigation property templates for applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}",
+   "summary": "Get templates from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}",
+   "summary": "Update synchronizationTemplate",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationtemplate-update?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema",
+   "summary": "Delete navigation property schema for applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema",
+   "summary": "Get schema from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema",
+   "summary": "Update the navigation property schema in applications"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/directories",
+   "summary": "Get directories from applications",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/directories",
+   "summary": "Create new navigation property to directories for applications"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/directories/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/directories/{directoryDefinition-id}",
+   "summary": "Delete navigation property directories for applications",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/directories/{directoryDefinition-id}",
+   "summary": "Get directories from applications",
+   "query": [
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/directories/{directoryDefinition-id}",
+   "summary": "Update the navigation property directories in applications"
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/directories/{directoryDefinition-id}/discover",
+   "summary": "Invoke action discover",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-directorydefinition-discover?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/filterOperators()",
+   "summary": "Invoke function filterOperators",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationschema-filteroperators?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$orderby",
+    "$expand"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/functions()",
+   "summary": "Invoke function functions",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationschema-functions?view=graph-rest-1.0",
+   "query": [
+    "$select",
+    "$orderby",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/synchronization/templates/{synchronizationTemplate-id}/schema/parseExpression",
+   "summary": "Invoke action parseExpression",
+   "doc": "https://learn.microsoft.com/graph/api/synchronization-synchronizationschema-parseexpression?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/tokenIssuancePolicies",
+   "summary": "List assigned tokenIssuancePolicies",
+   "doc": "https://learn.microsoft.com/graph/api/application-list-tokenissuancepolicies?view=graph-rest-1.0",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/tokenIssuancePolicies/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/tokenIssuancePolicies/$ref",
+   "summary": "Remove tokenIssuancePolicy",
+   "doc": "https://learn.microsoft.com/graph/api/application-delete-tokenissuancepolicies?view=graph-rest-1.0",
+   "query": [
+    "@id"
+   ],
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/tokenIssuancePolicies/$ref",
+   "summary": "List assigned tokenIssuancePolicies",
+   "doc": "https://learn.microsoft.com/graph/api/application-list-tokenissuancepolicies?view=graph-rest-1.0",
+   "query": [
+    "$orderby"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/tokenIssuancePolicies/$ref",
+   "summary": "Assign tokenIssuancePolicy",
+   "doc": "https://learn.microsoft.com/graph/api/application-post-tokenissuancepolicies?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/tokenIssuancePolicies/{tokenIssuancePolicy-id}/$ref",
+   "summary": "Remove tokenIssuancePolicy",
+   "doc": "https://learn.microsoft.com/graph/api/application-delete-tokenissuancepolicies?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/tokenLifetimePolicies",
+   "summary": "List assigned tokenLifetimePolicies",
+   "doc": "https://learn.microsoft.com/graph/api/application-list-tokenlifetimepolicies?view=graph-rest-1.0",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/tokenLifetimePolicies/$count",
+   "summary": "Get the number of the resource"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/tokenLifetimePolicies/$ref",
+   "summary": "Remove tokenLifetimePolicy",
+   "doc": "https://learn.microsoft.com/graph/api/application-delete-tokenlifetimepolicies?view=graph-rest-1.0",
+   "query": [
+    "@id"
+   ],
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/applications/{application-id}/tokenLifetimePolicies/$ref",
+   "summary": "List assigned tokenLifetimePolicies",
+   "doc": "https://learn.microsoft.com/graph/api/application-list-tokenlifetimepolicies?view=graph-rest-1.0",
+   "query": [
+    "$orderby"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/tokenLifetimePolicies/$ref",
+   "summary": "Assign tokenLifetimePolicy",
+   "doc": "https://learn.microsoft.com/graph/api/application-post-tokenlifetimepolicies?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/applications/{application-id}/tokenLifetimePolicies/{tokenLifetimePolicy-id}/$ref",
+   "summary": "Remove tokenLifetimePolicy",
+   "doc": "https://learn.microsoft.com/graph/api/application-delete-tokenlifetimepolicies?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/applications/{application-id}/unsetVerifiedPublisher",
+   "summary": "Invoke action unsetVerifiedPublisher",
+   "doc": "https://learn.microsoft.com/graph/api/agentidentityblueprint-unsetverifiedpublisher?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
    "path": "/groups",
    "summary": "List groups",
    "doc": "https://learn.microsoft.com/graph/api/group-list?view=graph-rest-1.0",
@@ -43876,6 +44933,261 @@
     "nullable": true,
     "default": true,
     "filter": "eq only"
+   }
+  },
+  "application": {
+   "@odata.type": {
+    "type": "string",
+    "default": true
+   },
+   "addIns": {
+    "type": "array",
+    "default": true
+   },
+   "api": {
+    "type": "microsoft.graph.apiApplication",
+    "default": true
+   },
+   "appId": {
+    "type": "string",
+    "nullable": true,
+    "readOnly": true,
+    "default": true,
+    "filter": "eq"
+   },
+   "appManagementPolicies": {
+    "type": "array",
+    "default": true
+   },
+   "appRoles": {
+    "type": "array",
+    "default": true
+   },
+   "applicationTemplateId": {
+    "type": "string",
+    "nullable": true,
+    "readOnly": true,
+    "default": true,
+    "filter": "eq, not, ne"
+   },
+   "authenticationBehaviors": {
+    "type": "microsoft.graph.authenticationBehaviors"
+   },
+   "certification": {
+    "type": "microsoft.graph.certification",
+    "default": true
+   },
+   "createdByAppId": {
+    "type": "string",
+    "nullable": true,
+    "readOnly": true,
+    "default": true
+   },
+   "createdDateTime": {
+    "type": "string",
+    "nullable": true,
+    "readOnly": true,
+    "default": true,
+    "filter": "eq, ne, not, ge, le, in, and eq on null values"
+   },
+   "createdOnBehalfOf": {
+    "type": "microsoft.graph.directoryObject",
+    "readOnly": true,
+    "default": true,
+    "filter": "/$count eq 0, /$count ne 0"
+   },
+   "defaultRedirectUri": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "deletedDateTime": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "description": {
+    "type": "string",
+    "nullable": true,
+    "default": true,
+    "filter": "eq, ne, not, ge, le, startsWith"
+   },
+   "disabledByMicrosoftStatus": {
+    "type": "string",
+    "nullable": true,
+    "default": true,
+    "filter": "eq, ne, not"
+   },
+   "displayName": {
+    "type": "string",
+    "nullable": true,
+    "default": true,
+    "filter": "eq, ne, not, ge, le, in, startsWith, and eq on null values"
+   },
+   "extensionProperties": {
+    "type": "array",
+    "readOnly": true,
+    "default": true
+   },
+   "federatedIdentityCredentials": {
+    "type": "array",
+    "default": true
+   },
+   "groupMembershipClaims": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "homeRealmDiscoveryPolicies": {
+    "type": "array"
+   },
+   "id": {
+    "type": "string",
+    "readOnly": true,
+    "default": true
+   },
+   "identifierUris": {
+    "type": "array",
+    "default": true,
+    "filter": "eq, ne, ge, le, startsWith"
+   },
+   "info": {
+    "type": "microsoft.graph.informationalUrl",
+    "default": true,
+    "filter": "eq, ne, not, ge, le, and eq on null values"
+   },
+   "isDeviceOnlyAuthSupported": {
+    "type": "boolean",
+    "nullable": true,
+    "default": true
+   },
+   "isDisabled": {
+    "type": "boolean",
+    "nullable": true
+   },
+   "isFallbackPublicClient": {
+    "type": "boolean",
+    "nullable": true,
+    "default": true
+   },
+   "keyCredentials": {
+    "type": "array",
+    "default": true,
+    "filter": "eq, not, ge, le"
+   },
+   "logo": {
+    "type": "string",
+    "default": true
+   },
+   "managerApplications": {
+    "type": "array",
+    "default": true
+   },
+   "nativeAuthenticationApisEnabled": {
+    "type": "microsoft.graph.nativeAuthenticationApisEnabled",
+    "default": true
+   },
+   "notes": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "oauth2RequirePostResponse": {
+    "type": "boolean"
+   },
+   "optionalClaims": {
+    "type": "microsoft.graph.optionalClaims",
+    "default": true
+   },
+   "owners": {
+    "type": "array",
+    "default": true
+   },
+   "parentalControlSettings": {
+    "type": "microsoft.graph.parentalControlSettings",
+    "default": true
+   },
+   "passwordCredentials": {
+    "type": "array",
+    "default": true
+   },
+   "publicClient": {
+    "type": "microsoft.graph.publicClientApplication",
+    "default": true
+   },
+   "publisherDomain": {
+    "type": "string",
+    "nullable": true,
+    "readOnly": true,
+    "default": true,
+    "filter": "eq, ne, ge, le, startsWith"
+   },
+   "requestSignatureVerification": {
+    "type": "microsoft.graph.requestSignatureVerification",
+    "default": true
+   },
+   "requiredResourceAccess": {
+    "type": "array",
+    "default": true,
+    "filter": "eq, not, ge, le"
+   },
+   "samlMetadataUrl": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "serviceManagementReference": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "servicePrincipalLockConfiguration": {
+    "type": "microsoft.graph.servicePrincipalLockConfiguration",
+    "default": true
+   },
+   "signInAudience": {
+    "type": "string",
+    "nullable": true,
+    "default": true,
+    "filter": "eq, ne, not"
+   },
+   "spa": {
+    "type": "microsoft.graph.spaApplication",
+    "default": true
+   },
+   "synchronization": {
+    "type": "microsoft.graph.synchronization",
+    "default": true
+   },
+   "tags": {
+    "type": "array",
+    "default": true,
+    "filter": "eq, not, ge, le, startsWith"
+   },
+   "tokenEncryptionKeyId": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "tokenIssuancePolicies": {
+    "type": "array"
+   },
+   "tokenLifetimePolicies": {
+    "type": "array"
+   },
+   "uniqueName": {
+    "type": "string",
+    "nullable": true,
+    "readOnly": true,
+    "default": true
+   },
+   "verifiedPublisher": {
+    "type": "microsoft.graph.verifiedPublisher",
+    "default": true
+   },
+   "web": {
+    "type": "microsoft.graph.webApplication",
+    "default": true
    }
   },
   "building": {

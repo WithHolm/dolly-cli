@@ -45,6 +45,11 @@ func TestSpec_EveryRouteIsInGraph(t *testing.T) {
 		if e.Method == "GET" && spec.Normal(e.Path) == "/places/{}" {
 			continue
 		}
+		// The Learn pages write delta query as GET /users/delta, and the description as /users/delta(). The real Graph answers both
+		// (checked with the proxy of Graph Explorer), so dolly does too.
+		if e.Method == "GET" && strings.HasSuffix(e.Path, "/delta") {
+			e.Path += "()"
+		}
 		found := false
 		for _, p := range graphPaths(e.Path) {
 			found = found || s.Has(e.Method, p)

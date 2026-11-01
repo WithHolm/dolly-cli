@@ -204,6 +204,8 @@ func (w *World) AssignAppRole(resourceID, principalID, roleID string, a Actor) (
 		role, found = roleInfo{ID: DefaultAccess, Value: "", Name: "Default access"}, true
 	}
 	switch {
+	case !found && res.Builtin == BuiltinGraph:
+		return nil, unknownPermissionID(res.Name, roleID)
 	case !found:
 		return nil, badRequest("Permission being assigned was not found on application '%s'.", res.AppID)
 	case res.Builtin != "" && kind != PrincipalService:

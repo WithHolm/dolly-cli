@@ -14,12 +14,15 @@ import (
 // of it, and each resource file takes that lock. The history (journal.go) records
 // every change.
 type World struct {
-	mu          sync.RWMutex
-	Seed        int64               `json:"seed"`
-	Users       []Object            `json:"users"`
-	Groups      []*Group            `json:"groups"`
-	SPs         []*ServicePrincipal `json:"servicePrincipals"`
-	Assignments []Assignment        `json:"assignments"`
+	mu     sync.RWMutex
+	Seed   int64               `json:"seed"`
+	Users  []Object            `json:"users"`
+	Groups []*Group            `json:"groups"`
+	SPs    []*ServicePrincipal `json:"servicePrincipals"`
+	// Applications are the app registrations of this tenant (applications.go), as Graph objects. A service principal with the same appId is its
+	// instance. A service principal with no application here is an app of another tenant.
+	Applications []Object     `json:"applications,omitempty"`
+	Assignments  []Assignment `json:"assignments"`
 	// Grants are the consents to delegated permissions (grants.go).
 	Grants []Grant `json:"oauth2PermissionGrants,omitempty"`
 	// Managers links a user ID to the ID of the manager, both in lowercase.
@@ -32,11 +35,23 @@ type World struct {
 	Organization      Object              `json:"organization,omitempty"`
 	RoomListMembersOf map[string][]string `json:"roomListMembers,omitempty"`
 
+	// Admin is the user principal name of the admin account of the owner, when it is not the one of the default profile (a.philip@acme.example).
+	// A world that has none uses the default, so a seed from before profiles is as it was.
+	Admin string `json:"adminAccount,omitempty"`
+
+	// Profile is what the world was made from. It is in the seed only when a profile was given, so the data of the default profile is the
+	// same as before profiles. A reset, a restart, and a new generation without a profile use it.
+	Profile *Profile  `json:"profile,omitempty"`
+	delta   changeLog // what changed, for delta query (delta.go)
+
 	users   map[string]Object
 	groups  map[string]*Group
 	sps     map[string]*ServicePrincipal
 	byAppID map[string]*ServicePrincipal // by the lowercase application (client) ID
 	places  map[string]Object
+	// the applications, by the lowercase object ID and by the lowercase appId
+	apps        map[string]Object
+	appsByAppID map[string]Object
 
 	j *journal // the files of the data. nil: the world is only in memory
 }
@@ -55,7 +70,9 @@ func (w *World) index() {
 		w.Managers = map[string]string{}
 	}
 	w.ensureOrganization()
-	defer w.refreshDynamic() // after the lookups below are made
+	w.delta.quiet = true
+	defer func() { w.delta.quiet = false }() // runs after refreshDynamic: loading is not a change for delta query
+	defer w.refreshDynamic()                 // after the lookups below are made
 	w.places = make(map[string]Object, len(w.Places))
 	for _, p := range w.Places {
 		w.places[strings.ToLower(str(p["id"]))] = p
@@ -66,6 +83,12 @@ func (w *World) index() {
 		w.sps[strings.ToLower(s.ID)] = s
 		w.byAppID[strings.ToLower(s.AppID)] = s
 	}
+	w.apps = make(map[string]Object, len(w.Applications))
+	w.appsByAppID = make(map[string]Object, len(w.Applications))
+	for _, a := range w.Applications {
+		w.apps[strings.ToLower(str(a["id"]))] = a
+		w.appsByAppID[strings.ToLower(str(a["appId"]))] = a
+	}
 	w.ensureGraphServicePrincipal()
 }
 
@@ -73,8 +96,10 @@ func (w *World) index() {
 // lock stay. Call it with the lock held.
 func (w *World) replaceWith(o *World) {
 	w.Seed, w.Users, w.Groups, w.SPs, w.Assignments, w.Managers = o.Seed, o.Users, o.Groups, o.SPs, o.Assignments, o.Managers
-	w.Grants = o.Grants
+	w.Grants, w.Applications = o.Grants, o.Applications
 	w.Places, w.RoomListMembersOf, w.Organization = o.Places, o.RoomListMembersOf, o.Organization
+	w.Admin = o.Admin
+	w.Profile = o.Profile
 	w.index()
 }
 
@@ -122,7 +147,7 @@ func (w *World) objectOf(id string) Object {
 	case w.groups[id] != nil:
 		return w.groups[id].object()
 	case w.sps[id] != nil:
-		return w.sps[id].object(false)
+		return w.spObject(w.sps[id], false)
 	}
 	return nil
 }
@@ -166,7 +191,7 @@ func (w *World) Reset(a Actor) error {
 			return err
 		}
 	} else {
-		fresh = Generate(Options{Users: len(w.Users), Seed: w.Seed})
+		fresh = Generate(Options{Users: len(w.Users), Seed: w.Seed, Profile: w.Profile})
 	}
 	w.replaceWith(fresh)
 	w.record(Event{Type: evReset, Actor: a})
@@ -211,6 +236,11 @@ func distinct(users []Object, field string) []ValueCount {
 func (w *World) Snapshot() State {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
+	return w.snapshotLocked()
+}
+
+// snapshotLocked is Snapshot for a caller that holds the lock.
+func (w *World) snapshotLocked() State {
 	return State{
 		Seed: w.Seed, Users: len(w.Users), Groups: len(w.Groups), ServicePrincipals: len(w.SPs),
 		Departments: distinct(w.Users, "department"),

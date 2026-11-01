@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"log/slog"
 	"net/http"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -32,6 +33,7 @@ type Server struct {
 
 	costs   *cost.Data    // what a call costs, and the limits (see package cost)
 	limiter *cost.Limiter // counts the cost of the calls of each client
+	needs   needTracker   // which calls each client made, for the permissions that they need (needs.go)
 
 	verify TokenVerifier // the sign-in API, when it runs. Without it, any token works.
 
@@ -92,6 +94,21 @@ func (s *Server) meRequest(r *http.Request) (*http.Request, *apiError) {
 	return r2, nil
 }
 
+// appIDKeyRe is the alternate key of an application: /applications(appId='<client ID>'), and what follows it.
+var appIDKeyRe = regexp.MustCompile(`^(.*/(?:applications|servicePrincipals))\(appId='([^']*)'\)(.*)$`)
+
+// appIDKey rewrites a call that names an application or a service principal by its appId to the call by ID: Graph takes both, and the route knows one.
+// The data finds the object by either value. (Checked with the real Graph for applications(appId='...'): it answers as /applications/{id}.)
+func appIDKey(r *http.Request) *http.Request {
+	m := appIDKeyRe.FindStringSubmatch(r.URL.Path)
+	if m == nil {
+		return r
+	}
+	r2 := r.Clone(r.Context())
+	r2.URL.Path, r2.URL.RawPath = m[1]+"/"+m[2]+m[3], ""
+	return r2
+}
+
 // token gives what the sign-in API says about the bearer token of a request.
 func (s *Server) token(r *http.Request) (TokenInfo, bool) {
 	if s.verify == nil {
@@ -112,6 +129,9 @@ type ServerOptions struct {
 	// default is the folder that is built into the program. A folder that is given is read again at each
 	// request, so a person who writes the docs sees a change without a rebuild. It is for development.
 	Docs fs.FS
+	// UsageHistory is how long the use of each client over time is kept (in buckets of 10 seconds, for the graphs of the portal). 0 is
+	// an hour. The limits are one minute and one day.
+	UsageHistory time.Duration
 }
 
 // New makes a server for a world.
@@ -124,6 +144,11 @@ func New(w *World, opt ServerOptions) *Server {
 		slog.Error("Dolly cannot read the data about the cost of a call. It does not count the cost.", "error", err)
 	} else {
 		s.costs, s.limiter = d, cost.NewLimiter(d, nil)
+		if opt.UsageHistory > 0 {
+			if err := s.limiter.SetRetention(opt.UsageHistory); err != nil {
+				slog.Error("Dolly keeps the use of the clients for an hour, as it comes.", "error", err)
+			}
+		}
 	}
 	s.mountAPI()
 	s.adminRoutes()
@@ -178,6 +203,7 @@ func (s *Server) serve(w http.ResponseWriter, r *http.Request) {
 		writeError(rec, apiErr(http.StatusUnauthorized, "InvalidAuthenticationToken", info.Problem))
 		return
 	}
+	r = appIDKey(r)
 	if r.URL.Path != BasePath+"/$batch" {
 		var e *apiError
 		if r, e = s.meRequest(r); e != nil {

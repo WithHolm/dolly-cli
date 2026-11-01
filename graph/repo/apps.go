@@ -53,6 +53,13 @@ type ServicePrincipal struct {
 	// How the Graph API treats the calls of this client (see FlagExemptFromThrottle and FlagHideCalls).
 	ExemptFromThrottle bool `json:"exemptFromThrottle,omitempty"`
 	HideCalls          bool `json:"hideCalls,omitempty"`
+
+	// What a call can set on a service principal (service_principals.go): the properties that have no field of their own (loginUrl, notes,
+	// accountEnabled, replyUrls, and so on) are in Props, by name, as Graph writes them. ExtraTags are the tags besides the enterprise tag and dolly:auto.
+	// Created is the date of creation, as Graph writes it. Empty: the start of the generated tenant.
+	Props     map[string]any `json:"props,omitempty"`
+	ExtraTags []string       `json:"extraTags,omitempty"`
+	Created   string         `json:"created,omitempty"`
 }
 
 // Assignment gives a user or group a role on an app.
@@ -77,6 +84,7 @@ func (s *ServicePrincipal) object(full bool) Object {
 	if s.Enterprise {
 		tags = append(tags, EnterpriseTag)
 	}
+	tags = append(tags, s.ExtraTags...)
 	if s.Auto {
 		tags = append(tags, "dolly:auto")
 	}
@@ -99,14 +107,12 @@ func (s *ServicePrincipal) object(full bool) Object {
 		roles = append(roles, Object{"id": r.ID, "displayName": r.Name, "value": strings.ToLower(r.Name), "isEnabled": true})
 	}
 	o["appRoles"] = roles
-	if len(s.Scopes) > 0 {
-		scopes := make([]Object, 0, len(s.Scopes))
-		for _, c := range s.Scopes {
-			scopes = append(scopes, Object{"id": c.ID, "value": c.Value, "type": "Admin", "isEnabled": true,
-				"adminConsentDisplayName": c.Name, "adminConsentDescription": c.Description})
-		}
-		o["oauth2PermissionScopes"] = scopes
+	scopes := make([]Object, 0, len(s.Scopes))
+	for _, c := range s.Scopes {
+		scopes = append(scopes, Object{"id": c.ID, "value": c.Value, "type": "Admin", "isEnabled": true,
+			"adminConsentDisplayName": c.Name, "adminConsentDescription": c.Description})
 	}
+	o["oauth2PermissionScopes"] = scopes
 	return o
 }
 
@@ -143,7 +149,7 @@ func (w *World) ListServicePrincipals() []Object {
 	defer w.mu.RUnlock()
 	items := make([]Object, len(w.SPs))
 	for i, sp := range w.SPs {
-		items[i] = sp.object(false)
+		items[i] = w.spObject(sp, false)
 	}
 	return items
 }
@@ -152,11 +158,11 @@ func (w *World) ListServicePrincipals() []Object {
 func (w *World) GetServicePrincipal(id string) (Object, bool) {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
-	sp := w.sps[strings.ToLower(id)]
+	sp := w.findServicePrincipal(id)
 	if sp == nil {
 		return nil, false
 	}
-	return sp.object(true), true
+	return w.spObject(sp, true), true
 }
 
 // AppRoleAssignedTo lists who is assigned to an app. The bool is false when there

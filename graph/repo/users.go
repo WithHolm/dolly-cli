@@ -236,12 +236,24 @@ func (w *World) removeUser(id string) int {
 func (w *World) Rename(field, from, to string, a Actor) int {
 	w.mu.Lock()
 	defer w.mu.Unlock()
+	ids := w.usersWith(field, from)
 	n := w.renameLocked(field, from, to)
 	if n > 0 {
 		w.refreshDynamic()
-		w.record(Event{Type: evRename, Actor: a, Field: field, From: from, To: to, Changed: n})
+		w.record(Event{Type: evRename, Actor: a, Field: field, From: from, To: to, Changed: n, Users: ids})
 	}
 	return n
+}
+
+// usersWith gives the object IDs of the users that have this value in a field. Call it with the lock held.
+func (w *World) usersWith(field, value string) []string {
+	var ids []string
+	for _, u := range w.Users {
+		if str(u[field]) == value {
+			ids = append(ids, str(u["id"]))
+		}
+	}
+	return ids
 }
 
 func (w *World) renameLocked(field, from, to string) int {
