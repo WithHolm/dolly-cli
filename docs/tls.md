@@ -17,8 +17,10 @@ dollycli makes its own small certificate authority (CA), and signs the certifica
 | `dolly-data/tls/ca.pem` | The public certificate of the CA. You give this file to the clients. |
 | `dolly-data/tls/ca-key.pem` | The private key of the CA. Keep it secret (the file is `0600`, and the folder is `0700`). |
 
-- The CA is good for 10 years, and it stays in the folder. A new server certificate is made at each start, good for 397 days. So you trust the CA **once**, and a restart changes nothing.
+- The CA is good for one year, and it stays in the folder. A new server certificate is made at each start, good for 90 days (never longer than the CA). So you trust the CA **once**, and a restart changes nothing.
 - The certificate has these names: `localhost`, `127.0.0.1`, `::1`, the address of `--host` (if it is one address), and every name in `--allow-host`. A client that calls another name gets an error about the name. Add the name with `--allow-host` and restart.
+- **The CA is name-constrained.** It can sign for `localhost` (and the names below it), the loopback addresses (`127.0.0.0/8` and `::1`), and the names and addresses that were given with `--host` and `--allow-host` when it was made, and for nothing else. The constraint is in the certificate, and it is marked critical. A client that trusts the CA refuses a certificate that it signed for any other name, so the key of the CA is of no use against `login.microsoftonline.com`, a bank, or any other real site. (A test signs certificates with the key of the CA for real domains, and checks that Go's verifier refuses them. It was not tried with other clients.)
+- A new `--allow-host` that the CA is not allowed to sign for makes dollycli make a **new CA** at the start (it says so in the log). Trust the new `ca.pem`, and take the old one out. The same happens when the CA has less than 30 days left, and for a CA from before the constraints.
 - With no data folder (`--dir=`) the CA is new at each start, so nothing can trust it. dollycli says so in the log. Keep the data folder, or use your own certificate (see the end of this page).
 
 ## Trust the CA
@@ -68,9 +70,9 @@ dollycli then makes no CA, and the address `/dolly-ca.pem` is not served. The ce
 
 ## Keep it safe
 
-- Anyone who has `ca-key.pem` can make a certificate that every client which trusts the CA accepts, for any name. Do not share the data folder, do not commit it, and do not put the key in an image. `dolly-data` is for one machine.
+- Anyone who has `ca-key.pem` can make a certificate that a client which trusts the CA accepts, **for the names that the CA is limited to** (localhost, the loopback addresses, and your `--allow-host` names): so they could pretend to be your local dollycli, and nothing else. Do not share the data folder, do not commit it, and do not put the key in an image. `dolly-data` is for one machine. dollycli keeps the folder at `0700` and the key at `0600`, and sets them again at each start.
 - Trust the CA in one tool (`NODE_EXTRA_CA_CERTS` and the like) when you can, and not in the whole system.
-- To stop trusting it, remove it from the trust store, and delete `dolly-data/tls`. The next start makes a new CA.
+- To stop trusting it, run `dolly tls remove`. It deletes the CA and its key, and prints the commands that take the CA out of the trust store of your system, a browser, or a tool (dollycli never put it there, so it cannot take it out). The next start makes a new CA.
 
 ## When it does not work
 
