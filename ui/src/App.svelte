@@ -3,11 +3,12 @@
   import Toasts from "./lib/Toasts.svelte";
   import Graph from "./graph/Graph.svelte";
   import Login from "./login/Login.svelte";
+  import Generator from "./generator/Generator.svelte";
 
   // The APIs that this Dolly runs come from the server. A page is here for the ones that have one.
-  const pages: Record<string, typeof Graph> = { graph: Graph, login: Login };
-  const labels: Record<string, string> = { graph: "Graph", login: "Sign-in" };
-
+  // The generator is not an API: it makes the data of Graph, so it is in the bar when Graph runs.
+  const pages: Record<string, typeof Graph> = { graph: Graph, login: Login, generator: Generator };
+  const labels: Record<string, string> = { graph: "Graph", login: "Sign-in", generator: "Generator" };
   let apis = $state<string[]>(["graph"]);
   $effect(() => {
     void fetch("/_dolly/apis")
@@ -16,6 +17,7 @@
       .catch(() => {});
   });
 
+  const tabs = $derived(apis.includes("graph") ? [...apis, "generator"] : apis);
   const Page = $derived(pages[route.api]);
 </script>
 
@@ -23,7 +25,7 @@
   <div class="bar">
     <a class="brand" href="#/">dollycli</a>
     <nav aria-label="APIs">
-      {#each apis as name (name)}
+      {#each tabs as name (name)}
         <a href={route.href(name)} aria-current={name === route.api ? "page" : undefined}>{labels[name] ?? name}</a>
       {/each}
     </nav>

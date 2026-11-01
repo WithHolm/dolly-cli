@@ -6,9 +6,11 @@
   import Chip from "../lib/Chip.svelte";
   import CopyButton from "../lib/CopyButton.svelte";
   import Icon from "../lib/Icon.svelte";
+  import { ENTERPRISE_TAG, missingTagAdvice } from "./identity";
   import ServicePrincipalDialog from "./ServicePrincipalDialog.svelte";
   import TenantId from "./TenantId.svelte";
   import type { Behavior, ServicePrincipal, Usage } from "./types";
+  import UsageHistory from "./UsageHistory.svelte";
 
   let list = $state.raw<ServicePrincipal[]>([]);
   let usage = $state.raw<Record<string, Usage>>({});
@@ -70,6 +72,11 @@
   {/if}
 </div>
 
+<section class="overview" aria-labelledby="usage-title">
+  <h3 id="usage-title">Resource units over time</h3>
+  <UsageHistory />
+</section>
+
 <div class="bar">
   <button type="button" class="btn" disabled={!selected} onclick={() => selected && go(selected)} title="Or double-click a service principal, or press Enter">Open details</button>
 </div>
@@ -81,7 +88,7 @@
     <thead>
       <tr>
         <th>Service principal</th>
-        <th title="Open: every call is allowed, and dollycli records what it needs. Enforce: only granted permissions are allowed (not active yet).">Permission mode</th>
+        <th title="Open: every call is allowed, whatever the client has been granted. Enforce: only granted permissions are allowed (not active yet).">Permission mode</th>
         <th title="How the sign-in API checks the secret or the certificate of the client">Credential</th>
         <th title="How dollycli treats the calls of this client">Calls are</th>
         <th class="num">Calls</th>
@@ -105,6 +112,8 @@
             <div class="name">
               <strong>{sp.displayName}</strong>
               {#if sp.builtin || sp.system}<Chip tone="primary">built in</Chip>{:else if sp.auto}<Chip>auto-created</Chip>{/if}
+              {#if sp.enterprise}<Chip tone="green" title="It has the tag {ENTERPRISE_TAG}">enterprise application</Chip>{:else if missingTagAdvice(sp)}<Chip tone="amber" title={missingTagAdvice(sp)}>no enterprise tag</Chip>{/if}
+              {#if sp.application}<Chip title="This tenant has the app registration of this service principal">app registration</Chip>{/if}
             </div>
             <div class="id muted"><code>{sp.appId}</code><CopyButton text={sp.appId} title="Copy the client ID" /></div>
           </td>
@@ -156,6 +165,8 @@
 
 <style>
   .settings { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; margin-bottom: 12px; }
+  .overview { margin-bottom: 16px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .overview h3 { margin-bottom: 8px; }
   .bar { display: flex; margin-bottom: 8px; }
   .name { display: flex; align-items: center; gap: 8px; }
   .id { display: flex; align-items: center; gap: 2px; margin-top: 2px; }

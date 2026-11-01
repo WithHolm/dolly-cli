@@ -3,6 +3,7 @@
   import Calls from "./Calls.svelte";
   import Data from "./Data.svelte";
   import ApiReference from "./ApiReference.svelte";
+  import AppRegistrations from "./AppRegistrations.svelte";
   import Groups from "./Groups.svelte";
   import History from "./History.svelte";
   import Organization from "./Organization.svelte";
@@ -13,6 +14,7 @@
     { id: "calls", label: "Calls", page: Calls },
     { id: "users", label: "Users", page: Users },
     { id: "groups", label: "Groups", page: Groups },
+    { id: "app-registrations", label: "App registrations", page: AppRegistrations },
     { id: "service-principals", label: "Service principals", page: ServicePrincipals },
     { id: "organization", label: "Organization", page: Organization },
     { id: "data", label: "Data", page: Data },

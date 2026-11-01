@@ -19,7 +19,16 @@
     }, 4000),
   );
 
-  const place = $derived([org?.city, org?.country].filter(Boolean).join(", "));
+  // the address, as it is written on an envelope: street, then postal code and city, then state and country
+  const address = $derived(
+    org
+      ? [org.street, [org.postalCode, org.city].filter(Boolean).join(" "), org.state, org.country && org.countryLetterCode ? `${org.country} (${org.countryLetterCode})` : (org.country ?? org.countryLetterCode)]
+          .filter(Boolean)
+          .join(", ")
+      : "",
+  );
+  const list = (v?: string[]) => (v && v.length ? v.join(", ") : "");
+  const number = new Intl.NumberFormat();
 </script>
 
 {#if org}
@@ -34,10 +43,25 @@
   <div class="settings"><TenantId /></div>
 
   <section>
+    <h3>Details</h3>
     <dl>
-      {#if place}<dt>Place</dt><dd>{place}{org.countryLetterCode ? ` (${org.countryLetterCode})` : ""}</dd>{/if}
+      {#if address}<dt>Address</dt><dd>{address}</dd>{/if}
+      {#if list(org.businessPhones)}<dt>Phone</dt><dd>{list(org.businessPhones)}</dd>{/if}
       {#if org.preferredLanguage}<dt>Language</dt><dd>{org.preferredLanguage}</dd>{/if}
+      {#if org.defaultUsageLocation}<dt>Usage location</dt><dd>{org.defaultUsageLocation} <span class="muted">(the default for new users)</span></dd>{/if}
       {#if org.createdDateTime}<dt>Created</dt><dd>{dateTime(org.createdDateTime)}</dd>{/if}
+      {#if org.directorySizeQuota}
+        <dt>Directory</dt><dd>{number.format(org.directorySizeQuota.used)} of {number.format(org.directorySizeQuota.total)} objects</dd>
+      {/if}
+      <dt>Sync</dt>
+      <dd>
+        {#if org.onPremisesSyncEnabled}
+          From an on-premises directory{#if org.onPremisesLastSyncDateTime}, last on {dateTime(org.onPremisesLastSyncDateTime)}{/if}
+        {:else}
+          <span class="muted">Not synced from an on-premises directory</span>
+        {/if}
+      </dd>
+      {#if org.partnerTenantType}<dt>Partner</dt><dd>{org.partnerTenantType}</dd>{/if}
     </dl>
   </section>
 
@@ -68,6 +92,57 @@
       </tbody>
     </table>
   </section>
+
+  <section>
+    <h3>Notifications and privacy</h3>
+    <p class="muted hint">Who gets mail from Microsoft about the tenant. A tool can change these with <code>PATCH /organization/{org.id}</code>.</p>
+    <dl>
+      <dt>Technical</dt><dd>{list(org.technicalNotificationMails) || "None"}</dd>
+      <dt>Marketing</dt><dd>{list(org.marketingNotificationEmails) || "None"}</dd>
+      <dt>Security mail</dt><dd>{list(org.securityComplianceNotificationMails) || "None"}</dd>
+      <dt>Security phone</dt><dd>{list(org.securityComplianceNotificationPhones) || "None"}</dd>
+      <dt>Privacy contact</dt><dd>{org.privacyProfile?.contactEmail || "None"}</dd>
+      <dt>Privacy statement</dt><dd>{org.privacyProfile?.statementUrl || "None"}</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h3>Service plans</h3>
+    <p class="muted hint">The plans of Microsoft 365 that the tenant has, with the IDs that a tool looks for.</p>
+    <details>
+      <summary>Assigned plans <span class="faint">{org.assignedPlans?.length ?? 0}</span></summary>
+      <table class="t fixed">
+        <colgroup><col style="width: 220px" /><col /><col style="width: 110px" /><col style="width: 180px" /></colgroup>
+        <thead><tr><th>Service</th><th>Plan ID</th><th>Status</th><th>Assigned</th></tr></thead>
+        <tbody>
+          {#each org.assignedPlans ?? [] as p (p.servicePlanId)}
+            <tr>
+              <td>{p.service}</td>
+              <td class="mono cut"><div class="truncate">{p.servicePlanId}</div></td>
+              <td><Chip tone={p.capabilityStatus === "Enabled" ? "green" : undefined}>{p.capabilityStatus}</Chip></td>
+              <td class="muted">{dateTime(p.assignedDateTime)}</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </details>
+    <details>
+      <summary>Provisioned plans <span class="faint">{org.provisionedPlans?.length ?? 0}</span></summary>
+      <table class="t fixed">
+        <colgroup><col /><col style="width: 140px" /><col style="width: 160px" /></colgroup>
+        <thead><tr><th>Service</th><th>Status</th><th>Provisioning</th></tr></thead>
+        <tbody>
+          {#each org.provisionedPlans ?? [] as p, i (p.service + i)}
+            <tr>
+              <td>{p.service}</td>
+              <td><Chip tone={p.capabilityStatus === "Enabled" ? "green" : undefined}>{p.capabilityStatus}</Chip></td>
+              <td class="muted">{p.provisioningStatus}</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </details>
+  </section>
 {/if}
 
 <style>
@@ -77,9 +152,13 @@
   section { margin-bottom: 28px; }
   h3 { margin-bottom: 6px; }
   h3 .faint { font-weight: 400; }
-  dl { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 4px 16px; margin: 0; }
+  dl { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 4px 16px; margin: 0; }
   dt { color: var(--muted); }
-  dd { margin: 0; }
+  dd { margin: 0; overflow-wrap: anywhere; }
+  .hint { margin: 0 0 8px; max-width: 80ch; }
+  details { border-top: 1px solid var(--line); padding: 8px 0; }
+  details table { margin-top: 8px; }
+  summary { cursor: pointer; font-weight: 500; }
   .counts { display: flex; gap: 32px; }
   .counts a { color: var(--muted); text-decoration: none; display: flex; align-items: baseline; gap: 6px; }
   .counts a:hover { color: var(--text); }

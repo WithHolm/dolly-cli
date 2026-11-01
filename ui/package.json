@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.test.json",
-    "test": "node --test src/graph/*.test.ts src/lib/*.test.ts"
+    "test": "node --test src/graph/*.test.ts src/lib/*.test.ts src/generator/*.test.ts"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.1",

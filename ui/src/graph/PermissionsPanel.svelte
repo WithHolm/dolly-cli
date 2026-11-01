@@ -5,14 +5,17 @@
   import { poll } from "../lib/poll";
   import Chip from "../lib/Chip.svelte";
   import CopyButton from "../lib/CopyButton.svelte";
+  import Dialog from "../lib/Dialog.svelte";
   import Icon from "../lib/Icon.svelte";
   import PermissionPicker from "./PermissionPicker.svelte";
+  import PermissionsNeeded from "./PermissionsNeeded.svelte";
   import type { Grants, Kind, ServicePrincipal } from "./types";
 
   // The permissions of a service principal: what it has, and a picker to add more. It is the Permissions tab of the dialog.
   let { sp }: { sp: ServicePrincipal } = $props();
 
   let grants = $state.raw<Grants | null>(null);
+  let adding = $state(false);
 
   async function load() {
     grants = await graph.get<Grants>(`/service-principals/${sp.appId}/grants`);
@@ -40,7 +43,11 @@
   const byResource = $derived(groupBy(grants?.application ?? [], (g) => g.resourceAppId).map(([, items]) => items));
 </script>
 
-<section>
+<div class="top"><button type="button" class="btn" onclick={() => (adding = true)}>+ Permission</button></div>
+
+<PermissionsNeeded {sp} />
+
+  <section>
     <h3>Delegated permissions</h3>
     <p class="hint">A user signs in. The client asks for these scopes by name, and the token has them in the claim <code>scp</code>.</p>
     {#each grants?.delegated ?? [] as d (d.grantId)}
@@ -100,12 +107,14 @@
     {/each}
   </section>
 
-  <section>
-    <h3>Add a permission</h3>
+{#if adding}
+  <Dialog title="Add a permission" onclose={() => (adding = false)}>
     <PermissionPicker {have} ongrant={grant} />
-  </section>
+  </Dialog>
+{/if}
 
 <style>
+  .top { display: flex; justify-content: flex-end; margin-bottom: 4px; }
   section { margin-top: 20px; }
   section:first-child { margin-top: 4px; }
   .hint { margin: 2px 0 8px; color: var(--muted); }

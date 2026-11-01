@@ -129,15 +129,34 @@ export interface Member {
   detail?: string;
 }
 
+/** What /organization gives (every property of the resource; a property with no value is null). */
 export interface Organization {
   id: string;
   displayName: string;
   tenantType: string;
-  city?: string;
-  country?: string;
-  countryLetterCode?: string;
-  preferredLanguage?: string;
-  createdDateTime?: string;
+  deletedDateTime?: string | null;
+  businessPhones?: string[];
+  street?: string | null;
+  postalCode?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  countryLetterCode?: string | null;
+  defaultUsageLocation?: string | null;
+  preferredLanguage?: string | null;
+  createdDateTime?: string | null;
+  isMultipleDataLocationsForServicesEnabled?: boolean | null;
+  onPremisesSyncEnabled?: boolean | null;
+  onPremisesLastSyncDateTime?: string | null;
+  partnerTenantType?: string | null;
+  marketingNotificationEmails?: string[];
+  securityComplianceNotificationMails?: string[];
+  securityComplianceNotificationPhones?: string[];
+  technicalNotificationMails?: string[];
+  privacyProfile?: { contactEmail?: string | null; statementUrl?: string | null } | null;
+  directorySizeQuota?: { used: number; total: number } | null;
+  assignedPlans?: { assignedDateTime: string; capabilityStatus: string; service: string; servicePlanId: string }[];
+  provisionedPlans?: { capabilityStatus: string; provisioningStatus: string; service: string }[];
   verifiedDomains: { name: string; type: string; isDefault: boolean; isInitial: boolean; capabilities: string }[];
 }
 
@@ -271,6 +290,22 @@ export interface ServicePrincipal {
   system: boolean;
   exemptFromThrottle: boolean;
   hideCalls: boolean;
+  /** The tag WindowsAzureActiveDirectoryIntegratedApp: only a service principal with it is an enterprise application in Entra. */
+  enterprise: boolean;
+  /** The object ID of the app registration with the same client ID in this tenant. Missing: the app is registered in another tenant. */
+  application?: string;
+}
+
+/** An app registration of this tenant (/applications). */
+export interface AppRegistration {
+  id: string;
+  appId: string;
+  displayName: string;
+  signInAudience: string;
+  /** How many permissions it asks for (requiredResourceAccess). */
+  requested: number;
+  /** The object ID of the service principal with the same client ID. Missing: no client has signed in with it yet. */
+  servicePrincipal?: string;
 }
 
 export interface Usage {
@@ -278,6 +313,8 @@ export interface Usage {
   calls: number;
   ru: number;
   throttled: number;
+  /** The use by row of the cost table (for example "GET /users"). */
+  routes?: Record<string, { calls: number; ru: number }>;
 }
 
 export interface Behavior {
@@ -300,6 +337,8 @@ export interface Resource {
   builtin?: string;
   application: number;
   delegated: number;
+  /** Where the permissions are from, when the person added a file of their own tenant. */
+  source?: string;
 }
 
 export interface Permission {

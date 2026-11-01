@@ -64,6 +64,8 @@
   </label>
 </div>
 
+{#if resource?.source}<p class="source">{resource.source}</p>{/if}
+
 {#if found}
   {#if !found.permissions.length}
     <p class="none">No permission matches "{query}".</p>
@@ -91,6 +93,7 @@
 {/if}
 
 <style>
+  .source { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
   .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
   .controls select { max-width: 100%; }
   .seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: var(--radius); overflow: hidden; }

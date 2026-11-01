@@ -7,8 +7,9 @@
     onconfirm,
     ask = "Sure?",
     title,
+    plain = false,
     children,
-  }: { onconfirm: () => void | Promise<void>; ask?: string; title?: string; children: Snippet } = $props();
+  }: { onconfirm: () => void | Promise<void>; ask?: string; title?: string; plain?: boolean; children: Snippet } = $props();
 
   let armed = $state(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -26,6 +27,6 @@
   }
 </script>
 
-<button type="button" class={["btn", armed ? "danger" : "ghost"]} {title} onclick={click} onblur={() => (armed = false)}>
+<button type="button" class={["btn", armed ? "danger" : plain ? "" : "ghost"]} {title} onclick={click} onblur={() => (armed = false)}>
   {#if armed}{ask}{:else}{@render children()}{/if}
 </button>
