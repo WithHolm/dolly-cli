@@ -33,6 +33,10 @@ var DefaultUserProperties = []string{
 	"officeLocation", "preferredLanguage", "surname", "userPrincipalName", "id",
 }
 
+// DefaultUserDeltaProperties are the properties that /users/delta tracks and returns when the call has no $select. They are fewer than the
+// ones of /users (checked with the real Graph).
+var DefaultUserDeltaProperties = []string{"displayName", "mail", "userPrincipalName", "id"}
+
 // Users is the resource for /users.
 func Users(b UsersBackend) Resource { return users{b} }
 
@@ -51,6 +55,14 @@ func (u users) Register(r *Router) {
 		}
 		ServeList(w, req, env, items, ListOptions{Filterable: true, Resource: "user", Context: "users", Extra: []string{"manager", "directReports"}, Default: DefaultUserProperties})
 	})
+	if feed, ok := u.b.(DeltaFeed); ok { // the data has a log of changes (the fake of a test may not)
+		src := DeltaSource{Feed: feed, Kind: "user", Set: "users", Tracked: DefaultUserDeltaProperties, List: u.b.ListUsers, Get: u.b.GetUser}
+		serve := func(w http.ResponseWriter, req *http.Request) { ServeDelta(w, req, src) }
+		const summary = "Read the users, and then only what changed since (delta query). The first call gives every user in pages, and ends with an @odata.deltaLink. Call that link to get the users that were made, changed, or deleted since. A deleted user is its id and @removed. $select says which properties are tracked, and $filter takes only id eq '…'."
+		opts := []string{"$select", "$filter", "$deltatoken", "$skiptoken"}
+		s.Handle("GET", "/delta", summary, opts, serve)
+		s.Handle("GET", "/delta()", summary, opts, serve)
+	}
 	s.Handle("GET", "/$count", "Count the users. Needs ConsistencyLevel: eventual.", []string{"$filter", "$search"}, func(w http.ResponseWriter, req *http.Request) {
 		ServeCount(w, req, u.b.ListUsers(), ListOptions{Filterable: true, Resource: "user"})
 	})

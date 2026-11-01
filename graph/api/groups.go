@@ -24,6 +24,20 @@ type GroupsBackend interface {
 	GroupMemberOf
 }
 
+// DefaultGroupDeltaProperties are the properties that /groups/delta tracks and returns when the call has no $select (checked with the real
+// Graph). members@delta comes with them. A property that the group does not have is left out.
+var DefaultGroupDeltaProperties = []string{
+	"createdDateTime", "description", "displayName", "mailEnabled", "mailNickname", "renewedDateTime", "securityEnabled",
+	"securityIdentifier", "visibility", "id",
+}
+
+// groupDelta is what delta query for groups needs from the data, on top of the log of changes.
+type groupDelta interface {
+	DeltaFeed
+	DeltaGroupMembers(group string) []string
+	DeltaTypeOf(id string) string
+}
+
 // Groups is the resource for /groups, with everything below it: /groups/{id},
 // and the members, the owners, and the apps of a group.
 func Groups(b GroupsBackend) Resource { return groups{b} }
@@ -38,6 +52,15 @@ func (g groups) Register(r *Router) {
 	s.Handle("GET", "", "List the groups.", list, func(w http.ResponseWriter, req *http.Request) {
 		ServeList(w, req, env, g.b.ListGroups(), ListOptions{Filterable: true, Resource: "group", Context: "groups"})
 	})
+	if feed, ok := g.b.(groupDelta); ok { // the data has a log of changes (the fake of a test may not)
+		src := DeltaSource{Feed: feed, Kind: "group", Set: "groups", Tracked: DefaultGroupDeltaProperties, List: g.b.ListGroups, Get: g.b.GetGroup,
+			Members: feed.DeltaGroupMembers, TypeOf: feed.DeltaTypeOf}
+		serve := func(w http.ResponseWriter, req *http.Request) { ServeDelta(w, req, src) }
+		const summary = "Read the groups, and then only what changed since (delta query). It works as /users/delta. Each group has members@delta: its members in the first round, and later the members that went in, and the ones that went out with @removed. $select without members leaves members@delta out."
+		opts := []string{"$select", "$filter", "$deltatoken", "$skiptoken"}
+		s.Handle("GET", "/delta", summary, opts, serve)
+		s.Handle("GET", "/delta()", summary, opts, serve)
+	}
 	s.Handle("GET", "/$count", "Count the groups. Needs ConsistencyLevel: eventual.", []string{"$filter", "$search"}, func(w http.ResponseWriter, req *http.Request) {
 		ServeCount(w, req, g.b.ListGroups(), ListOptions{Filterable: true, Resource: "group"})
 	})

@@ -12,6 +12,7 @@ import (
 
 	"github.com/withholm/dolly-cli/graph/query"
 	"github.com/withholm/dolly-cli/graph/spec"
+	"github.com/withholm/dolly-cli/shared"
 )
 
 // The query options that every collection shares: $filter, $search, $orderby, $count,
@@ -511,7 +512,7 @@ func ServeList(w http.ResponseWriter, r *http.Request, env Env, items []Object, 
 	if end < len(items) {
 		next := cloneValues(q)
 		next.Set("$skiptoken", strconv.Itoa(end))
-		body["@odata.nextLink"] = fmt.Sprintf("http://%s%s?%s", r.Host, r.URL.Path, next.Encode())
+		body["@odata.nextLink"] = fmt.Sprintf("%s://%s%s?%s", shared.Scheme(r), r.Host, r.URL.Path, next.Encode())
 	}
 	WriteJSON(w, http.StatusOK, body)
 }
