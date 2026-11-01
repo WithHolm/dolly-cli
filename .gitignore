@@ -10,7 +10,7 @@
 # the packages of the library checks (docs/compat); the lock file is kept
 /docs/compat/node_modules/
 
-/dolly-data/
+/dolly-data/**
 /.playwright-mcp/
 /.impeccable/
 /bin/
