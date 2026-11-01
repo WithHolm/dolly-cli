@@ -1,4 +1,4 @@
-.PHONY: build release test ui ui-dev dev graph-spec update-cost update-query update-permissions
+.PHONY: build release test ui ui-dev dev compat graph-spec update-cost update-query update-permissions
 
 build:
 	@go build -o bin/dolly ./cmd/dolly
@@ -31,6 +31,11 @@ ui-dev:
 dev:
 	@air
 
+# Check that sign-in libraries (MSAL, @azure/identity, oidc-client-ts, openid-client) work with dollycli. It builds dollycli, starts
+# it on ports 8661 and 8662, and checks every case. It needs Node and Chromium. See docs/compat/README.md.
+compat:
+	@cd docs/compat && npm ci && npm run check
+
 # Make the extract of Microsoft's OpenAPI description of Graph that Dolly is
 # checked against (graph/spec). It downloads 44 MB. Run it when you want newer data,
 # and commit the extract. The description is MIT licensed.
@@ -53,4 +58,12 @@ update-query:
 
 update-permissions:
 	@go run ./graph/permissions/fetch -out graph/permissions/raw
+
+# Which permissions each call of Graph needs, from the pages of Microsoft Learn about the calls: the map of every
+# call (graph/permissions/operations/all.json) and the part that dollycli serves (operations.json). It reads about
+# 3,900 pages, and takes about a minute. Run it when dollycli serves a new route: a test fails until you do.
+# Set COMMIT=<sha> to read an older commit (the default is the latest).
+update-operation-permissions:
+	@go run ./graph/permissions/opfetch -out graph/permissions/operations $(if $(COMMIT),-commit $(COMMIT))
+	@go test ./graph/permissions ./graph -run 'Operation'
 	@go test ./graph/permissions
