@@ -8,5 +8,5 @@ var _ shared.API = (*Server)(nil)
 // Name is the name of the API: graph.
 func (s *Server) Name() string { return "graph" }
 
-// Prefixes are the path starts that the Graph API answers.
-func (s *Server) Prefixes() []string { return []string{BasePath + "/"} }
+// Prefixes are the path starts that the Graph API answers. The second is the receiver of change notifications (subscriptions.go).
+func (s *Server) Prefixes() []string { return []string{BasePath + "/", ReceiverPath} }

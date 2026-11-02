@@ -2,6 +2,7 @@ package repo
 
 import (
 	"bytes"
+	_ "embed"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -14,7 +15,8 @@ import (
 // (how many guests, how many synced users), the formats of ids and phone numbers, the extension attributes, and the groups. The generator reads
 // it, and the same profile with the same seed always makes the same data.
 //
-// The default profile is the tenant that dollycli made before profiles were there: exactly the same data, for the same seed (golden_test.go).
+// The default profile is Fjordvik (profiles/fjordvik.json). The tenant that dollycli made before profiles, and before Fjordvik, is Acme (profiles/acme.json):
+// exactly the same data, for the same seed (golden_test.go).
 // A profile is data that other people may share, so it is not trusted: ParseProfile checks every field and every size.
 
 // ProfileVersion is the version of the format of a profile.
@@ -219,95 +221,29 @@ const (
 	maxWeight       = 1000
 )
 
-// DefaultProfile is the tenant that dollycli has always made: Acme Corporation in Stockholm. Every call gives a new copy.
-func DefaultProfile() *Profile {
-	titles := func(names ...string) []ProfileTitle {
-		out := make([]ProfileTitle, len(names))
-		for i, n := range names {
-			out[i] = ProfileTitle{Name: n, Weight: 1}
-		}
-		return out
+// The two profiles that are in the program (profiles/): Fjordvik is the default tenant, and Acme is the one that dollycli made before Fjordvik. A seed that
+// has no profile in it was made from Acme.
+//
+//go:embed profiles/fjordvik.json
+var fjordvikJSON []byte
+
+//go:embed profiles/acme.json
+var acmeJSON []byte
+
+func builtin(name string, data []byte) *Profile {
+	p, err := ParseProfile(bytes.NewReader(data))
+	if err != nil {
+		panic("dolly: the built-in profile " + name + " is not valid: " + err.Error()) // the tests of this package find it
 	}
-	dept := func(name string, weight int, t ...string) ProfileDepartment {
-		return ProfileDepartment{Name: name, Weight: weight, Titles: titles(t...)}
-	}
-	pct := func(n int) *int { return &n }
-	values := func(v ...string) []ProfileValue {
-		out := make([]ProfileValue, len(v))
-		for i, s := range v {
-			out[i] = ProfileValue{Value: s, Weight: 1}
-		}
-		return out
-	}
-	return &Profile{
-		Version:     ProfileVersion,
-		Name:        "Acme (default)",
-		Description: "Acme Corporation, a company of Nordic offices. What dollycli made before profiles.",
-		Organization: ProfileOrganization{
-			DisplayName: "Acme Corporation (fake)", CompanyName: "Acme", Domain: "acme.example", InitialDomain: "acme.onmicrosoft.com",
-			GuestDomain: "partner.example", Street: "Exempelgatan 1", PostalCode: "111 29", City: "Stockholm", State: "Stockholm",
-			Country: "Sweden", CountryLetterCode: "SE", UsageLocation: "SE", PreferredLanguage: "en", Phone: "+46 8 555 0100",
-		},
-		Offices: []ProfileOffice{
-			{"Stockholm HQ", "Stockholm", "Sweden", "SE", "111 22", "46", 1},
-			{"Gothenburg", "Gothenburg", "Sweden", "SE", "411 03", "46", 1},
-			{"Oslo", "Oslo", "Norway", "NO", "0150", "47", 1},
-			{"Copenhagen", "Copenhagen", "Denmark", "DK", "1050", "45", 1},
-			{"Helsinki", "Helsinki", "Finland", "FI", "00100", "358", 1},
-			{"London", "London", "United Kingdom", "GB", "EC2A 4NE", "44", 1},
-			{"Berlin", "Berlin", "Germany", "DE", "10117", "49", 1},
-			{"Amsterdam", "Amsterdam", "Netherlands", "NL", "1012 AB", "31", 1},
-		},
-		Departments: []ProfileDepartment{
-			dept("Sales", 14, "Account Executive", "Sales Manager", "Sales Development Representative"),
-			dept("Engineering", 22, "Software Engineer", "Senior Software Engineer", "Engineering Manager", "DevOps Engineer"),
-			dept("Marketing", 8, "Marketing Specialist", "Content Manager", "Brand Manager"),
-			dept("Finance", 7, "Accountant", "Financial Analyst", "Finance Manager"),
-			dept("Human Resources", 5, "HR Business Partner", "Recruiter", "HR Manager"),
-			dept("IT", 7, "IT Support Specialist", "Systems Administrator", "Security Analyst"),
-			dept("Customer Support", 12, "Support Agent", "Support Team Lead"),
-			dept("Legal", 3, "Legal Counsel", "Compliance Officer"),
-			dept("Operations", 10, "Operations Coordinator", "Logistics Manager", "Operations Manager"),
-			dept("Product", 6, "Product Manager", "Product Designer", "UX Researcher"),
-		},
-		Names: ProfileNames{First: append([]string(nil), firstNames...), Last: append([]string(nil), lastNames...)},
-		People: ProfilePeople{
-			GuestPercent: 3, SyncedPercent: 60, EnabledPercent: 97, ContractorPercent: 12, ManagerWord: "Manager",
-			Languages: []ProfileLanguage{{"en-US", 40}, {"sv-SE", 60}},
-		},
-		Formats: ProfileFormats{
-			EmployeeID:    ProfileEmployeeID{Pattern: "E#####", Start: 10000},
-			MobilePhone:   "+{cc} 7# ### ## ##",
-			BusinessPhone: "+4# 8 ### ###",
-			CostCenter:    "CC-{100-119}",
-			Streets:       []string{"Main Street", "Harbour Road", "Station Way", "Park Avenue"},
-		},
-		Extension: []ProfileExtension{
-			{Index: 1, Pattern: "CC-{100-119}"},
-			{Index: 2, Values: []ProfileValue{{"Contractor", 12}, {"Employee", 88}}},
-			{Index: 3, Values: values("North", "South", "East", "West", "HQ")},
-			{Index: 4, Pattern: "SITE-{01-12}"},
-			{Index: 5, Values: values("L1", "L2", "L3", "L4")},
-			{Index: 6, Values: values("remote", "hybrid", "office"), Fill: pct(40)},
-			{Index: 7, Pattern: "PRJ-{000-059}", Fill: pct(25)},
-			{Index: 8, Values: values("pilot"), Fill: pct(15)},
-			{Index: 9, Values: values("VIP"), Fill: pct(10)},
-			{Index: 10, Values: values("A", "B", "C"), Fill: pct(30)},
-		},
-		Groups: ProfileGroups{
-			Prefix: "grp.", DepartmentGroups: true, OfficeGroups: true, DynamicDepartment: "Engineering",
-			Microsoft365: []string{"Marketing", "Human Resources"}, AdminDepartment: "IT", LegalDepartment: "Legal",
-			StrayDepartments: []string{"Legal", "Human Resources"},
-			Apps: []ProfileApp{
-				{"acme", "Acme Portal", []string{"Sales", "Marketing"}, []string{"Customer Support", "Legal"}},
-				{"contoso", "Contoso Planner", []string{"Engineering", "Product"}, []string{"Operations", "Human Resources"}},
-				{"globex", "Globex Ledger", []string{"Finance", "Operations"}, []string{"Sales", "Legal"}},
-			},
-		},
-		Owner: ProfileOwner{Department: "Engineering", JobTitle: "Tech Lead"},
-		Admin: ProfileAdmin{UserPrincipalName: "a.{first}", DisplayName: "{First} (admin)", JobTitle: "Administrator", Department: "IT"},
-	}
+	return p
 }
+
+// DefaultProfile is the tenant that dollycli makes when no profile is given: Fjordvik, a made-up Norwegian energy company. Every call gives a new copy.
+func DefaultProfile() *Profile { return builtin("fjordvik", fjordvikJSON) }
+
+// AcmeProfile is Acme Corporation, the tenant that dollycli made before Fjordvik, with English titles and groups and Nordic offices. A seed from before
+// Fjordvik has no profile in it, and it was made from this one. Every call gives a new copy.
+func AcmeProfile() *Profile { return builtin("acme", acmeJSON) }
 
 // ParseProfile reads a profile from JSON. It refuses a field that it does not know, a value that is out of range, and a file that is too big.
 // A profile that is not valid is an error that says which field.

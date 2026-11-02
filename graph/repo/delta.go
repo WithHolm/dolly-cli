@@ -84,6 +84,7 @@ func (w *World) noteChange(seq int, e Event) {
 	for _, c := range append(changesOf(e), l.pending...) {
 		c.seq = seq
 		l.changes = append(l.changes, c)
+		w.announce(c)
 	}
 	l.pending = nil
 }

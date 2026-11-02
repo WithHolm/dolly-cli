@@ -1,0 +1,336 @@
+{
+  "version": 1,
+  "name": "Fjordvik (default)",
+  "description": "The default tenant: a made-up Norwegian energy company with six offices, Norwegian names, titles, and groups, and admin accounts named adm.<first name>.",
+  "organization": {
+    "displayName": "Fjordvik Energi AS (fake)",
+    "companyName": "Fjordvik",
+    "domain": "fjordvik.example",
+    "initialDomain": "fjordvik.onmicrosoft.com",
+    "guestDomain": "partner.example",
+    "street": "Havnegata 1",
+    "postalCode": "0150",
+    "city": "Oslo",
+    "state": "Oslo",
+    "country": "Norway",
+    "countryLetterCode": "NO",
+    "usageLocation": "NO",
+    "preferredLanguage": "nb",
+    "phone": "+47 815 493 00"
+  },
+  "offices": [
+    {
+      "name": "Oslo hovedkontor",
+      "city": "Oslo",
+      "country": "Norway",
+      "usage": "NO",
+      "postal": "0150",
+      "callingCode": "47",
+      "weight": 5
+    },
+    {
+      "name": "Bergen",
+      "city": "Bergen",
+      "country": "Norway",
+      "usage": "NO",
+      "postal": "5003",
+      "callingCode": "47",
+      "weight": 2
+    },
+    {
+      "name": "Trondheim",
+      "city": "Trondheim",
+      "country": "Norway",
+      "usage": "NO",
+      "postal": "7010",
+      "callingCode": "47",
+      "weight": 2
+    },
+    {
+      "name": "Stavanger",
+      "city": "Stavanger",
+      "country": "Norway",
+      "usage": "NO",
+      "postal": "4006",
+      "callingCode": "47",
+      "weight": 2
+    },
+    {
+      "name": "Tromsø",
+      "city": "Tromsø",
+      "country": "Norway",
+      "usage": "NO",
+      "postal": "9008",
+      "callingCode": "47",
+      "weight": 1
+    },
+    {
+      "name": "Kristiansand",
+      "city": "Kristiansand",
+      "country": "Norway",
+      "usage": "NO",
+      "postal": "4611",
+      "callingCode": "47",
+      "weight": 1
+    }
+  ],
+  "departments": [
+    {
+      "name": "Drift",
+      "weight": 24,
+      "titles": [
+        { "name": "Driftstekniker", "weight": 6 },
+        { "name": "Seniortekniker", "weight": 3 },
+        { "name": "Teamleder drift", "weight": 2 },
+        { "name": "Avdelingsleder drift", "weight": 1 }
+      ]
+    },
+    {
+      "name": "IT og digitalisering",
+      "weight": 14,
+      "titles": [
+        { "name": "Systemutvikler", "weight": 5 },
+        { "name": "Systemadministrator", "weight": 3 },
+        { "name": "Sikkerhetsrådgiver", "weight": 2 },
+        { "name": "Teamleder IT", "weight": 2 }
+      ]
+    },
+    {
+      "name": "Salg og marked",
+      "weight": 12,
+      "titles": [
+        { "name": "Kundeansvarlig", "weight": 5 },
+        { "name": "Markedsrådgiver", "weight": 3 },
+        { "name": "Salgsleder", "weight": 1 }
+      ]
+    },
+    {
+      "name": "Økonomi",
+      "weight": 8,
+      "titles": [
+        { "name": "Regnskapsfører", "weight": 4 },
+        { "name": "Økonomirådgiver", "weight": 3 },
+        { "name": "Økonomileder", "weight": 1 }
+      ]
+    },
+    {
+      "name": "Kundeservice",
+      "weight": 14,
+      "titles": [
+        { "name": "Kundebehandler", "weight": 8 },
+        { "name": "Gruppeleder kundeservice", "weight": 1 }
+      ]
+    },
+    {
+      "name": "Personal og organisasjon",
+      "weight": 5,
+      "titles": [
+        { "name": "HR-rådgiver", "weight": 4 },
+        { "name": "Rekrutterer", "weight": 2 },
+        { "name": "Personalleder", "weight": 1 }
+      ]
+    },
+    {
+      "name": "Juridisk",
+      "weight": 3,
+      "titles": [
+        { "name": "Jurist", "weight": 3 },
+        { "name": "Compliance-rådgiver", "weight": 2 },
+        { "name": "Juridisk leder", "weight": 1 }
+      ]
+    },
+    {
+      "name": "Produktutvikling",
+      "weight": 9,
+      "titles": [
+        { "name": "Produktansvarlig", "weight": 3 },
+        { "name": "Designer", "weight": 2 },
+        { "name": "Brukerforsker", "weight": 1 },
+        { "name": "Produktleder", "weight": 1 }
+      ]
+    }
+  ],
+  "names": {
+    "first": [
+      "Ola",
+      "Kari",
+      "Nils",
+      "Ingrid",
+      "Håkon",
+      "Sigrid",
+      "Bjørn",
+      "Astrid",
+      "Øyvind",
+      "Marte",
+      "Lars",
+      "Silje",
+      "Åse",
+      "Eirik",
+      "Thea",
+      "Jørgen",
+      "Ida",
+      "Magnus",
+      "Solveig",
+      "Tor",
+      "Maja",
+      "Even",
+      "Live",
+      "Sindre",
+      "Hanne",
+      "Åsmund",
+      "Camilla",
+      "Kristian",
+      "Emilie",
+      "Torbjørn",
+      "Linn",
+      "Henrik",
+      "Aurora",
+      "Mathias",
+      "Nora",
+      "Trygve",
+      "Sunniva",
+      "Vegard",
+      "Mari",
+      "Sæbjørn"
+    ],
+    "last": [
+      "Hansen",
+      "Johansen",
+      "Olsen",
+      "Larsen",
+      "Andersen",
+      "Pedersen",
+      "Nilsen",
+      "Kristiansen",
+      "Jensen",
+      "Karlsen",
+      "Johnsen",
+      "Pettersen",
+      "Eriksen",
+      "Berg",
+      "Haugen",
+      "Hagen",
+      "Johannessen",
+      "Andreassen",
+      "Jacobsen",
+      "Dahl",
+      "Jørgensen",
+      "Halvorsen",
+      "Henriksen",
+      "Lund",
+      "Sørensen",
+      "Moen",
+      "Gundersen",
+      "Iversen",
+      "Strand",
+      "Solberg",
+      "Svendsen",
+      "Eide",
+      "Knutsen",
+      "Martinsen",
+      "Paulsen",
+      "Bakken",
+      "Nygård",
+      "Sæther",
+      "Aas",
+      "Myhre",
+      "Løvik",
+      "Ødegård",
+      "Brække",
+      "Ågedal"
+    ]
+  },
+  "people": {
+    "guestPercent": 5,
+    "syncedPercent": 35,
+    "enabledPercent": 98,
+    "contractorPercent": 8,
+    "managerWord": "leder",
+    "languages": [
+      { "code": "nb-NO", "weight": 85 },
+      { "code": "en-US", "weight": 15 }
+    ]
+  },
+  "formats": {
+    "employeeId": { "pattern": "######", "start": 100001 },
+    "mobilePhone": "+{cc} 9## ## ###",
+    "businessPhone": "+47 22 ## ## ##",
+    "costCenter": "K-{1000-1099}",
+    "streets": [
+      "Storgata",
+      "Kirkegata",
+      "Strandveien",
+      "Parkveien",
+      "Havnegata"
+    ]
+  },
+  "extensionAttributes": [
+    { "index": 1, "pattern": "K-{1000-1099}" },
+    {
+      "index": 2,
+      "values": [
+        { "value": "Fast ansatt", "weight": 92 },
+        { "value": "Innleid", "weight": 8 }
+      ]
+    },
+    {
+      "index": 3,
+      "values": [
+        { "value": "Øst" },
+        { "value": "Vest" },
+        { "value": "Nord" },
+        { "value": "Sør" },
+        { "value": "Midt" }
+      ]
+    },
+    { "index": 4, "pattern": "ANL-{01-30}" },
+    {
+      "index": 5,
+      "values": [{ "value": "N1" }, { "value": "N2" }, { "value": "N3" }]
+    },
+    {
+      "index": 6,
+      "values": [
+        { "value": "hjemmekontor" },
+        { "value": "hybrid" },
+        { "value": "kontor" }
+      ],
+      "fill": 55
+    },
+    { "index": 7, "pattern": "PRO-{000-120}", "fill": 30 }
+  ],
+  "groups": {
+    "prefix": "sg-",
+    "departmentGroups": true,
+    "officeGroups": true,
+    "dynamicDepartment": "IT og digitalisering",
+    "microsoft365Departments": ["Salg og marked", "Personal og organisasjon"],
+    "adminDepartment": "IT og digitalisering",
+    "legalDepartment": "Juridisk",
+    "strayDepartments": ["Juridisk", "Personal og organisasjon"],
+    "apps": [
+      {
+        "name": "kundeportal",
+        "title": "Kundeportal",
+        "contributorDepartments": ["Salg og marked", "Kundeservice"],
+        "readerDepartments": ["Drift", "Juridisk"]
+      },
+      {
+        "name": "driftsplan",
+        "title": "Driftsplan",
+        "contributorDepartments": ["Drift", "Produktutvikling"],
+        "readerDepartments": ["Økonomi", "Personal og organisasjon"]
+      }
+    ]
+  },
+  "owner": {
+    "department": "IT og digitalisering",
+    "jobTitle": "Identitetsarkitekt"
+  },
+  "admin": {
+    "userPrincipalName": "adm.{first}",
+    "displayName": "{First} (adm)",
+    "jobTitle": "Administrator",
+    "department": "IT og digitalisering"
+  }
+}

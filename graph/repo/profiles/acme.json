@@ -1,0 +1,579 @@
+{
+  "version": 1,
+  "name": "Acme (Nordic, the old default)",
+  "description": "Acme Corporation with Nordic offices and Swedish names. It was the default before Fjordvik: a seed with no profile in it was made from this one. Not in the wizard.",
+  "organization": {
+    "displayName": "Acme Corporation (fake)",
+    "companyName": "Acme",
+    "domain": "acme.example",
+    "initialDomain": "acme.onmicrosoft.com",
+    "guestDomain": "partner.example",
+    "street": "Exempelgatan 1",
+    "postalCode": "111 29",
+    "city": "Stockholm",
+    "state": "Stockholm",
+    "country": "Sweden",
+    "countryLetterCode": "SE",
+    "usageLocation": "SE",
+    "preferredLanguage": "en",
+    "phone": "+46 8 555 0100"
+  },
+  "offices": [
+    {
+      "name": "Stockholm HQ",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "usage": "SE",
+      "postal": "111 22",
+      "callingCode": "46",
+      "weight": 1
+    },
+    {
+      "name": "Gothenburg",
+      "city": "Gothenburg",
+      "country": "Sweden",
+      "usage": "SE",
+      "postal": "411 03",
+      "callingCode": "46",
+      "weight": 1
+    },
+    {
+      "name": "Oslo",
+      "city": "Oslo",
+      "country": "Norway",
+      "usage": "NO",
+      "postal": "0150",
+      "callingCode": "47",
+      "weight": 1
+    },
+    {
+      "name": "Copenhagen",
+      "city": "Copenhagen",
+      "country": "Denmark",
+      "usage": "DK",
+      "postal": "1050",
+      "callingCode": "45",
+      "weight": 1
+    },
+    {
+      "name": "Helsinki",
+      "city": "Helsinki",
+      "country": "Finland",
+      "usage": "FI",
+      "postal": "00100",
+      "callingCode": "358",
+      "weight": 1
+    },
+    {
+      "name": "London",
+      "city": "London",
+      "country": "United Kingdom",
+      "usage": "GB",
+      "postal": "EC2A 4NE",
+      "callingCode": "44",
+      "weight": 1
+    },
+    {
+      "name": "Berlin",
+      "city": "Berlin",
+      "country": "Germany",
+      "usage": "DE",
+      "postal": "10117",
+      "callingCode": "49",
+      "weight": 1
+    },
+    {
+      "name": "Amsterdam",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "usage": "NL",
+      "postal": "1012 AB",
+      "callingCode": "31",
+      "weight": 1
+    }
+  ],
+  "departments": [
+    {
+      "name": "Sales",
+      "weight": 14,
+      "titles": [
+        {
+          "name": "Account Executive",
+          "weight": 1
+        },
+        {
+          "name": "Sales Manager",
+          "weight": 1
+        },
+        {
+          "name": "Sales Development Representative",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "Engineering",
+      "weight": 22,
+      "titles": [
+        {
+          "name": "Software Engineer",
+          "weight": 1
+        },
+        {
+          "name": "Senior Software Engineer",
+          "weight": 1
+        },
+        {
+          "name": "Engineering Manager",
+          "weight": 1
+        },
+        {
+          "name": "DevOps Engineer",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "Marketing",
+      "weight": 8,
+      "titles": [
+        {
+          "name": "Marketing Specialist",
+          "weight": 1
+        },
+        {
+          "name": "Content Manager",
+          "weight": 1
+        },
+        {
+          "name": "Brand Manager",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "Finance",
+      "weight": 7,
+      "titles": [
+        {
+          "name": "Accountant",
+          "weight": 1
+        },
+        {
+          "name": "Financial Analyst",
+          "weight": 1
+        },
+        {
+          "name": "Finance Manager",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "Human Resources",
+      "weight": 5,
+      "titles": [
+        {
+          "name": "HR Business Partner",
+          "weight": 1
+        },
+        {
+          "name": "Recruiter",
+          "weight": 1
+        },
+        {
+          "name": "HR Manager",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "IT",
+      "weight": 7,
+      "titles": [
+        {
+          "name": "IT Support Specialist",
+          "weight": 1
+        },
+        {
+          "name": "Systems Administrator",
+          "weight": 1
+        },
+        {
+          "name": "Security Analyst",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "Customer Support",
+      "weight": 12,
+      "titles": [
+        {
+          "name": "Support Agent",
+          "weight": 1
+        },
+        {
+          "name": "Support Team Lead",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "Legal",
+      "weight": 3,
+      "titles": [
+        {
+          "name": "Legal Counsel",
+          "weight": 1
+        },
+        {
+          "name": "Compliance Officer",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "Operations",
+      "weight": 10,
+      "titles": [
+        {
+          "name": "Operations Coordinator",
+          "weight": 1
+        },
+        {
+          "name": "Logistics Manager",
+          "weight": 1
+        },
+        {
+          "name": "Operations Manager",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "weight": 6,
+      "titles": [
+        {
+          "name": "Product Manager",
+          "weight": 1
+        },
+        {
+          "name": "Product Designer",
+          "weight": 1
+        },
+        {
+          "name": "UX Researcher",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "names": {
+    "first": [
+      "Anna",
+      "Erik",
+      "Maria",
+      "Lars",
+      "Sofia",
+      "Johan",
+      "Elin",
+      "Oskar",
+      "Ida",
+      "Nils",
+      "Klara",
+      "Anders",
+      "Linnea",
+      "Mats",
+      "Hanna",
+      "Viktor",
+      "Emma",
+      "Henrik",
+      "Julia",
+      "Fredrik",
+      "Alice",
+      "Magnus",
+      "Sara",
+      "Daniel",
+      "Frida",
+      "Karl",
+      "Nora",
+      "Simon",
+      "Tilda",
+      "Jonas",
+      "Olivia",
+      "Peter",
+      "Maja",
+      "Gustav",
+      "Elsa",
+      "Patrik",
+      "Agnes",
+      "David",
+      "Lena",
+      "Axel"
+    ],
+    "last": [
+      "Andersson",
+      "Johansson",
+      "Karlsson",
+      "Nilsson",
+      "Eriksson",
+      "Larsson",
+      "Olsson",
+      "Persson",
+      "Svensson",
+      "Gustafsson",
+      "Pettersson",
+      "Jonsson",
+      "Jansson",
+      "Hansson",
+      "Bengtsson",
+      "Lindberg",
+      "Lindqvist",
+      "Lindgren",
+      "Berg",
+      "Axelsson",
+      "Bergstrom",
+      "Lundberg",
+      "Lundgren",
+      "Mattsson",
+      "Berglund",
+      "Fredriksson",
+      "Sandberg",
+      "Henriksson",
+      "Forsberg",
+      "Sjoberg",
+      "Wallin",
+      "Engstrom",
+      "Eklund",
+      "Danielsson"
+    ]
+  },
+  "people": {
+    "guestPercent": 3,
+    "syncedPercent": 60,
+    "enabledPercent": 97,
+    "contractorPercent": 12,
+    "languages": [
+      {
+        "code": "en-US",
+        "weight": 40
+      },
+      {
+        "code": "sv-SE",
+        "weight": 60
+      }
+    ],
+    "managerWord": "Manager"
+  },
+  "formats": {
+    "employeeId": {
+      "pattern": "E#####",
+      "start": 10000
+    },
+    "mobilePhone": "+{cc} 7# ### ## ##",
+    "businessPhone": "+4# 8 ### ###",
+    "costCenter": "CC-{100-119}",
+    "streets": [
+      "Main Street",
+      "Harbour Road",
+      "Station Way",
+      "Park Avenue"
+    ]
+  },
+  "extensionAttributes": [
+    {
+      "index": 1,
+      "pattern": "CC-{100-119}"
+    },
+    {
+      "index": 2,
+      "values": [
+        {
+          "value": "Contractor",
+          "weight": 12
+        },
+        {
+          "value": "Employee",
+          "weight": 88
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "values": [
+        {
+          "value": "North",
+          "weight": 1
+        },
+        {
+          "value": "South",
+          "weight": 1
+        },
+        {
+          "value": "East",
+          "weight": 1
+        },
+        {
+          "value": "West",
+          "weight": 1
+        },
+        {
+          "value": "HQ",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "pattern": "SITE-{01-12}"
+    },
+    {
+      "index": 5,
+      "values": [
+        {
+          "value": "L1",
+          "weight": 1
+        },
+        {
+          "value": "L2",
+          "weight": 1
+        },
+        {
+          "value": "L3",
+          "weight": 1
+        },
+        {
+          "value": "L4",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "values": [
+        {
+          "value": "remote",
+          "weight": 1
+        },
+        {
+          "value": "hybrid",
+          "weight": 1
+        },
+        {
+          "value": "office",
+          "weight": 1
+        }
+      ],
+      "fill": 40
+    },
+    {
+      "index": 7,
+      "pattern": "PRJ-{000-059}",
+      "fill": 25
+    },
+    {
+      "index": 8,
+      "values": [
+        {
+          "value": "pilot",
+          "weight": 1
+        }
+      ],
+      "fill": 15
+    },
+    {
+      "index": 9,
+      "values": [
+        {
+          "value": "VIP",
+          "weight": 1
+        }
+      ],
+      "fill": 10
+    },
+    {
+      "index": 10,
+      "values": [
+        {
+          "value": "A",
+          "weight": 1
+        },
+        {
+          "value": "B",
+          "weight": 1
+        },
+        {
+          "value": "C",
+          "weight": 1
+        }
+      ],
+      "fill": 30
+    }
+  ],
+  "groups": {
+    "prefix": "grp.",
+    "departmentGroups": true,
+    "officeGroups": true,
+    "dynamicDepartment": "Engineering",
+    "microsoft365Departments": [
+      "Marketing",
+      "Human Resources"
+    ],
+    "adminDepartment": "IT",
+    "legalDepartment": "Legal",
+    "strayDepartments": [
+      "Legal",
+      "Human Resources"
+    ],
+    "apps": [
+      {
+        "name": "acme",
+        "title": "Acme Portal",
+        "contributorDepartments": [
+          "Sales",
+          "Marketing"
+        ],
+        "readerDepartments": [
+          "Customer Support",
+          "Legal"
+        ]
+      },
+      {
+        "name": "contoso",
+        "title": "Contoso Planner",
+        "contributorDepartments": [
+          "Engineering",
+          "Product"
+        ],
+        "readerDepartments": [
+          "Operations",
+          "Human Resources"
+        ]
+      },
+      {
+        "name": "globex",
+        "title": "Globex Ledger",
+        "contributorDepartments": [
+          "Finance",
+          "Operations"
+        ],
+        "readerDepartments": [
+          "Sales",
+          "Legal"
+        ]
+      }
+    ]
+  },
+  "owner": {
+    "department": "Engineering",
+    "jobTitle": "Tech Lead"
+  },
+  "admin": {
+    "userPrincipalName": "a.{first}",
+    "displayName": "{First} (admin)",
+    "jobTitle": "Administrator",
+    "department": "IT"
+  }
+}

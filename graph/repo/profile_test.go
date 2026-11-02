@@ -33,9 +33,10 @@ func groupNamed(w *World, name string) *Group {
 	return nil
 }
 
+// norway is the Norwegian profile: Fjordvik, the default one, from the file in the program. A test that needs a profile that is not the default uses AcmeProfile.
 func norway(t *testing.T) *Profile {
 	t.Helper()
-	f, err := os.Open("../../docs/profiles/norway.json")
+	f, err := os.Open("profiles/fjordvik.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,10 +59,10 @@ func TestProfile_DefaultIsValidAndSurvivesJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 	a, c := Generate(Options{Users: 60, Seed: 1}), Generate(Options{Users: 60, Seed: 1, Profile: p})
-	if a.Profile != nil || c.Profile == nil {
-		t.Error("the seed keeps a profile that was given, and not the default one")
+	if a.Profile == nil || a.Profile.Name != DefaultProfile().Name || c.Profile == nil {
+		t.Error("the seed keeps its profile, the default one too: a seed with no profile in it is Acme")
 	}
-	c.Profile = nil
+	a.Profile, c.Profile = nil, nil
 	if hashOf(t, a) != hashOf(t, c) {
 		t.Error("a profile that came from JSON makes other data than the default one")
 	}
@@ -294,7 +295,7 @@ func TestProfile_DefaultAdminAccount(t *testing.T) {
 // A profile can ask for the admin accounts to be named in any of the usual ways, and the owner and the admin keep working with a
 // profile that has other departments.
 func TestProfile_AdminNamingFollowsTheProfile(t *testing.T) {
-	for pattern, want := range map[string]string{"adm.{first}": "adm.philip@acme.example", "{first}.a.{last}": "philip.a.meholm@acme.example"} {
+	for pattern, want := range map[string]string{"a.{first}": "a.philip@fjordvik.example", "{first}.a.{last}": "philip.a.meholm@fjordvik.example"} {
 		p := DefaultProfile()
 		p.Admin.UserPrincipalName = pattern
 		w, err := GenerateChecked(Options{Users: 10, Seed: 1, Profile: p})
@@ -304,7 +305,7 @@ func TestProfile_AdminNamingFollowsTheProfile(t *testing.T) {
 		if w.AdminAccount() != want {
 			t.Errorf("%s: %s", pattern, w.AdminAccount())
 		}
-		if got, ok := w.GetUser(want); !ok || got["displayName"] != "Philip (admin)" {
+		if got, ok := w.GetUser(want); !ok || got["displayName"] != "Philip (adm)" {
 			t.Errorf("%s: the account is %v", pattern, got["displayName"])
 		}
 	}
@@ -407,7 +408,7 @@ func TestProfile_RegenerateInMemory(t *testing.T) {
 // More than one domain: the addresses of the members follow the weights, the default domain stays the one of the owner and the admin,
 // and the guests have their own domains. A profile with one domain is not touched (the golden test holds that).
 func TestProfile_ManyDomains(t *testing.T) {
-	p := DefaultProfile()
+	p := AcmeProfile()
 	p.Organization.Domain, p.Organization.DomainWeight = "acme.example", 6
 	p.Organization.Domains = []ProfileDomain{{"acme.com", 3}, {"acme.onmicrosoft.com", 1}}
 	p.Organization.GuestDomain = ""
@@ -484,7 +485,7 @@ func TestProfile_NamesFollowTheLanguages(t *testing.T) {
 		t.Fatal(err)
 	}
 	norwegian := 0
-	for _, u := range w.Users[:len(w.Users)-2] { // the owner and the admin account are not drawn
+	for _, u := range w.Users[:len(w.Users)-6] { // the owner, the admin account, and the cast of A Doll's House are not drawn
 		no := slices.Contains([]string{"Ola", "Kari", "Nils"}, str(u["givenName"]))
 		en := slices.Contains([]string{"Oliver", "Amelia"}, str(u["givenName"]))
 		if no == en || (no && u["preferredLanguage"] != "nb-NO") || (en && u["preferredLanguage"] != "en-GB") {
@@ -551,10 +552,40 @@ func TestProfile_TheSeedKeepsItsProfile(t *testing.T) {
 	if len(again.ListUsers()) != 60 || again.AdminAccount() != "adm.philip@fjordvik.example" || again.CurrentProfile() == nil {
 		t.Errorf("regenerate with no profile: %d users, admin %s", len(again.ListUsers()), again.AdminAccount())
 	}
-	// the default profile is not kept
+	// the default profile is kept too, and the seed says which one it is
 	plain := Generate(Options{Users: 10})
-	if plain.CurrentProfile() != nil {
-		t.Error("data from the default profile keeps none")
+	if p := plain.CurrentProfile(); p == nil || p.Name != DefaultProfile().Name {
+		t.Errorf("data from the default profile keeps it: %+v", p)
+	}
+}
+
+// A seed with no profile in it was made before Fjordvik was the default: from Acme, with the admin account a.philip@acme.example. It stays Acme: a
+// reset and a new generation from it make Acme again, and its admin account is the one that it had.
+func TestProfile_ASeedWithNoProfileIsAcme(t *testing.T) {
+	old := Generate(Options{Users: 30, Seed: 4, Profile: AcmeProfile()})
+	old.Profile, old.Admin = nil, "" // the seed file as it was before: no field `profile`, and no field `adminAccount` for the default admin account
+	data, err := json.Marshal(old)
+	if err != nil {
+		t.Fatal(err)
+	}
+	w, err := loadBytes(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if p := w.CurrentProfile(); p == nil || p.Organization.Domain != "acme.example" {
+		t.Fatalf("the profile of a seed with none: %+v", p)
+	}
+	if w.AdminAccount() != "a.philip@acme.example" {
+		t.Errorf("the admin account of an old seed: %s", w.AdminAccount())
+	}
+	if _, ok := w.GetUser("a.philip@acme.example"); !ok {
+		t.Error("the admin account is in the data")
+	}
+	if _, err := w.Regenerate(Options{Users: 20, Seed: 4}); err != nil { // no profile: the one that it has
+		t.Fatal(err)
+	}
+	if _, ok := w.GetUser("a.philip@acme.example"); !ok || w.AdminAccount() != "a.philip@acme.example" {
+		t.Errorf("a new generation from an old seed makes Acme again: %s", w.AdminAccount())
 	}
 }
 

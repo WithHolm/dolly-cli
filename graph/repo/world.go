@@ -43,6 +43,8 @@ type World struct {
 	// same as before profiles. A reset, a restart, and a new generation without a profile use it.
 	Profile *Profile  `json:"profile,omitempty"`
 	delta   changeLog // what changed, for delta query (delta.go)
+	// listeners are told of each change as it is made (changes_feed.go)
+	listeners []func(ChangeEvent)
 
 	users   map[string]Object
 	groups  map[string]*Group
@@ -108,6 +110,14 @@ func loadBytes(data []byte) (*World, error) {
 	w := &World{}
 	if err := json.Unmarshal(data, w); err != nil {
 		return nil, fmt.Errorf("dolly: the seed is not valid: %w", err)
+	}
+	if w.Profile == nil {
+		// A seed with no profile in it was made before Fjordvik was the default: from Acme, with the admin account a.<first name>@acme.example. The data
+		// stays what it is, and a reset or a new generation from it makes Acme again.
+		w.Profile = AcmeProfile()
+		if w.Admin == "" {
+			w.Admin = adminUPN(w.Profile)
+		}
 	}
 	w.index()
 	return w, nil

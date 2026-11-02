@@ -127,20 +127,22 @@ func Generate(o Options) *World {
 	if o.Seed == 0 {
 		o.Seed = 1
 	}
-	given := o.Profile // the seed keeps a profile that was given, and not the default one: its data is the same as before profiles
 	if o.Profile == nil {
 		o.Profile = DefaultProfile()
 	}
+	// The seed keeps its profile, the default one too: a seed with no profile in it is read as Acme, the tenant of before Fjordvik (loadBytes).
 	g := &gen{rng: rand.New(rand.NewPCG(uint64(o.Seed), 0x9e3779b97f4a7c15)), w: &World{Seed: o.Seed, Managers: map[string]string{}}, p: o.Profile}
-	g.w.Profile = given
+	g.w.Profile = o.Profile
 	g.users(o.Users)
-	g.managers()
+	g.cast()       // the people of the cast that need the others to be there (their department, their office)...
+	g.managers()   // ...before the manager tree and the groups are made from the users...
+	g.castBosses() // ...and the links that the tree could not know about, after it
 	g.groups()
 	g.apps()
 	g.places()
 	g.w.Organization = newOrganization(o.Profile)
 	if admin := adminUPN(o.Profile); admin != AdminUPN {
-		g.w.Admin = admin // a world with the default admin account has no field: its seed is the same as it was before profiles
+		g.w.Admin = admin // a world with the admin account of the default profile has no field
 	}
 	g.w.index()
 	return g.w
@@ -239,16 +241,19 @@ func (g *gen) users(n int) {
 			makeOwner(u, g.p) // the last user is the owner of this Dolly, so the count of users is as asked
 		case n - 2:
 			makeAdmin(u, g.p) // the one before is the admin account of the owner
+		case n - 3:
+			makeNora(u, g.p) // and the one before that is Nora Helmer, when there is room for her
 		}
 		g.w.Users = append(g.w.Users, u)
 	}
 }
 
-// OwnerName and OwnerUPN are the user that every generated world has: Philip Meholm, a tech lead in Engineering. The
-// examples of the portal use this user, and a tool that signs in as a user can use it too. The address is fake.
+// OwnerName and OwnerUPN are the user that every generated world has: Philip Meholm. His department and job title are the ones of the profile
+// (Identitetsarkitekt in IT og digitalisering at Fjordvik, Tech Lead in Engineering at Acme). The examples of the portal use this user, and a tool
+// that signs in as a user can use it too. The address is fake.
 const (
 	OwnerName = "Philip Meholm"
-	OwnerUPN  = "philip.meholm@acme.example"
+	OwnerUPN  = "philip.meholm@fjordvik.example" // in the default profile (Fjordvik); a profile says its own domain
 )
 
 // makeOwner turns a generated user into the owner. It draws nothing from the random numbers, so every other user of a
@@ -270,12 +275,145 @@ func makeOwner(u Object, p *Profile) {
 	}
 }
 
-// AdminName and AdminUPN are the admin account of the owner in the default profile, as many companies make one (a. and the name). The
+// NoraName is the second person that every generated world has, when it has three users or more: Nora Helmer, from Ibsen's A Doll's House (a "doll's house"
+// is where the name of this tool is from). Her address is nora.helmer@ and the domain of the profile. She is an ordinary member of the tenant.
+const NoraName = "Nora Helmer"
+
+// makeNora turns a generated user into Nora Helmer. Like makeOwner, it draws nothing from the random numbers, so every other user of a seed is the
+// same as it was. Only the fields that say who she is change: the department, the job title, the office, and the rest stay what the seed gave the user.
+func makeNora(u Object, p *Profile) {
+	upn := "nora.helmer@" + p.Organization.Domain
+	u["displayName"], u["givenName"], u["surname"] = NoraName, "Nora", "Helmer"
+	u["userPrincipalName"], u["mail"], u["mailNickname"] = upn, upn, "nora.helmer"
+	u["accountEnabled"], u["userType"] = true, "Member"
+	u["proxyAddresses"] = []any{"SMTP:" + upn}
+	u["showInAddressList"], u["creationType"], u["externalUserState"] = true, nil, nil
+	if dept, ok := u["department"].(string); ok {
+		if _, synced := u["onPremisesDistinguishedName"]; synced {
+			u["onPremisesDistinguishedName"] = fmt.Sprintf("CN=%s,OU=%s,%s", NoraName, dept, dcOf(p.Organization.Domain))
+		}
+	}
+}
+
+// The rest of the cast of A Doll's House, besides Nora Helmer (who is made while the users are): Torvald Helmer is her boss, Nils Krogstad is a colleague with a
+// disabled account, and Dr. Rank is a guest. They are the generated users four, five, and six from the end, when there is room. They draw nothing from the
+// random numbers. The people of the story are made after the users and before the manager tree and the groups (cast), so the departments, the manager tree, and
+// the groups agree with them. The links to Torvald are set after the tree is made (castBosses), where a loop is checked for.
+
+// castAt gives the generated user that many places from the end (1 is the owner), or nil when there is no such user.
+func (g *gen) castAt(fromEnd int) Object {
+	if i := len(g.w.Users) - fromEnd; i >= 0 && i < len(g.w.Users) {
+		return g.w.Users[i]
+	}
+	return nil
+}
+
+// colleagueOf makes u a colleague of nora: the same department and office. The groups of the department and the office are made later, from these.
+func colleagueOf(u, nora Object) {
+	dept := str(nora["department"])
+	u["department"] = dept
+	if org, ok := u["employeeOrgData"].(Object); ok {
+		org["division"] = dept
+	}
+	for _, k := range []string{"officeLocation", "city", "country", "usageLocation", "postalCode", "state", "streetAddress"} {
+		u[k] = nora[k]
+	}
+}
+
+// makeMember gives a generated user the name of someone in the story, as an enabled member of the tenant.
+func makeMember(u Object, first, last string, p *Profile) {
+	nick := strings.ToLower(first + "." + last)
+	upn := nick + "@" + p.Organization.Domain
+	u["displayName"], u["givenName"], u["surname"] = first+" "+last, first, last
+	u["userPrincipalName"], u["mail"], u["mailNickname"] = upn, upn, nick
+	u["accountEnabled"], u["userType"] = true, "Member"
+	u["proxyAddresses"] = []any{"SMTP:" + upn}
+	u["showInAddressList"], u["creationType"], u["externalUserState"] = true, nil, nil
+}
+
+// syncedName writes the on-premises name of a synced user again, for the name and the department that the user has now.
+func syncedName(u Object, p *Profile) {
+	if _, synced := u["onPremisesDistinguishedName"]; synced {
+		u["onPremisesDistinguishedName"] = fmt.Sprintf("CN=%s,OU=%s,%s", str(u["displayName"]), str(u["department"]), dcOf(p.Organization.Domain))
+	}
+}
+
+// bossTitle gives the title of a department that says that its person leads (it has the manager word of the profile), or "" when none does.
+func bossTitle(p *Profile, dept string) string {
+	word := strings.ToLower(p.People.ManagerWord)
+	for _, d := range p.Departments {
+		if d.Name != dept {
+			continue
+		}
+		for _, t := range d.Titles {
+			if word != "" && strings.Contains(strings.ToLower(t.Name), word) {
+				return t.Name
+			}
+		}
+	}
+	return ""
+}
+
+// cast makes Torvald Helmer, Nils Krogstad, and Dr. Rank from generated users, when there is room: Nora must be there (3 from the end), then Torvald (4), Nils (5), and Dr. Rank (6).
+func (g *gen) cast() {
+	nora := g.castAt(3)
+	if nora == nil {
+		return
+	}
+	if torvald := g.castAt(4); torvald != nil {
+		makeMember(torvald, "Torvald", "Helmer", g.p)
+		colleagueOf(torvald, nora)
+		if title := bossTitle(g.p, str(nora["department"])); title != "" {
+			torvald["jobTitle"] = title // a boss has the title of one: the manager tree takes the people with such a title as the managers of the department
+		}
+		syncedName(torvald, g.p)
+	}
+	if nils := g.castAt(5); nils != nil {
+		makeMember(nils, "Nils", "Krogstad", g.p)
+		colleagueOf(nils, nora)
+		nils["accountEnabled"] = false // Torvald dismisses him
+		syncedName(nils, g.p)
+	}
+	if rank := g.castAt(6); rank != nil {
+		guestDomain := g.p.guestDomains()[0].Name
+		upn, mail := fmt.Sprintf("dr.rank_%s#EXT#@%s", guestDomain, g.p.Organization.InitialDomain), "dr.rank@"+guestDomain
+		rank["displayName"], rank["givenName"], rank["surname"] = "Dr. Rank", "Dr.", "Rank"
+		rank["userPrincipalName"], rank["mail"], rank["mailNickname"] = upn, mail, "dr.rank"
+		rank["accountEnabled"], rank["userType"] = true, "Guest"
+		rank["proxyAddresses"] = []any{"SMTP:" + mail}
+		rank["showInAddressList"], rank["creationType"], rank["externalUserState"] = false, "Invitation", "Accepted"
+		rank["onPremisesSyncEnabled"] = nil // an invited guest is not synced from an on-premises directory
+		delete(rank, "onPremisesDistinguishedName")
+		delete(rank, "onPremisesSecurityIdentifier")
+	}
+}
+
+// castBosses makes Torvald the manager of Nora and of Nils, after the manager tree is made. The tree is checked for a loop: if Torvald's own chain of managers
+// reaches Nora or Nils (they led the company or the department), Torvald has no manager, and leads. A guest has no manager.
+func (g *gen) castBosses() {
+	nora, torvald, nils := g.castAt(3), g.castAt(4), g.castAt(5)
+	if nora == nil || torvald == nil {
+		return
+	}
+	key := func(u Object) string { return strings.ToLower(str(u["id"])) }
+	g.w.Managers[key(nora)] = key(torvald)
+	if nils != nil {
+		g.w.Managers[key(nils)] = key(torvald)
+	}
+	for cur, steps := g.w.Managers[key(torvald)], 0; cur != "" && steps <= len(g.w.Users); cur, steps = g.w.Managers[cur], steps+1 {
+		if cur == key(nora) || (nils != nil && cur == key(nils)) {
+			delete(g.w.Managers, key(torvald))
+			return
+		}
+	}
+}
+
+// AdminName and AdminUPN are the admin account of the owner in the default profile, as many companies make one (adm. and the name). The
 // quick connect for PowerShell signs in as this user. A world of one user has no admin account. Another profile names its admin accounts
 // in its own way (admin.userPrincipalName), and World.AdminAccount gives the address.
 const (
-	AdminName = "Philip (admin)"
-	AdminUPN  = "a.philip@acme.example"
+	AdminName = "Philip (adm)"
+	AdminUPN  = "adm.philip@fjordvik.example"
 )
 
 // adminUPN is the user principal name of the admin account that a profile makes for the owner.

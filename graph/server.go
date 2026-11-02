@@ -12,6 +12,7 @@ import (
 
 	"github.com/withholm/dolly-cli/graph/api"
 	"github.com/withholm/dolly-cli/graph/cost"
+	"github.com/withholm/dolly-cli/graph/notify"
 	"github.com/withholm/dolly-cli/shared"
 )
 
@@ -26,6 +27,7 @@ type Server struct {
 	bmu sync.RWMutex
 	beh Behavior
 
+	notifier  *notify.Engine // the change notifications (subscriptions.go)
 	calls     callLog
 	graphURL  string
 	endpoints []Endpoint // the operations that dolly supports, from mountAPI
@@ -180,6 +182,10 @@ func (s *Server) serve(w http.ResponseWriter, r *http.Request) {
 		shared.Guard(http.StripPrefix("/_dolly", s.admin)).ServeHTTP(w, r)
 		return
 	}
+	if r.URL.Path == ReceiverPath { // not a Graph call: no token, and not in the call log
+		s.receive(w, r)
+		return
+	}
 	id := s.calls.reserve()
 	start := time.Now()
 	call := Call{
@@ -195,11 +201,13 @@ func (s *Server) serve(w http.ResponseWriter, r *http.Request) {
 		slog.Debug("dolly: request", "method", call.Method, "url", r.URL.String(), "status", call.Status)
 	}()
 
-	if !strings.HasPrefix(strings.ToLower(r.Header.Get("Authorization")), "bearer ") {
+	// The description of the API is public: a client reads /$metadata before it signs in (a guess, from what Graph is known to do: it is not checked).
+	public := r.Method == http.MethodGet && r.URL.Path == metadataPath
+	if !public && !strings.HasPrefix(strings.ToLower(r.Header.Get("Authorization")), "bearer ") {
 		writeError(rec, apiErr(http.StatusUnauthorized, "InvalidAuthenticationToken", "Access token is empty."))
 		return
 	}
-	if info, ours := s.token(r); ours && info.Problem != "" {
+	if info, ours := s.token(r); !public && ours && info.Problem != "" {
 		writeError(rec, apiErr(http.StatusUnauthorized, "InvalidAuthenticationToken", info.Problem))
 		return
 	}

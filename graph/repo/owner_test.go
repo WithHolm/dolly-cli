@@ -21,7 +21,7 @@ func TestGenerate_HasTheOwner(t *testing.T) {
 		u := owners[0]
 		for field, want := range map[string]any{
 			"displayName": "Philip Meholm", "givenName": "Philip", "surname": "Meholm", "mail": OwnerUPN, "mailNickname": "philip.meholm",
-			"department": "Engineering", "jobTitle": "Tech Lead", "accountEnabled": true, "userType": "Member", "showInAddressList": true,
+			"department": DefaultProfile().Owner.Department, "jobTitle": DefaultProfile().Owner.JobTitle, "accountEnabled": true, "userType": "Member", "showInAddressList": true,
 		} {
 			if u[field] != want {
 				t.Errorf("n=%d: %s = %v, want %v", n, field, u[field], want)
@@ -30,11 +30,11 @@ func TestGenerate_HasTheOwner(t *testing.T) {
 		if u["creationType"] != nil || u["externalUserState"] != nil {
 			t.Errorf("n=%d: the owner is not a guest: %v %v", n, u["creationType"], u["externalUserState"])
 		}
-		if org, _ := u["employeeOrgData"].(Object); org["division"] != "Engineering" {
+		if org, _ := u["employeeOrgData"].(Object); org["division"] != DefaultProfile().Owner.Department {
 			t.Errorf("n=%d: employeeOrgData %v", n, u["employeeOrgData"])
 		}
 		// the owner is found by name and by address, and has a manager like the other members (except the head of the company)
-		if found, _ := w.SearchUsers("Philip Meholm", 5); len(found) != 1 || found[0].UPN != OwnerUPN || found[0].JobTitle != "Tech Lead" {
+		if found, _ := w.SearchUsers("Philip Meholm", 5); len(found) != 1 || found[0].UPN != OwnerUPN || found[0].JobTitle != DefaultProfile().Owner.JobTitle {
 			t.Errorf("n=%d: search: %+v", n, found)
 		}
 		if got, ok := w.GetUser(OwnerUPN); !ok || got["displayName"] != "Philip Meholm" {
@@ -54,7 +54,7 @@ func TestGenerate_OwnerLeavesTheOthersAsTheyWere(t *testing.T) {
 	}
 	// users 0..38 do not depend on how many are asked for after them: the first 39 of a world of 40 are the first 39 of 39
 	c := Generate(Options{Users: 39, Seed: 7})
-	for i := 0; i < 37; i++ { // the last two of a world are the owner and the admin account, so they are not compared
+	for i := 0; i < 33; i++ { // the last six of a world are the owner, the admin account, and the cast of A Doll's House, so they are not compared
 		if a.Users[i]["displayName"] != c.Users[i]["displayName"] || a.Users[i]["jobTitle"] != c.Users[i]["jobTitle"] {
 			t.Fatalf("user %d is not the same: %v and %v", i, a.Users[i]["displayName"], c.Users[i]["displayName"])
 		}
