@@ -5,17 +5,23 @@ on:
       - main
     paths:
       - '.github/labels.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
 
 jobs:
-  build:
+  labels:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Run Label Sync
-        uses: MichelBlanchet/github-label-sync-action@v2
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          manifest: '.github/labels.json'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          sparse-checkout: .github/labels.json
+
+      - uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
+        with:
+          config-file: .github/labels.json
+          delete-other-labels: false
+          dry-run: false
+          token: ${{ secrets.GITHUB_TOKEN }}
