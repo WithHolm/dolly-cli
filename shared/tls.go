@@ -46,6 +46,11 @@ const (
 // It gives the certificate, and the CA as PEM.
 func LocalCert(dir string, hosts []string) (tls.Certificate, []byte, error) {
 	names, ips := hostsOf(hosts)
+	for _, n := range names {
+		if LooksPublic(n) {
+			slog.Warn("A host for --tls looks like a real domain. The CA can sign for every host that is given, so do not give it a domain that is not yours to impersonate.", "host", n)
+		}
+	}
 	ca, caKey, caPEM, err := loadCA(dir, names, ips)
 	if err != nil {
 		return tls.Certificate{}, nil, err
@@ -77,6 +82,24 @@ func LocalCert(dir string, hosts []string) (tls.Certificate, []byte, error) {
 		return tls.Certificate{}, nil, err
 	}
 	return tls.Certificate{Certificate: [][]byte{der}, PrivateKey: key}, caPEM, nil
+}
+
+// localSuffixes are the endings of names that are not on the internet: a name with a dot that does not end in one of them looks like a real domain.
+var localSuffixes = []string{".localhost", ".local", ".internal", ".test", ".example", ".invalid", ".lan", ".home.arpa", ".localdomain", ".corp", ".home", ".intranet", ".private"}
+
+// LooksPublic says whether a host name looks like a real domain (it has a dot, and does not end in a name that is kept for local use). A name with
+// no dot (a service name in a compose file) does not. The CA can sign for every name that is given, so dollycli warns about such a name.
+func LooksPublic(name string) bool {
+	name = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(name), "."))
+	if !strings.Contains(name, ".") || net.ParseIP(name) != nil {
+		return false
+	}
+	for _, s := range localSuffixes {
+		if strings.HasSuffix(name, s) {
+			return false
+		}
+	}
+	return true
 }
 
 // hostsOf splits the hosts that are given into names and addresses. An empty one and an unspecified address (0.0.0.0) are left out.

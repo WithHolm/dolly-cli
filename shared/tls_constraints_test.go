@@ -157,6 +157,19 @@ func TestLocalCA_KeyIsNotReadableByOthers(t *testing.T) {
 	}
 }
 
+// The CA signs for the hosts that it is given, so a name that looks like a real domain gets a warning. A service name and a local name do not.
+func TestLooksPublic(t *testing.T) {
+	for name, want := range map[string]bool{
+		"login.microsoftonline.com": true, "example.com": true, "Graph.Microsoft.com.": true, "dolly.example.co": true,
+		"dolly": false, "dolly.internal": false, "api.dolly.local": false, "app.localhost": false, "box.lan": false, "x.home.arpa": false,
+		"10.1.2.3": false, "::1": false, "": false,
+	} {
+		if got := LooksPublic(name); got != want {
+			t.Errorf("%q: %v, want %v", name, got, want)
+		}
+	}
+}
+
 func TestRemoveLocalCA(t *testing.T) {
 	dir := filepath.Join(t.TempDir(), "tls")
 	if removed, err := RemoveLocalCA(dir); removed || err != nil {
