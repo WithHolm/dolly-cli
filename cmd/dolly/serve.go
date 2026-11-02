@@ -103,7 +103,8 @@ func openGraph(s *settings, _ []shared.API) (shared.API, func(), error) {
 		opt.Docs = os.DirFS(s.docs)
 		slog.Info("Dolly reads the documentation from this folder, and not from the program.", "folder", s.docs)
 	}
-	return graph.New(world, opt), func() { _ = world.Close() }, nil
+	srv := graph.New(world, opt)
+	return srv, func() { srv.Close(); _ = world.Close() }, nil
 }
 
 // reachable gives host:port for a listener, as a client on the same machine reaches it. An address that listens on every
@@ -173,6 +174,11 @@ func serveCmd(s *settings, only string) *cobra.Command {
 			"the next-page links often, which is a way to test paging.",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			// The port comes first: a port that is taken must not leave a new data folder behind (the seed and the history are made when the data opens).
+			ln, err := net.Listen("tcp", net.JoinHostPort(s.host, strconv.Itoa(s.port)))
+			if err != nil {
+				return fmt.Errorf("dolly cannot listen on %s: %w. Use --port (or DOLLY_PORT) to pick another port, or --host to pick another address", net.JoinHostPort(s.host, strconv.Itoa(s.port)), err)
+			}
 			var running []shared.API
 			for _, d := range apis {
 				if only != "" && d.name != only {
@@ -180,14 +186,11 @@ func serveCmd(s *settings, only string) *cobra.Command {
 				}
 				api, closeData, err := d.open(s, running)
 				if err != nil {
+					_ = ln.Close()
 					return err
 				}
 				defer closeData()
 				running = append(running, api)
-			}
-			ln, err := net.Listen("tcp", net.JoinHostPort(s.host, strconv.Itoa(s.port)))
-			if err != nil {
-				return fmt.Errorf("dolly cannot listen on %s: %w. Use --port to pick another port, or --host to pick another address", net.JoinHostPort(s.host, strconv.Itoa(s.port)), err)
 			}
 			scheme := "http"
 			var caPEM []byte

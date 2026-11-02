@@ -16531,10 +16531,1479 @@
     ]
    }
   },
+  "subscription-delete": {
+   "summary": "Delete subscription",
+   "calls": [
+    "DELETE /subscriptions/{subscription-id}"
+   ],
+   "lists": [
+    "DELETE /subscriptions/{}"
+   ],
+   "table": true,
+   "delegated": {},
+   "application": {},
+   "variants": [
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "AiEnterpriseInteraction.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ],
+      "higher": [
+       "AiEnterpriseInteraction.Read.User"
+      ]
+     }
+    },
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecord",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "CallRecords.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/{id}/channels)",
+     "delegated": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats – all chats in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats/{id})",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatSettings.Read.Chat"
+      ],
+      "higher": [
+       "ChatSettings.ReadWrite.Chat",
+       "Chat.Manage.Chat",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatSettings.Read.Chat": "resource-specific consent",
+       "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+     "delegated": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.Group"
+      ],
+      "higher": [
+       "ChannelMessage.Read.All"
+      ],
+      "conditions": {
+       "ChannelMessage.Read.Group": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/{id}/messages)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+     "delegated": {
+      "least": [
+       "Chat.Read"
+      ],
+      "higher": [
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ],
+      "higher": [
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "contact",
+     "delegated": {
+      "least": [
+       "Contacts.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Contacts.Read"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.All"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/{id}/members)",
+     "delegated": {
+      "least": [
+       "ChatMember.Read"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite",
+       "Chat.ReadBasic",
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.Chat"
+      ],
+      "higher": [
+       "Chat.Manage.Chat",
+       "ChatMember.Read.All",
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatMember.Read.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "conversationMember",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.WhereInstalled"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.WhereInstalled",
+       "Chat.ReadBasic.WhereInstalled",
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/members)",
+     "delegated": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "driveItem (user's personal OneDrive)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "driveItem (OneDrive for Business)",
+     "delegated": {
+      "least": [
+       "Files.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Files.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "event",
+     "delegated": {
+      "least": [
+       "Calendars.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Calendars.Read"
+      ]
+     }
+    },
+    {
+     "resource": "group",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Group.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "group conversation",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "list",
+     "delegated": {
+      "least": [
+       "Sites.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Sites.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "message",
+     "delegated": {
+      "least": [
+       "Mail.ReadBasic"
+      ],
+      "higher": [
+       "Mail.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Mail.Read"
+      ]
+     }
+    },
+    {
+     "resource": "offerShiftRequest",
+     "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "openShiftChangeRequest",
+     "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "printer",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Printer.Read.All"
+      ],
+      "higher": [
+       "Printer.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "printTaskDefinition",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "PrintTaskDefinition.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "security alert",
+     "delegated": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "shift",
+     "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "swapShiftsChangeRequest",
+     "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams – all teams in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams/{id})",
+     "delegated": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "timeOffRequest",
+     "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "todoTask",
+     "delegated": {
+      "least": [
+       "Tasks.ReadWrite"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "user",
+     "delegated": {
+      "least": [
+       "User.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "User.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "virtualEventWebinar",
+     "delegated": {
+      "least": [
+       "VirtualEvent.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "VirtualEvent.Read.All"
+      ]
+     }
+    }
+   ]
+  },
+  "subscription-get": {
+   "summary": "Get subscription",
+   "calls": [
+    "GET /subscriptions/{subscription-id}"
+   ],
+   "lists": [
+    "GET /subscriptions/{}"
+   ],
+   "table": true,
+   "delegated": {},
+   "application": {},
+   "variants": [
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "AiEnterpriseInteraction.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ],
+      "higher": [
+       "AiEnterpriseInteraction.Read.User"
+      ]
+     }
+    },
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecord",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "CallRecords.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/{id}/channels)",
+     "delegated": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats – all chats in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats/{id})",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatSettings.Read.Chat"
+      ],
+      "higher": [
+       "ChatSettings.ReadWrite.Chat",
+       "Chat.Manage.Chat",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatSettings.Read.Chat": "resource-specific consent",
+       "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+     "delegated": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.Group"
+      ],
+      "higher": [
+       "ChannelMessage.Read.All"
+      ],
+      "conditions": {
+       "ChannelMessage.Read.Group": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/{id}/messages)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+     "delegated": {
+      "least": [
+       "Chat.Read"
+      ],
+      "higher": [
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ],
+      "higher": [
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "contact",
+     "delegated": {
+      "least": [
+       "Contacts.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Contacts.Read"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.All"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/{id}/members)",
+     "delegated": {
+      "least": [
+       "ChatMember.Read"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite",
+       "Chat.ReadBasic",
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.Chat"
+      ],
+      "higher": [
+       "Chat.Manage.Chat",
+       "ChatMember.Read.All",
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatMember.Read.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "conversationMember",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.WhereInstalled"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.WhereInstalled",
+       "Chat.ReadBasic.WhereInstalled",
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/members)",
+     "delegated": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "driveItem (user's personal OneDrive)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "driveItem (OneDrive for Business)",
+     "delegated": {
+      "least": [
+       "Files.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Files.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "event",
+     "delegated": {
+      "least": [
+       "Calendars.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Calendars.Read"
+      ]
+     }
+    },
+    {
+     "resource": "group",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Group.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "group conversation",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "list",
+     "delegated": {
+      "least": [
+       "Sites.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Sites.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "message",
+     "delegated": {
+      "least": [
+       "Mail.ReadBasic"
+      ],
+      "higher": [
+       "Mail.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Mail.Read"
+      ]
+     }
+    },
+    {
+     "resource": "offerShiftRequest",
+     "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "openShiftChangeRequest",
+     "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "printer",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Printer.Read.All"
+      ],
+      "higher": [
+       "Printer.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "printTaskDefinition",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "PrintTaskDefinition.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "security alert",
+     "delegated": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "shift",
+     "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "swapShiftsChangeRequest",
+     "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams – all teams in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams/{id})",
+     "delegated": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "timeOffRequest",
+     "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "todoTask",
+     "delegated": {
+      "least": [
+       "Tasks.ReadWrite"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "user",
+     "delegated": {
+      "least": [
+       "User.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "User.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "virtualEventWebinar",
+     "delegated": {
+      "least": [
+       "VirtualEvent.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "VirtualEvent.Read.All"
+      ]
+     }
+    }
+   ]
+  },
   "subscription-getvapidpublickey": {
    "summary": "Invoke function getVapidPublicKey",
    "calls": [
-    "GET /groups/{group-id}/sites/{site-id}/lists/{list-id}/subscriptions/getVapidPublicKey()"
+    "GET /groups/{group-id}/sites/{site-id}/lists/{list-id}/subscriptions/getVapidPublicKey()",
+    "GET /subscriptions/getVapidPublicKey()"
    ],
    "lists": [
     "GET /subscriptions/getvapidpublickey"
@@ -17303,10 +18772,1557 @@
     }
    ]
   },
+  "subscription-list": {
+   "summary": "List subscriptions",
+   "calls": [
+    "GET /subscriptions"
+   ],
+   "lists": [
+    "GET /subscriptions"
+   ],
+   "table": true,
+   "delegated": {},
+   "application": {},
+   "variants": [
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "AiEnterpriseInteraction.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ],
+      "higher": [
+       "AiEnterpriseInteraction.Read.User"
+      ]
+     }
+    },
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecord (/communications/callRecords)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "CallRecords.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/{id}/channels)",
+     "delegated": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All",
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats – all chats in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats/{id})",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite",
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatSettings.Read.Chat"
+      ],
+      "higher": [
+       "ChatSettings.ReadWrite.Chat",
+       "Chat.Manage.Chat",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatSettings.Read.Chat": "resource-specific consent",
+       "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+     "delegated": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ],
+      "higher": [
+       "Group.Read.All",
+       "Group.ReadWrite.All",
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.Group"
+      ],
+      "higher": [
+       "ChannelMessage.Read.All"
+      ],
+      "conditions": {
+       "ChannelMessage.Read.Group": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/{id}/messages)",
+     "delegated": {
+      "least": [
+       "Chat.Read"
+      ],
+      "higher": [
+       "Chat.ReadWrite",
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+     "delegated": {
+      "least": [
+       "Chat.Read"
+      ],
+      "higher": [
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ],
+      "higher": [
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "contact",
+     "delegated": {
+      "least": [
+       "Contacts.Read"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Contacts.Read"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.All"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/{id}/members)",
+     "delegated": {
+      "least": [
+       "ChatMember.Read"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite",
+       "Chat.ReadBasic",
+       "Chat.Read",
+       "Chat.ReadWrite",
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.Chat"
+      ],
+      "higher": [
+       "Chat.Manage.Chat",
+       "ChatMember.Read.All",
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatMember.Read.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "conversationMember",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.WhereInstalled"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.WhereInstalled",
+       "Chat.ReadBasic.WhereInstalled",
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/members)",
+     "delegated": {
+      "least": [
+       "TeamMember.Read.All"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "driveItem (user's personal OneDrive)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "driveItem (OneDrive for work or school)",
+     "delegated": {
+      "least": [
+       "Files.ReadWrite.All"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Files.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "event",
+     "delegated": {
+      "least": [
+       "Calendars.Read"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Calendars.Read"
+      ]
+     }
+    },
+    {
+     "resource": "group",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Group.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "group conversation",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "list",
+     "delegated": {
+      "least": [
+       "Sites.ReadWrite.All"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Sites.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "message",
+     "delegated": {
+      "least": [
+       "Mail.ReadBasic"
+      ],
+      "higher": [
+       "Mail.Read",
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Mail.Read"
+      ]
+     }
+    },
+    {
+     "resource": "offerShiftRequest",
+     "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "openShiftChangeRequest",
+     "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "presence",
+     "delegated": {
+      "least": [
+       "Presence.Read.All"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "printer",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Printer.Read.All"
+      ],
+      "higher": [
+       "Printer.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "printTaskDefinition",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "PrintTaskDefinition.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "security alert",
+     "delegated": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "shift",
+     "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "swapShiftsChangeRequest",
+     "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams – all teams in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams/{id})",
+     "delegated": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All",
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "timeOffRequest",
+     "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "todoTask",
+     "delegated": {
+      "least": [
+       "Tasks.ReadWrite"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "user",
+     "delegated": {
+      "least": [
+       "User.Read.All"
+      ],
+      "higher": [
+       "Subscription.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "User.Read.All"
+      ]
+     }
+    }
+   ]
+  },
+  "subscription-post-subscriptions": {
+   "summary": "Create subscription",
+   "calls": [
+    "POST /subscriptions"
+   ],
+   "lists": [
+    "POST /subscriptions"
+   ],
+   "table": true,
+   "delegated": {},
+   "application": {},
+   "variants": [
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "AiEnterpriseInteraction.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ],
+      "higher": [
+       "AiEnterpriseInteraction.Read.User"
+      ]
+     }
+    },
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecord (/communications/callRecords)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "CallRecords.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/{id}/channels)",
+     "delegated": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats – all chats in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats/{id})",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatSettings.Read.Chat"
+      ],
+      "higher": [
+       "ChatSettings.ReadWrite.Chat",
+       "Chat.Manage.Chat",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatSettings.Read.Chat": "resource-specific consent",
+       "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+     "delegated": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.Group"
+      ],
+      "higher": [
+       "ChannelMessage.Read.All"
+      ],
+      "conditions": {
+       "ChannelMessage.Read.Group": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/{id}/messages)",
+     "delegated": {
+      "least": [
+       "Chat.Read"
+      ],
+      "higher": [
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+     "delegated": {
+      "least": [
+       "Chat.Read"
+      ],
+      "higher": [
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ],
+      "higher": [
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "contact",
+     "delegated": {
+      "least": [
+       "Contacts.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Contacts.Read"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.All"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/{id}/members)",
+     "delegated": {
+      "least": [
+       "ChatMember.Read"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite",
+       "Chat.ReadBasic",
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.Chat"
+      ],
+      "higher": [
+       "Chat.Manage.Chat",
+       "ChatMember.Read.All",
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatMember.Read.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "conversationMember",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.WhereInstalled"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.WhereInstalled",
+       "Chat.ReadBasic.WhereInstalled",
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/members)",
+     "delegated": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "driveItem (user's personal OneDrive)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "driveItem (OneDrive for Business)",
+     "delegated": {
+      "least": [
+       "Files.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Files.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "event",
+     "delegated": {
+      "least": [
+       "Calendars.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Calendars.Read"
+      ]
+     }
+    },
+    {
+     "resource": "group",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Group.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "group conversation",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "list",
+     "delegated": {
+      "least": [
+       "Sites.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Sites.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "message",
+     "delegated": {
+      "least": [
+       "Mail.ReadBasic"
+      ],
+      "higher": [
+       "Mail.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Mail.Read"
+      ]
+     }
+    },
+    {
+     "resource": "offerShiftRequest",
+     "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "openShiftChangeRequest",
+     "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "presence",
+     "delegated": {
+      "least": [
+       "Presence.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "printer",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Printer.Read.All"
+      ],
+      "higher": [
+       "Printer.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "printTaskDefinition",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "PrintTaskDefinition.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "security alert",
+     "delegated": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "shift",
+     "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "swapShiftsChangeRequest",
+     "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams – all teams in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams/{id})",
+     "delegated": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "timeOffRequest",
+     "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "todoTask",
+     "delegated": {
+      "least": [
+       "Tasks.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Tasks.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "user",
+     "delegated": {
+      "least": [
+       "User.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "User.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "virtualEventWebinar",
+     "delegated": {
+      "least": [
+       "VirtualEvent.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "VirtualEvent.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "virtualEventTownhall",
+     "delegated": {
+      "least": [
+       "VirtualEvent.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "VirtualEvent.Read.All"
+      ]
+     }
+    }
+   ]
+  },
   "subscription-reauthorize": {
    "summary": "Invoke action reauthorize",
    "calls": [
-    "POST /groups/{group-id}/sites/{site-id}/lists/{list-id}/subscriptions/{subscription-id}/reauthorize"
+    "POST /groups/{group-id}/sites/{site-id}/lists/{list-id}/subscriptions/{subscription-id}/reauthorize",
+    "POST /subscriptions/{subscription-id}/reauthorize"
    ],
    "lists": [
     "POST /subscriptions/{}/reauthorize"
@@ -18105,6 +21121,751 @@
      "application": {
       "least": [
        "User.Read.All"
+      ]
+     }
+    }
+   ]
+  },
+  "subscription-update": {
+   "summary": "Update subscription",
+   "calls": [
+    "PATCH /subscriptions/{subscription-id}"
+   ],
+   "lists": [
+    "PATCH /subscriptions/{}"
+   ],
+   "table": true,
+   "delegated": {},
+   "application": {},
+   "variants": [
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "AiEnterpriseInteraction.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ],
+      "higher": [
+       "AiEnterpriseInteraction.Read.User"
+      ]
+     }
+    },
+    {
+     "resource": "aiInteraction",
+     "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "AiEnterpriseInteraction.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecord",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "CallRecords.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callRecording",
+     "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingRecording.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "callTranscript",
+     "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+     "delegated": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "OnlineMeetingTranscript.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "channel (/teams/{id}/channels)",
+     "delegated": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Channel.ReadBasic.All"
+      ],
+      "higher": [
+       "ChannelSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats – all chats in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chat (/chats/{id})",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatSettings.Read.Chat"
+      ],
+      "higher": [
+       "ChatSettings.ReadWrite.Chat",
+       "Chat.Manage.Chat",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatSettings.Read.Chat": "resource-specific consent",
+       "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "chat",
+     "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+     "delegated": {
+      "least": [
+       "Chat.ReadBasic"
+      ],
+      "higher": [
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.ReadBasic.All"
+      ],
+      "higher": [
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+     "delegated": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.Group"
+      ],
+      "higher": [
+       "ChannelMessage.Read.All"
+      ],
+      "conditions": {
+       "ChannelMessage.Read.Group": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMessage.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/{id}/messages)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+     "delegated": {
+      "least": [
+       "Chat.Read"
+      ],
+      "higher": [
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "Chat.Read.All"
+      ],
+      "higher": [
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "chatMessage",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Chat.Read.WhereInstalled"
+      ],
+      "higher": [
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "contact",
+     "delegated": {
+      "least": [
+       "Contacts.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Contacts.Read"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.All"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/chats/{id}/members)",
+     "delegated": {
+      "least": [
+       "ChatMember.Read"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite",
+       "Chat.ReadBasic",
+       "Chat.Read",
+       "Chat.ReadWrite"
+      ]
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.Chat"
+      ],
+      "higher": [
+       "Chat.Manage.Chat",
+       "ChatMember.Read.All",
+       "ChatMember.ReadWrite.All",
+       "Chat.ReadBasic.All",
+       "Chat.Read.All",
+       "Chat.ReadWrite.All"
+      ],
+      "conditions": {
+       "Chat.Manage.Chat": "resource-specific consent",
+       "ChatMember.Read.Chat": "resource-specific consent"
+      }
+     }
+    },
+    {
+     "resource": "conversationMember",
+     "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChatMember.Read.WhereInstalled"
+      ],
+      "higher": [
+       "ChatMember.ReadWrite.WhereInstalled",
+       "Chat.ReadBasic.WhereInstalled",
+       "Chat.Read.WhereInstalled",
+       "Chat.ReadWrite.WhereInstalled"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/members)",
+     "delegated": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "TeamMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "ChannelMember.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "driveItem (user's personal OneDrive)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "driveItem (OneDrive for Business)",
+     "delegated": {
+      "least": [
+       "Files.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Files.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "event",
+     "delegated": {
+      "least": [
+       "Calendars.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Calendars.Read"
+      ]
+     }
+    },
+    {
+     "resource": "group",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Group.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "group conversation",
+     "delegated": {
+      "least": [
+       "Group.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "list",
+     "delegated": {
+      "least": [
+       "Sites.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Sites.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "message",
+     "delegated": {
+      "least": [
+       "Mail.ReadBasic"
+      ],
+      "higher": [
+       "Mail.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "Mail.Read"
+      ]
+     }
+    },
+    {
+     "resource": "offerShiftRequest",
+     "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "openShiftChangeRequest",
+     "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "presence",
+     "delegated": {
+      "least": [
+       "Presence.Read.All"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "printer",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Printer.Read.All"
+      ],
+      "higher": [
+       "Printer.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "printTaskDefinition",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "PrintTaskDefinition.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "security alert",
+     "delegated": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "SecurityEvents.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "shift",
+     "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "swapShiftsChangeRequest",
+     "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams – all teams in an organization)",
+     "delegated": {
+      "notSupported": true
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "team (/teams/{id})",
+     "delegated": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Team.ReadBasic.All"
+      ],
+      "higher": [
+       "TeamSettings.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "timeOffRequest",
+     "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+     "delegated": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "Schedule.Read.All"
+      ],
+      "higher": [
+       "Schedule.ReadWrite.All"
+      ]
+     }
+    },
+    {
+     "resource": "todoTask",
+     "delegated": {
+      "least": [
+       "Tasks.ReadWrite"
+      ]
+     },
+     "application": {
+      "notSupported": true
+     }
+    },
+    {
+     "resource": "user",
+     "delegated": {
+      "least": [
+       "User.Read.All"
+      ]
+     },
+     "application": {
+      "least": [
+       "User.Read.All"
+      ]
+     }
+    },
+    {
+     "resource": "virtualEventWebinar",
+     "delegated": {
+      "least": [
+       "VirtualEvent.Read"
+      ]
+     },
+     "application": {
+      "least": [
+       "VirtualEvent.Read.All"
       ]
      }
     }
@@ -24077,6 +27838,10 @@
   },
   "DELETE /servicePrincipals/{servicePrincipal-id}/tokenLifetimePolicies/{tokenLifetimePolicy-id}/$ref": {
    "page": "serviceprincipal-delete-tokenlifetimepolicies",
+   "via": "verified"
+  },
+  "DELETE /subscriptions/{subscription-id}": {
+   "page": "subscription-delete",
    "via": "verified"
   },
   "DELETE /users/{user-id}": {
@@ -32209,6 +35974,18 @@
   "GET /servicePrincipals/{servicePrincipal-id}/transitiveMemberOf/{directoryObject-id}/graph.group": {
    "page": ""
   },
+  "GET /subscriptions": {
+   "page": "subscription-list",
+   "via": "verified"
+  },
+  "GET /subscriptions/getVapidPublicKey()": {
+   "page": "subscription-getvapidpublickey",
+   "via": "spec-only"
+  },
+  "GET /subscriptions/{subscription-id}": {
+   "page": "subscription-get",
+   "via": "verified"
+  },
   "GET /users": {
    "page": "user-list",
    "via": "verified",
@@ -36756,6 +40533,10 @@
   "PATCH /servicePrincipals/{servicePrincipal-id}/synchronization/templates/{synchronizationTemplate-id}/schema/directories/{directoryDefinition-id}": {
    "page": ""
   },
+  "PATCH /subscriptions/{subscription-id}": {
+   "page": "subscription-update",
+   "via": "verified"
+  },
   "PATCH /users/{user-id}": {
    "page": "user-update",
    "via": "verified",
@@ -40707,6 +44488,14 @@
    "page": "serviceprincipal-post-tokenlifetimepolicies",
    "via": "verified"
   },
+  "POST /subscriptions": {
+   "page": "subscription-post-subscriptions",
+   "via": "verified"
+  },
+  "POST /subscriptions/{subscription-id}/reauthorize": {
+   "page": "subscription-reauthorize",
+   "via": "verified"
+  },
   "POST /users": {
    "page": "user-post-users",
    "via": "verified",
@@ -43149,11 +46938,31 @@
    "delegated": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "aiInteraction"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "aiInteraction"
      },
      {
+      "page": "subscription-list",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "aiInteraction"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-update",
       "resource": "aiInteraction"
      }
     ]
@@ -43168,11 +46977,43 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "aiInteraction"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "aiInteraction"
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "aiInteraction"
      },
      {
@@ -43181,6 +47022,14 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-update",
       "resource": "aiInteraction"
      }
     ]
@@ -43194,11 +47043,31 @@
    "application": {
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "aiInteraction"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "aiInteraction"
      },
      {
+      "page": "subscription-list",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "aiInteraction"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "aiInteraction"
+     },
+     {
+      "page": "subscription-update",
       "resource": "aiInteraction"
      }
     ]
@@ -44989,11 +48858,31 @@
       "resource": "event"
      },
      {
+      "page": "subscription-delete",
+      "resource": "event"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "event"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "event"
      },
      {
+      "page": "subscription-list",
+      "resource": "event"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "event"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "event"
+     },
+     {
+      "page": "subscription-update",
       "resource": "event"
      },
      {
@@ -45089,11 +48978,31 @@
       "resource": "event"
      },
      {
+      "page": "subscription-delete",
+      "resource": "event"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "event"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "event"
      },
      {
+      "page": "subscription-list",
+      "resource": "event"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "event"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "event"
+     },
+     {
+      "page": "subscription-update",
       "resource": "event"
      }
     ],
@@ -45715,11 +49624,31 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "callRecord"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callRecord"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "callRecord"
      },
      {
+      "page": "subscription-list",
+      "resource": "callRecord (/communications/callRecords)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "callRecord (/communications/callRecords)"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "callRecord"
+     },
+     {
+      "page": "subscription-update",
       "resource": "callRecord"
      }
     ]
@@ -45753,24 +49682,76 @@
    "delegated": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "channel"
      },
      {
+      "page": "subscription-list",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "channel"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "channel (/teams/{id}/channels)"
      }
     ]
    },
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "channel"
      },
      {
       "page": "subscription-getvapidpublickey",
       "resource": "channel"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "channel (/teams/{id}/channels)"
      },
      {
       "page": "subscription-reauthorize",
@@ -45779,6 +49760,14 @@
      {
       "page": "subscription-reauthorize",
       "resource": "channel"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "channel (/teams/{id}/channels)"
      }
     ]
    }
@@ -45801,8 +49790,24 @@
       "page": "channel-doesuserhaveaccess"
      },
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/teams/{id}/channels/getAllMembers)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/teams/{id}/channels/getAllMembers)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/teams/{id}/channels/getAllMembers)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/teams/{id}/channels/getAllMembers)"
      },
      {
       "page": "subscription-reauthorize",
@@ -45811,6 +49816,10 @@
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/teams/{id}/channels/getAllMembers)"
      }
     ]
    }
@@ -45855,12 +49864,32 @@
       "scenario": "Permissions for channel"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
      },
      {
+      "page": "subscription-list",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
      }
     ]
    },
@@ -45873,12 +49902,32 @@
       "page": "channel-getallretainedmessages"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
      },
      {
+      "page": "subscription-list",
+      "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)"
      }
     ],
     "higher": [
@@ -45895,12 +49944,32 @@
       "scenario": "Permissions for channel"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
      },
      {
+      "page": "subscription-list",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
      }
     ]
    }
@@ -45925,12 +49994,32 @@
       "scenario": "Permissions for channel"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
      },
      {
+      "page": "subscription-list",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
      }
     ]
    }
@@ -45961,24 +50050,76 @@
    "delegated": {
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "channel"
      },
      {
+      "page": "subscription-list",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "channel"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "channel (/teams/{id}/channels)"
      }
     ]
    },
    "application": {
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "channel"
      },
      {
       "page": "subscription-getvapidpublickey",
       "resource": "channel"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "channel (/teams/{id}/channels)"
      },
      {
       "page": "subscription-reauthorize",
@@ -45987,6 +50128,14 @@
      {
       "page": "subscription-reauthorize",
       "resource": "channel"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "channel (/teams/getAllChannels – all channels in an organization)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "channel (/teams/{id}/channels)"
      }
     ]
    }
@@ -46043,6 +50192,22 @@
       "page": "chat-teamsappinstallation-upgrade"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
@@ -46051,12 +50216,36 @@
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chat"
      },
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    }
@@ -46083,12 +50272,36 @@
       "scenario": "Permissions for chat"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
      },
      {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
      },
      {
       "page": "subscription-reauthorize",
@@ -46097,6 +50310,10 @@
      {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
      }
     ],
     "higher": [
@@ -46113,6 +50330,30 @@
       "page": "chat-list-members"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
@@ -46125,6 +50366,30 @@
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chat"
      },
@@ -46135,6 +50400,18 @@
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    },
@@ -46169,8 +50446,28 @@
       "page": "chats-getallmessages"
      },
      {
-      "page": "subscription-getvapidpublickey",
-      "resource": "chatMessage"
+      "page": "subscription-delete",
+      "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
      },
      {
       "page": "subscription-getvapidpublickey",
@@ -46179,6 +50476,34 @@
      {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-getvapidpublickey",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
      },
      {
       "page": "subscription-reauthorize",
@@ -46191,6 +50516,18 @@
      {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
      }
     ],
     "higher": [
@@ -46210,6 +50547,46 @@
       "page": "chat-list-messages"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
@@ -46230,6 +50607,46 @@
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chat"
      },
@@ -46248,6 +50665,26 @@
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    }
@@ -46260,15 +50697,51 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage"
+     },
+     {
       "page": "subscription-getvapidpublickey",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "chatMessage"
      },
      {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage"
      }
     ],
     "higher": [
+     {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember"
+     },
      {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
@@ -46278,11 +50751,35 @@
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chat"
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
       "resource": "conversationMember"
      }
     ]
@@ -46307,11 +50804,43 @@
       "page": "chat-list-members"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "chat"
      },
      {
@@ -46320,17 +50849,45 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-update",
       "resource": "chat"
      }
     ],
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    },
@@ -46347,11 +50904,43 @@
       "page": "chat-list"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "chat"
      },
      {
@@ -46360,6 +50949,14 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-update",
       "resource": "chat"
      }
     ],
@@ -46374,6 +50971,30 @@
       "page": "chat-list-members"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
@@ -46386,6 +51007,30 @@
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chat"
      },
@@ -46396,6 +51041,18 @@
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    }
@@ -46411,21 +51068,61 @@
       "page": "chat-get"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
       "resource": "chat"
      }
     ],
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
       "resource": "conversationMember"
      }
     ]
@@ -46487,6 +51184,38 @@
       "scenario": "Permissions for chat"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
      },
@@ -46507,6 +51236,46 @@
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
      },
@@ -46525,6 +51294,22 @@
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    },
@@ -46581,6 +51366,54 @@
       "page": "chats-getallmessages"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
      },
@@ -46605,6 +51438,54 @@
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
      },
@@ -46627,6 +51508,30 @@
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats – all chats in an organization)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    }
@@ -46639,6 +51544,30 @@
    "application": {
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
      },
@@ -46651,6 +51580,30 @@
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
      },
@@ -46660,6 +51613,18 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
       "resource": "conversationMember"
      }
     ]
@@ -46672,12 +51637,32 @@
    "delegated": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ],
     "higher": [
@@ -46705,22 +51690,62 @@
       "page": "chat-list-members"
      },
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/getAllMembers)"
      }
     ],
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    }
@@ -46733,12 +51758,32 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ],
     "higher": [
@@ -46759,11 +51804,31 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
       "resource": "conversationMember"
      }
     ]
@@ -46782,12 +51847,32 @@
       "page": "chat-list-members"
      },
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    },
@@ -46807,12 +51892,44 @@
       "page": "chat-list-members"
      },
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/chats/{id}/members)"
      },
      {
       "page": "subscription-reauthorize",
@@ -46821,6 +51938,14 @@
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/getAllMembers)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/chats/{id}/members)"
      }
     ]
    }
@@ -46833,11 +51958,31 @@
    "application": {
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
       "resource": "conversationMember"
      }
     ]
@@ -46877,12 +52022,32 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
      }
     ],
     "higher": [
@@ -46903,12 +52068,32 @@
       "page": "chat-get"
      },
      {
+      "page": "subscription-delete",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "chat (/chats/{id})"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "chat"
      },
      {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "chat (/chats/{id})"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chat"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "chat (/chats/{id})"
      }
     ]
    }
@@ -47028,11 +52213,31 @@
       "scenario": "To retrieve the profile photo of a contact"
      },
      {
+      "page": "subscription-delete",
+      "resource": "contact"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "contact"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "contact"
      },
      {
+      "page": "subscription-list",
+      "resource": "contact"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "contact"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "contact"
+     },
+     {
+      "page": "subscription-update",
       "resource": "contact"
      },
      {
@@ -47072,11 +52277,31 @@
       "scenario": "To retrieve the profile photo of a contact"
      },
      {
+      "page": "subscription-delete",
+      "resource": "contact"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "contact"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "contact"
      },
      {
+      "page": "subscription-list",
+      "resource": "contact"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "contact"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "contact"
+     },
+     {
+      "page": "subscription-update",
       "resource": "contact"
      },
      {
@@ -49259,6 +54484,12 @@
     "application"
    ],
    "delegated": {
+    "least": [
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "driveItem (OneDrive for Business)"
+     }
+    ],
     "higher": [
      {
       "page": "drive-get"
@@ -49272,6 +54503,10 @@
     "least": [
      {
       "page": "drive-list"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "driveItem (OneDrive for Business)"
      }
     ]
    }
@@ -49308,11 +54543,27 @@
    "delegated": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "driveItem (OneDrive for Business)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "driveItem (OneDrive for Business)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "driveItem (OneDrive for work or school)"
      },
      {
+      "page": "subscription-list",
+      "resource": "driveItem (OneDrive for work or school)"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "driveItem (OneDrive for Business)"
+     },
+     {
+      "page": "subscription-update",
       "resource": "driveItem (OneDrive for Business)"
      }
     ],
@@ -49340,11 +54591,27 @@
       "page": "permission-revokegrants"
      },
      {
+      "page": "subscription-delete",
+      "resource": "driveItem (OneDrive for Business)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "driveItem (OneDrive for Business)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "driveItem (OneDrive for work or school)"
      },
      {
+      "page": "subscription-list",
+      "resource": "driveItem (OneDrive for work or school)"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "driveItem (OneDrive for Business)"
+     },
+     {
+      "page": "subscription-update",
       "resource": "driveItem (OneDrive for Business)"
      }
     ],
@@ -49727,6 +54994,22 @@
       "resource": "group"
      },
      {
+      "page": "subscription-delete",
+      "resource": "group conversation"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "group"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "group conversation"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "group"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "group conversation"
      },
@@ -49735,11 +55018,35 @@
       "resource": "group"
      },
      {
+      "page": "subscription-list",
+      "resource": "group conversation"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "group"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "group conversation"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "group"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "group conversation"
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "group"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "group conversation"
+     },
+     {
+      "page": "subscription-update",
       "resource": "group"
      }
     ],
@@ -49898,6 +55205,10 @@
       "resource": "chatMessage"
      },
      {
+      "page": "subscription-list",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "chatMessage"
      },
@@ -49951,11 +55262,31 @@
       "resource": "group"
      },
      {
+      "page": "subscription-delete",
+      "resource": "group"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "group"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "group"
      },
      {
+      "page": "subscription-list",
+      "resource": "group"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "group"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "group"
+     },
+     {
+      "page": "subscription-update",
       "resource": "group"
      }
     ],
@@ -50473,6 +55804,10 @@
      {
       "page": "subscription-getvapidpublickey",
       "resource": "chatMessage"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
      },
      {
       "page": "subscription-reauthorize",
@@ -51386,11 +56721,31 @@
       "page": "message-get"
      },
      {
+      "page": "subscription-delete",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "message"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "message"
      },
      {
+      "page": "subscription-list",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "message"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-update",
       "resource": "message"
      },
      {
@@ -51418,11 +56773,31 @@
       "resource": "message"
      },
      {
+      "page": "subscription-delete",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "message"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "message"
      },
      {
+      "page": "subscription-list",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "message"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-update",
       "resource": "message"
      },
      {
@@ -51496,11 +56871,31 @@
       "page": "message-get"
      },
      {
+      "page": "subscription-delete",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "message"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "message"
      },
      {
+      "page": "subscription-list",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "message"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-update",
       "resource": "message"
      },
      {
@@ -52651,11 +58046,43 @@
       "page": "onlinemeeting-list-recordings"
      },
      {
+      "page": "subscription-delete",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callRecording"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "callRecording"
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "callRecording"
      },
      {
@@ -52664,6 +58091,14 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-update",
       "resource": "callRecording"
      }
     ]
@@ -52680,7 +58115,27 @@
       "page": "onlinemeeting-list-recordings"
      },
      {
-      "page": "subscription-getvapidpublickey",
+      "page": "subscription-delete",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-get",
       "resource": "callRecording"
      },
      {
@@ -52689,6 +58144,34 @@
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-getvapidpublickey",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "callRecording"
      },
      {
@@ -52701,6 +58184,18 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "callRecording"
+     },
+     {
+      "page": "subscription-update",
       "resource": "callRecording"
      }
     ]
@@ -52736,11 +58231,43 @@
       "page": "onlinemeeting-list-transcripts"
      },
      {
+      "page": "subscription-delete",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callTranscript"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "callTranscript"
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "callTranscript"
      },
      {
@@ -52749,6 +58276,14 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-update",
       "resource": "callTranscript"
      }
     ]
@@ -52765,7 +58300,27 @@
       "page": "onlinemeeting-list-transcripts"
      },
      {
-      "page": "subscription-getvapidpublickey",
+      "page": "subscription-delete",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-get",
       "resource": "callTranscript"
      },
      {
@@ -52774,6 +58329,34 @@
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-getvapidpublickey",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "callTranscript"
      },
      {
@@ -52786,6 +58369,18 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "callTranscript"
+     },
+     {
+      "page": "subscription-update",
       "resource": "callTranscript"
      }
     ]
@@ -54202,7 +59797,19 @@
       "resource": "presence"
      },
      {
+      "page": "subscription-list",
+      "resource": "presence"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "presence"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "presence"
+     },
+     {
+      "page": "subscription-update",
       "resource": "presence"
      }
     ],
@@ -54295,11 +59902,31 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "printTaskDefinition"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "printTaskDefinition"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "printTaskDefinition"
      },
      {
+      "page": "subscription-list",
+      "resource": "printTaskDefinition"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "printTaskDefinition"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "printTaskDefinition"
+     },
+     {
+      "page": "subscription-update",
       "resource": "printTaskDefinition"
      }
     ]
@@ -54314,11 +59941,31 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "printer"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "printer"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "printer"
      },
      {
+      "page": "subscription-list",
+      "resource": "printer"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "printer"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "printer"
+     },
+     {
+      "page": "subscription-update",
       "resource": "printer"
      }
     ]
@@ -54333,11 +59980,31 @@
    "application": {
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "printer"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "printer"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "printer"
      },
      {
+      "page": "subscription-list",
+      "resource": "printer"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "printer"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "printer"
+     },
+     {
+      "page": "subscription-update",
       "resource": "printer"
      }
     ]
@@ -54593,6 +60260,46 @@
    "delegated": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "timeOffRequest"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "offerShiftRequest"
      },
@@ -54613,6 +60320,46 @@
       "resource": "timeOffRequest"
      },
      {
+      "page": "subscription-list",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "timeOffRequest"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "offerShiftRequest"
      },
@@ -54630,6 +60377,26 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-update",
       "resource": "timeOffRequest"
      }
     ]
@@ -54637,6 +60404,46 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "timeOffRequest"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "offerShiftRequest"
      },
@@ -54657,6 +60464,46 @@
       "resource": "timeOffRequest"
      },
      {
+      "page": "subscription-list",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "timeOffRequest"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "offerShiftRequest"
      },
@@ -54674,6 +60521,26 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-update",
       "resource": "timeOffRequest"
      }
     ]
@@ -54698,6 +60565,46 @@
     ],
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "timeOffRequest"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "offerShiftRequest"
      },
@@ -54718,6 +60625,46 @@
       "resource": "timeOffRequest"
      },
      {
+      "page": "subscription-list",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "timeOffRequest"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "offerShiftRequest"
      },
@@ -54735,6 +60682,26 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-update",
       "resource": "timeOffRequest"
      }
     ]
@@ -54753,6 +60720,46 @@
     ],
     "higher": [
      {
+      "page": "subscription-delete",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "timeOffRequest"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "offerShiftRequest"
      },
@@ -54773,6 +60780,46 @@
       "resource": "timeOffRequest"
      },
      {
+      "page": "subscription-list",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "timeOffRequest"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "offerShiftRequest"
      },
@@ -54790,6 +60837,26 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "timeOffRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "offerShiftRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "openShiftChangeRequest"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "shift"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "swapShiftsChangeRequest"
+     },
+     {
+      "page": "subscription-update",
       "resource": "timeOffRequest"
      }
     ]
@@ -54803,11 +60870,31 @@
    "delegated": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "security alert"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "security alert"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "security alert"
      },
      {
+      "page": "subscription-list",
+      "resource": "security alert"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "security alert"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "security alert"
+     },
+     {
+      "page": "subscription-update",
       "resource": "security alert"
      }
     ]
@@ -54815,11 +60902,31 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "security alert"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "security alert"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "security alert"
      },
      {
+      "page": "subscription-list",
+      "resource": "security alert"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "security alert"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "security alert"
+     },
+     {
+      "page": "subscription-update",
       "resource": "security alert"
      }
     ]
@@ -55187,6 +61294,10 @@
      {
       "page": "subscription-getvapidpublickey",
       "resource": "list"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "list"
      }
     ],
     "higher": [
@@ -55214,6 +61325,10 @@
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "list"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "list"
      }
     ],
@@ -55247,7 +61362,23 @@
       "page": "site-unfollow"
      },
      {
+      "page": "subscription-delete",
+      "resource": "list"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "list"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "list"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "list"
+     },
+     {
+      "page": "subscription-update",
       "resource": "list"
      }
     ],
@@ -55302,7 +61433,23 @@
       "page": "site-unfollow"
      },
      {
+      "page": "subscription-delete",
+      "resource": "list"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "list"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "list"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "list"
+     },
+     {
+      "page": "subscription-update",
       "resource": "list"
      }
     ],
@@ -55350,6 +61497,88 @@
      }
     ]
    }
+  },
+  "Subscription.Read.All": {
+   "inCatalog": [
+    "delegated"
+   ],
+   "delegated": {
+    "higher": [
+     {
+      "page": "subscription-list",
+      "resource": "channel (/teams/{id}/channels)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chat (/chats/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/chats/{id}/messages)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "chatMessage (/teams/{id}/channels/{id}/messages)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "contact"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/chats/{id}/members)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "driveItem (OneDrive for work or school)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "event"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "group conversation"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "group"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "list"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "message"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "presence"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "security alert"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "todoTask"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "user"
+     }
+    ]
+   },
+   "application": {}
   },
   "Synchronization.Read.All": {
    "inCatalog": [
@@ -55691,7 +61920,23 @@
       "resource": "todoTask"
      },
      {
+      "page": "subscription-delete",
+      "resource": "todoTask"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "todoTask"
+     },
+     {
       "page": "subscription-getvapidpublickey",
+      "resource": "todoTask"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "todoTask"
+     },
+     {
+      "page": "subscription-post-subscriptions",
       "resource": "todoTask"
      },
      {
@@ -55700,6 +61945,10 @@
      },
      {
       "page": "subscription-reauthorize",
+      "resource": "todoTask"
+     },
+     {
+      "page": "subscription-update",
       "resource": "todoTask"
      },
      {
@@ -55843,6 +62092,10 @@
       "resource": "todoTask"
      },
      {
+      "page": "subscription-post-subscriptions",
+      "resource": "todoTask"
+     },
+     {
       "page": "todo-post-lists"
      },
      {
@@ -55901,12 +62154,32 @@
       "scenario": "To retrieve the profile photo of a team"
      },
      {
+      "page": "subscription-delete",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "team (/teams/{id})"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "team"
      },
      {
+      "page": "subscription-list",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "team (/teams/{id})"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "team"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "team (/teams/{id})"
      },
      {
       "page": "user-list-joinedteams"
@@ -55923,12 +62196,44 @@
       "scenario": "To retrieve the profile photo of a team"
      },
      {
+      "page": "subscription-delete",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "team (/teams/{id})"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "team"
      },
      {
       "page": "subscription-getvapidpublickey",
       "resource": "team"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "team (/teams/{id})"
      },
      {
       "page": "subscription-reauthorize",
@@ -55937,6 +62242,14 @@
      {
       "page": "subscription-reauthorize",
       "resource": "team"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "team (/teams/{id})"
      },
      {
       "page": "user-list-joinedteams"
@@ -55952,28 +62265,68 @@
    "delegated": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/teams/{id}/members)"
      }
     ]
    },
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "conversationMember"
      },
      {
+      "page": "subscription-list",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "conversationMember (/teams/{id}/members)"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
      },
      {
       "page": "subscription-reauthorize",
       "resource": "conversationMember"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "conversationMember (/teams/{id}/members)"
      }
     ]
    }
@@ -56060,12 +62413,32 @@
       "scenario": "To retrieve the profile photo of a team"
      },
      {
+      "page": "subscription-delete",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "team (/teams/{id})"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "team"
      },
      {
+      "page": "subscription-list",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "team (/teams/{id})"
+     },
+     {
       "page": "subscription-reauthorize",
       "resource": "team"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "team (/teams/{id})"
      },
      {
       "page": "user-list-joinedteams"
@@ -56082,12 +62455,44 @@
       "scenario": "To retrieve the profile photo of a team"
      },
      {
+      "page": "subscription-delete",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-delete",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "team (/teams/{id})"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "team"
      },
      {
       "page": "subscription-getvapidpublickey",
       "resource": "team"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-list",
+      "resource": "team (/teams/{id})"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "team (/teams/{id})"
      },
      {
       "page": "subscription-reauthorize",
@@ -56096,6 +62501,14 @@
      {
       "page": "subscription-reauthorize",
       "resource": "team"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "team (/teams – all teams in an organization)"
+     },
+     {
+      "page": "subscription-update",
+      "resource": "team (/teams/{id})"
      },
      {
       "page": "user-list-joinedteams"
@@ -57069,11 +63482,31 @@
       "page": "shiftpreferences-get"
      },
      {
+      "page": "subscription-delete",
+      "resource": "user"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "user"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "user"
      },
      {
+      "page": "subscription-list",
+      "resource": "user"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "user"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "user"
+     },
+     {
+      "page": "subscription-update",
       "resource": "user"
      },
      {
@@ -57247,11 +63680,31 @@
       "resource": "user"
      },
      {
+      "page": "subscription-delete",
+      "resource": "user"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "user"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "user"
      },
      {
+      "page": "subscription-list",
+      "resource": "user"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "user"
+     },
+     {
       "page": "subscription-reauthorize",
+      "resource": "user"
+     },
+     {
+      "page": "subscription-update",
       "resource": "user"
      },
      {
@@ -59817,11 +66270,31 @@
    "delegated": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "virtualEventWebinar"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "virtualEventWebinar"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "virtualEventTownhall"
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "virtualEventWebinar"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "virtualEventTownhall"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "virtualEventWebinar"
+     },
+     {
+      "page": "subscription-update",
       "resource": "virtualEventWebinar"
      }
     ]
@@ -59836,11 +66309,31 @@
    "application": {
     "least": [
      {
+      "page": "subscription-delete",
+      "resource": "virtualEventWebinar"
+     },
+     {
+      "page": "subscription-get",
+      "resource": "virtualEventWebinar"
+     },
+     {
       "page": "subscription-getvapidpublickey",
       "resource": "virtualEventTownhall"
      },
      {
       "page": "subscription-getvapidpublickey",
+      "resource": "virtualEventWebinar"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "virtualEventTownhall"
+     },
+     {
+      "page": "subscription-post-subscriptions",
+      "resource": "virtualEventWebinar"
+     },
+     {
+      "page": "subscription-update",
       "resource": "virtualEventWebinar"
      }
     ]
@@ -59851,8 +66344,8 @@
   "counts": {
    "matched": 539,
    "none": 4324,
-   "spec-only": 590,
-   "verified": 604
+   "spec-only": 591,
+   "verified": 610
   }
  }
 }

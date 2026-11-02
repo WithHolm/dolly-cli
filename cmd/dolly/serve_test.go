@@ -2,8 +2,31 @@ package main
 
 import (
 	"net"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
 	"testing"
 )
+
+// A port that is taken stops dollycli with a message that says what to do, and leaves no data folder behind: the port is tried before the data opens.
+func TestServe_PortInUseLeavesNoFolder(t *testing.T) {
+	taken, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer taken.Close()
+	root := filepath.Join(t.TempDir(), "dolly-data")
+	s := settings{root: root, dir: filepath.Join(root, "graph"), host: "127.0.0.1", port: taken.Addr().(*net.TCPAddr).Port, users: 5, seed: 1}
+	cmd := serveCmd(&s, "")
+	err = cmd.RunE(cmd, nil)
+	if err == nil || !strings.Contains(err.Error(), "address already in use") || !strings.Contains(err.Error(), "--port") || !strings.Contains(err.Error(), strconv.Itoa(s.port)) {
+		t.Fatalf("the error: %v", err)
+	}
+	if _, err := os.Stat(root); !os.IsNotExist(err) {
+		t.Errorf("the data folder was made although the port was taken: %v", err)
+	}
+}
 
 func TestReachable_AnAddressOnEveryInterfaceIsReachedAtLoopback(t *testing.T) {
 	for addr, want := range map[string]string{

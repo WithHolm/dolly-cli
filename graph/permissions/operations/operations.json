@@ -1047,6 +1047,3730 @@
         ]
       }
     },
+    "subscription-delete": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "AiEnterpriseInteraction.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ],
+            "higher": [
+              "AiEnterpriseInteraction.Read.User"
+            ]
+          }
+        },
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecord",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "CallRecords.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/{id}/channels)",
+          "delegated": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats – all chats in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats/{id})",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatSettings.Read.Chat"
+            ],
+            "higher": [
+              "ChatSettings.ReadWrite.Chat",
+              "Chat.Manage.Chat",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatSettings.Read.Chat": "resource-specific consent",
+              "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+          "delegated": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.Group"
+            ],
+            "higher": [
+              "ChannelMessage.Read.All"
+            ],
+            "conditions": {
+              "ChannelMessage.Read.Group": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/{id}/messages)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+          "delegated": {
+            "least": [
+              "Chat.Read"
+            ],
+            "higher": [
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ],
+            "higher": [
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "contact",
+          "delegated": {
+            "least": [
+              "Contacts.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Contacts.Read"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.All"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/{id}/members)",
+          "delegated": {
+            "least": [
+              "ChatMember.Read"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite",
+              "Chat.ReadBasic",
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.Chat"
+            ],
+            "higher": [
+              "Chat.Manage.Chat",
+              "ChatMember.Read.All",
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatMember.Read.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "conversationMember",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.WhereInstalled"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.WhereInstalled",
+              "Chat.ReadBasic.WhereInstalled",
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/members)",
+          "delegated": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "driveItem (user's personal OneDrive)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "driveItem (OneDrive for Business)",
+          "delegated": {
+            "least": [
+              "Files.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Files.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "event",
+          "delegated": {
+            "least": [
+              "Calendars.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Calendars.Read"
+            ]
+          }
+        },
+        {
+          "resource": "group",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Group.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "group conversation",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "list",
+          "delegated": {
+            "least": [
+              "Sites.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Sites.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "message",
+          "delegated": {
+            "least": [
+              "Mail.ReadBasic"
+            ],
+            "higher": [
+              "Mail.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Mail.Read"
+            ]
+          }
+        },
+        {
+          "resource": "offerShiftRequest",
+          "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "openShiftChangeRequest",
+          "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "printer",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Printer.Read.All"
+            ],
+            "higher": [
+              "Printer.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "printTaskDefinition",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "PrintTaskDefinition.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "security alert",
+          "delegated": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "shift",
+          "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "swapShiftsChangeRequest",
+          "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams – all teams in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams/{id})",
+          "delegated": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "timeOffRequest",
+          "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "todoTask",
+          "delegated": {
+            "least": [
+              "Tasks.ReadWrite"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "user",
+          "delegated": {
+            "least": [
+              "User.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "User.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "virtualEventWebinar",
+          "delegated": {
+            "least": [
+              "VirtualEvent.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "VirtualEvent.Read.All"
+            ]
+          }
+        }
+      ]
+    },
+    "subscription-get": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "AiEnterpriseInteraction.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ],
+            "higher": [
+              "AiEnterpriseInteraction.Read.User"
+            ]
+          }
+        },
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecord",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "CallRecords.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/{id}/channels)",
+          "delegated": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats – all chats in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats/{id})",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatSettings.Read.Chat"
+            ],
+            "higher": [
+              "ChatSettings.ReadWrite.Chat",
+              "Chat.Manage.Chat",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatSettings.Read.Chat": "resource-specific consent",
+              "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+          "delegated": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.Group"
+            ],
+            "higher": [
+              "ChannelMessage.Read.All"
+            ],
+            "conditions": {
+              "ChannelMessage.Read.Group": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/{id}/messages)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+          "delegated": {
+            "least": [
+              "Chat.Read"
+            ],
+            "higher": [
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ],
+            "higher": [
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "contact",
+          "delegated": {
+            "least": [
+              "Contacts.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Contacts.Read"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.All"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/{id}/members)",
+          "delegated": {
+            "least": [
+              "ChatMember.Read"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite",
+              "Chat.ReadBasic",
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.Chat"
+            ],
+            "higher": [
+              "Chat.Manage.Chat",
+              "ChatMember.Read.All",
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatMember.Read.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "conversationMember",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.WhereInstalled"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.WhereInstalled",
+              "Chat.ReadBasic.WhereInstalled",
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/members)",
+          "delegated": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "driveItem (user's personal OneDrive)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "driveItem (OneDrive for Business)",
+          "delegated": {
+            "least": [
+              "Files.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Files.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "event",
+          "delegated": {
+            "least": [
+              "Calendars.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Calendars.Read"
+            ]
+          }
+        },
+        {
+          "resource": "group",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Group.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "group conversation",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "list",
+          "delegated": {
+            "least": [
+              "Sites.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Sites.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "message",
+          "delegated": {
+            "least": [
+              "Mail.ReadBasic"
+            ],
+            "higher": [
+              "Mail.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Mail.Read"
+            ]
+          }
+        },
+        {
+          "resource": "offerShiftRequest",
+          "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "openShiftChangeRequest",
+          "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "printer",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Printer.Read.All"
+            ],
+            "higher": [
+              "Printer.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "printTaskDefinition",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "PrintTaskDefinition.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "security alert",
+          "delegated": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "shift",
+          "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "swapShiftsChangeRequest",
+          "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams – all teams in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams/{id})",
+          "delegated": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "timeOffRequest",
+          "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "todoTask",
+          "delegated": {
+            "least": [
+              "Tasks.ReadWrite"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "user",
+          "delegated": {
+            "least": [
+              "User.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "User.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "virtualEventWebinar",
+          "delegated": {
+            "least": [
+              "VirtualEvent.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "VirtualEvent.Read.All"
+            ]
+          }
+        }
+      ]
+    },
+    "subscription-list": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "AiEnterpriseInteraction.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ],
+            "higher": [
+              "AiEnterpriseInteraction.Read.User"
+            ]
+          }
+        },
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecord (/communications/callRecords)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "CallRecords.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/{id}/channels)",
+          "delegated": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All",
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats – all chats in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats/{id})",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite",
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatSettings.Read.Chat"
+            ],
+            "higher": [
+              "ChatSettings.ReadWrite.Chat",
+              "Chat.Manage.Chat",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatSettings.Read.Chat": "resource-specific consent",
+              "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+          "delegated": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ],
+            "higher": [
+              "Group.Read.All",
+              "Group.ReadWrite.All",
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.Group"
+            ],
+            "higher": [
+              "ChannelMessage.Read.All"
+            ],
+            "conditions": {
+              "ChannelMessage.Read.Group": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/{id}/messages)",
+          "delegated": {
+            "least": [
+              "Chat.Read"
+            ],
+            "higher": [
+              "Chat.ReadWrite",
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+          "delegated": {
+            "least": [
+              "Chat.Read"
+            ],
+            "higher": [
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ],
+            "higher": [
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "contact",
+          "delegated": {
+            "least": [
+              "Contacts.Read"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Contacts.Read"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.All"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/{id}/members)",
+          "delegated": {
+            "least": [
+              "ChatMember.Read"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite",
+              "Chat.ReadBasic",
+              "Chat.Read",
+              "Chat.ReadWrite",
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.Chat"
+            ],
+            "higher": [
+              "Chat.Manage.Chat",
+              "ChatMember.Read.All",
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatMember.Read.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "conversationMember",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.WhereInstalled"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.WhereInstalled",
+              "Chat.ReadBasic.WhereInstalled",
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/members)",
+          "delegated": {
+            "least": [
+              "TeamMember.Read.All"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "driveItem (user's personal OneDrive)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "driveItem (OneDrive for work or school)",
+          "delegated": {
+            "least": [
+              "Files.ReadWrite.All"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Files.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "event",
+          "delegated": {
+            "least": [
+              "Calendars.Read"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Calendars.Read"
+            ]
+          }
+        },
+        {
+          "resource": "group",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Group.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "group conversation",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "list",
+          "delegated": {
+            "least": [
+              "Sites.ReadWrite.All"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Sites.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "message",
+          "delegated": {
+            "least": [
+              "Mail.ReadBasic"
+            ],
+            "higher": [
+              "Mail.Read",
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Mail.Read"
+            ]
+          }
+        },
+        {
+          "resource": "offerShiftRequest",
+          "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "openShiftChangeRequest",
+          "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "presence",
+          "delegated": {
+            "least": [
+              "Presence.Read.All"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "printer",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Printer.Read.All"
+            ],
+            "higher": [
+              "Printer.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "printTaskDefinition",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "PrintTaskDefinition.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "security alert",
+          "delegated": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "shift",
+          "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "swapShiftsChangeRequest",
+          "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams – all teams in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams/{id})",
+          "delegated": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All",
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "timeOffRequest",
+          "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "todoTask",
+          "delegated": {
+            "least": [
+              "Tasks.ReadWrite"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "user",
+          "delegated": {
+            "least": [
+              "User.Read.All"
+            ],
+            "higher": [
+              "Subscription.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "User.Read.All"
+            ]
+          }
+        }
+      ]
+    },
+    "subscription-post-subscriptions": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "AiEnterpriseInteraction.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ],
+            "higher": [
+              "AiEnterpriseInteraction.Read.User"
+            ]
+          }
+        },
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecord (/communications/callRecords)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "CallRecords.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/{id}/channels)",
+          "delegated": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats – all chats in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats/{id})",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatSettings.Read.Chat"
+            ],
+            "higher": [
+              "ChatSettings.ReadWrite.Chat",
+              "Chat.Manage.Chat",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatSettings.Read.Chat": "resource-specific consent",
+              "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+          "delegated": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.Group"
+            ],
+            "higher": [
+              "ChannelMessage.Read.All"
+            ],
+            "conditions": {
+              "ChannelMessage.Read.Group": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/{id}/messages)",
+          "delegated": {
+            "least": [
+              "Chat.Read"
+            ],
+            "higher": [
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+          "delegated": {
+            "least": [
+              "Chat.Read"
+            ],
+            "higher": [
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ],
+            "higher": [
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "contact",
+          "delegated": {
+            "least": [
+              "Contacts.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Contacts.Read"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.All"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/{id}/members)",
+          "delegated": {
+            "least": [
+              "ChatMember.Read"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite",
+              "Chat.ReadBasic",
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.Chat"
+            ],
+            "higher": [
+              "Chat.Manage.Chat",
+              "ChatMember.Read.All",
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatMember.Read.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "conversationMember",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.WhereInstalled"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.WhereInstalled",
+              "Chat.ReadBasic.WhereInstalled",
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/members)",
+          "delegated": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "driveItem (user's personal OneDrive)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "driveItem (OneDrive for Business)",
+          "delegated": {
+            "least": [
+              "Files.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Files.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "event",
+          "delegated": {
+            "least": [
+              "Calendars.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Calendars.Read"
+            ]
+          }
+        },
+        {
+          "resource": "group",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Group.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "group conversation",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "list",
+          "delegated": {
+            "least": [
+              "Sites.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Sites.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "message",
+          "delegated": {
+            "least": [
+              "Mail.ReadBasic"
+            ],
+            "higher": [
+              "Mail.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Mail.Read"
+            ]
+          }
+        },
+        {
+          "resource": "offerShiftRequest",
+          "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "openShiftChangeRequest",
+          "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "presence",
+          "delegated": {
+            "least": [
+              "Presence.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "printer",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Printer.Read.All"
+            ],
+            "higher": [
+              "Printer.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "printTaskDefinition",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "PrintTaskDefinition.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "security alert",
+          "delegated": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "shift",
+          "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "swapShiftsChangeRequest",
+          "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams – all teams in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams/{id})",
+          "delegated": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "timeOffRequest",
+          "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "todoTask",
+          "delegated": {
+            "least": [
+              "Tasks.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Tasks.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "user",
+          "delegated": {
+            "least": [
+              "User.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "User.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "virtualEventWebinar",
+          "delegated": {
+            "least": [
+              "VirtualEvent.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "VirtualEvent.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "virtualEventTownhall",
+          "delegated": {
+            "least": [
+              "VirtualEvent.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "VirtualEvent.Read.All"
+            ]
+          }
+        }
+      ]
+    },
+    "subscription-update": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/users/{userId}/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "AiEnterpriseInteraction.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ],
+            "higher": [
+              "AiEnterpriseInteraction.Read.User"
+            ]
+          }
+        },
+        {
+          "resource": "aiInteraction",
+          "detail": "copilot/interactionHistory/getAllEnterpriseInteractions · Copilot AI interactions in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "AiEnterpriseInteraction.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecord",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "CallRecords.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/getAllRecordings · All recordings in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/recordings · All recordings for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callRecording",
+          "detail": "users/{userId}/onlineMeetings/getAllRecordings · A call recording that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingRecording.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/getAllTranscripts · All transcripts in an organization.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "communications/onlineMeetings/{onlineMeetingId}/transcripts · All transcripts for a specific meeting.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "callTranscript",
+          "detail": "users/{userId}/onlineMeetings/getAllTranscripts · A call transcript that becomes available in a meeting organized by a specific user.",
+          "delegated": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "OnlineMeetingTranscript.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/getAllChannels – all channels in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "channel (/teams/{id}/channels)",
+          "delegated": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Channel.ReadBasic.All"
+            ],
+            "higher": [
+              "ChannelSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats – all chats in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chat (/chats/{id})",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatSettings.Read.Chat"
+            ],
+            "higher": [
+              "ChatSettings.ReadWrite.Chat",
+              "Chat.Manage.Chat",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatSettings.Read.Chat": "resource-specific consent",
+              "ChatSettings.ReadWrite.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats · All chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "chat",
+          "detail": "/users/{id}/chats · All chats that a particular user is part of.",
+          "delegated": {
+            "least": [
+              "Chat.ReadBasic"
+            ],
+            "higher": [
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.ReadBasic.All"
+            ],
+            "higher": [
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/{id}/channels/{id}/messages)",
+          "delegated": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.Group"
+            ],
+            "higher": [
+              "ChannelMessage.Read.All"
+            ],
+            "conditions": {
+              "ChannelMessage.Read.Group": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "chatMessage (/teams/getAllMessages -- all channel messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMessage.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/{id}/messages)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/chats/getAllMessages -- all chat messages in organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage (/users/{id}/chats/getAllMessages -- chat messages for all chats a particular user is part of)",
+          "delegated": {
+            "least": [
+              "Chat.Read"
+            ],
+            "higher": [
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "Chat.Read.All"
+            ],
+            "higher": [
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "chatMessage",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMessages · Chat messages for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Chat.Read.WhereInstalled"
+            ],
+            "higher": [
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "contact",
+          "delegated": {
+            "least": [
+              "Contacts.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Contacts.Read"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.All"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/chats/{id}/members)",
+          "delegated": {
+            "least": [
+              "ChatMember.Read"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite",
+              "Chat.ReadBasic",
+              "Chat.Read",
+              "Chat.ReadWrite"
+            ]
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.Chat"
+            ],
+            "higher": [
+              "Chat.Manage.Chat",
+              "ChatMember.Read.All",
+              "ChatMember.ReadWrite.All",
+              "Chat.ReadBasic.All",
+              "Chat.Read.All",
+              "Chat.ReadWrite.All"
+            ],
+            "conditions": {
+              "Chat.Manage.Chat": "resource-specific consent",
+              "ChatMember.Read.Chat": "resource-specific consent"
+            }
+          }
+        },
+        {
+          "resource": "conversationMember",
+          "detail": "/appCatalogs/teamsApps/{id}/installedToChats/getAllMembers · Chat members for all chats in an organization where a particular Teams app is installed.",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChatMember.Read.WhereInstalled"
+            ],
+            "higher": [
+              "ChatMember.ReadWrite.WhereInstalled",
+              "Chat.ReadBasic.WhereInstalled",
+              "Chat.Read.WhereInstalled",
+              "Chat.ReadWrite.WhereInstalled"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/members)",
+          "delegated": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "TeamMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "conversationMember (/teams/{id}/channels/getAllMembers)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "ChannelMember.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "driveItem (user's personal OneDrive)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "driveItem (OneDrive for Business)",
+          "delegated": {
+            "least": [
+              "Files.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Files.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "event",
+          "delegated": {
+            "least": [
+              "Calendars.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Calendars.Read"
+            ]
+          }
+        },
+        {
+          "resource": "group",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Group.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "group conversation",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "list",
+          "delegated": {
+            "least": [
+              "Sites.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Sites.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "message",
+          "delegated": {
+            "least": [
+              "Mail.ReadBasic"
+            ],
+            "higher": [
+              "Mail.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Mail.Read"
+            ]
+          }
+        },
+        {
+          "resource": "offerShiftRequest",
+          "detail": "(/teams/{id}/schedule/offerShiftRequests) · Changes to any offer shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "openShiftChangeRequest",
+          "detail": "(/teams/{id}/schedule/openShiftChangeRequests) · Changes to any open shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "presence",
+          "delegated": {
+            "least": [
+              "Presence.Read.All"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "printer",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Printer.Read.All"
+            ],
+            "higher": [
+              "Printer.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "printTaskDefinition",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "PrintTaskDefinition.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "security alert",
+          "delegated": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "SecurityEvents.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "shift",
+          "detail": "(/teams/{id}/schedule/shifts) · Changes to any shift in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "swapShiftsChangeRequest",
+          "detail": "(/teams/{id}/schedule/swapShiftsChangeRequests) · Changes to any swap shift request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams – all teams in an organization)",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "team (/teams/{id})",
+          "delegated": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Team.ReadBasic.All"
+            ],
+            "higher": [
+              "TeamSettings.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "timeOffRequest",
+          "detail": "(/teams/{id}/schedule/timeOffRequests) · Changes to any time off request in a team.",
+          "delegated": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Schedule.Read.All"
+            ],
+            "higher": [
+              "Schedule.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "resource": "todoTask",
+          "delegated": {
+            "least": [
+              "Tasks.ReadWrite"
+            ]
+          },
+          "application": {
+            "notSupported": true
+          }
+        },
+        {
+          "resource": "user",
+          "delegated": {
+            "least": [
+              "User.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "User.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "virtualEventWebinar",
+          "delegated": {
+            "least": [
+              "VirtualEvent.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "VirtualEvent.Read.All"
+            ]
+          }
+        }
+      ]
+    },
     "user-delete": {
       "table": true,
       "delegated": {
@@ -1391,6 +5115,7 @@
     "DELETE /v1.0/servicePrincipals/{id}": "serviceprincipal-delete",
     "DELETE /v1.0/servicePrincipals/{id}/appRoleAssignedTo/{assignmentId}": "serviceprincipal-delete-approleassignedto",
     "DELETE /v1.0/servicePrincipals/{id}/appRoleAssignments/{assignmentId}": "serviceprincipal-delete-approleassignments",
+    "DELETE /v1.0/subscriptions/{id}": "subscription-delete",
     "DELETE /v1.0/users/{id}": "user-delete",
     "DELETE /v1.0/users/{id}/manager/$ref": "user-delete-manager",
     "GET /v1.0/applications": "application-list",
@@ -1453,6 +5178,8 @@
     "GET /v1.0/servicePrincipals/{id}": "serviceprincipal-get",
     "GET /v1.0/servicePrincipals/{id}/appRoleAssignedTo": "serviceprincipal-list-approleassignedto",
     "GET /v1.0/servicePrincipals/{id}/appRoleAssignments": "serviceprincipal-list-approleassignments",
+    "GET /v1.0/subscriptions": "subscription-list",
+    "GET /v1.0/subscriptions/{id}": "subscription-get",
     "GET /v1.0/users": "user-list",
     "GET /v1.0/users/$count": "user-list",
     "GET /v1.0/users/delta": "user-delta",
@@ -1475,6 +5202,7 @@
     "PATCH /v1.0/organization/{id}": "organization-update",
     "PATCH /v1.0/places/{id}": "place-update",
     "PATCH /v1.0/servicePrincipals/{id}": "serviceprincipal-update",
+    "PATCH /v1.0/subscriptions/{id}": "subscription-update",
     "PATCH /v1.0/users/{id}": "user-update",
     "POST /v1.0/applications": "application-post-applications",
     "POST /v1.0/groups": "group-post-groups",
@@ -1485,6 +5213,7 @@
     "POST /v1.0/servicePrincipals": "serviceprincipal-post-serviceprincipals",
     "POST /v1.0/servicePrincipals/{id}/appRoleAssignedTo": "serviceprincipal-post-approleassignedto",
     "POST /v1.0/servicePrincipals/{id}/appRoleAssignments": "serviceprincipal-post-approleassignments",
+    "POST /v1.0/subscriptions": "subscription-post-subscriptions",
     "POST /v1.0/users": "user-post-users",
     "PUT /v1.0/me/manager/$ref": "user-post-manager",
     "PUT /v1.0/users/{id}/manager/$ref": "user-post-manager"
@@ -1515,6 +5244,7 @@
     "PUT /v1.0/me/manager/$ref": "PUT /v1.0/users/{id}/manager/$ref"
   },
   "noPage": [
+    "GET /v1.0/$metadata",
     "POST /v1.0/$batch"
   ]
 }

@@ -1,7 +1,7 @@
 {
   "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
   "commitDate": "2026-10-26T13:31:32Z",
-  "fetchedDate": "2026-11-01",
+  "fetchedDate": "2026-11-02",
   "files": [
     {
       "path": "api-reference/v1.0/api/application-delete.md",
@@ -232,6 +232,31 @@
       "path": "api-reference/v1.0/api/serviceprincipal-update.md",
       "bytes": 13982,
       "sha256": "b586b902a6f362e182696b24cecd5dd007662eaa412ed0222485203e04107f19"
+    },
+    {
+      "path": "api-reference/v1.0/api/subscription-delete.md",
+      "bytes": 14533,
+      "sha256": "b26b745a4a8a963344e719ec5493c3b42a827b622eb4695d18084c5b9462c468"
+    },
+    {
+      "path": "api-reference/v1.0/api/subscription-get.md",
+      "bytes": 15541,
+      "sha256": "642016a750b7f77ebf4ea4f6d800529f926f90f3c33614ac6ac2ecdd9399e36a"
+    },
+    {
+      "path": "api-reference/v1.0/api/subscription-list.md",
+      "bytes": 17054,
+      "sha256": "f344ce56d72b2f0c7b51b9f2834b45bea78b8dd9e4c40ff8516fd45a5a9991e0"
+    },
+    {
+      "path": "api-reference/v1.0/api/subscription-post-subscriptions.md",
+      "bytes": 20697,
+      "sha256": "635b7757cc1d652039b052d212a42d0de4a53252e722299daa0dba2a6639ec5d"
+    },
+    {
+      "path": "api-reference/v1.0/api/subscription-update.md",
+      "bytes": 17353,
+      "sha256": "38237524a2f94262a1b55fd85e49ec59dfdb5e1547da79af4c7da098aa9d3095"
     },
     {
       "path": "api-reference/v1.0/api/user-delete-manager.md",
