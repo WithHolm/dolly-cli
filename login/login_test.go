@@ -136,7 +136,7 @@ func jsonNum(v any) string { b, _ := json.Marshal(v); return string(b) }
 
 func TestDiscoveryAndKeys(t *testing.T) {
 	e := setup(t)
-	for _, tenant := range []string{e.tid, "common", "acme.example", "ACME.onmicrosoft.com"} {
+	for _, tenant := range []string{e.tid, "common", "fjordvik.example", "FJORDVIK.onmicrosoft.com"} {
 		res, err := http.Get(e.url + "/" + tenant + "/v2.0/.well-known/openid-configuration")
 		if err != nil {
 			t.Fatal(err)
@@ -392,7 +392,7 @@ func TestPasswordGrant_DelegatedToken(t *testing.T) {
 		want string
 	}{
 		{"a scope that is not a permission", form("https://graph.microsoft.com/Bogus.Read"), "AADSTS70011"},
-		{"a user that is not there", url.Values{"grant_type": {"password"}, "client_id": {client1}, "username": {"nobody@acme.example"}, "password": {"x"}, "scope": {"User.Read"}}, "AADSTS50034"},
+		{"a user that is not there", url.Values{"grant_type": {"password"}, "client_id": {client1}, "username": {"nobody@fjordvik.example"}, "password": {"x"}, "scope": {"User.Read"}}, "AADSTS50034"},
 		{"no password", url.Values{"grant_type": {"password"}, "client_id": {client1}, "username": {upn}, "scope": {"User.Read"}}, "AADSTS900144"},
 	} {
 		if code, m := e.post(path, c.form); code != 400 || errorCode(m) != c.want {

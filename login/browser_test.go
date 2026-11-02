@@ -292,7 +292,7 @@ func TestAuthorize_Errors(t *testing.T) {
 		}
 	}
 	// the choice of the person
-	if res := e.pick("nobody@acme.example", authParams(nil)); res.StatusCode != 400 || !strings.Contains(e.body(res), "AADSTS50034") {
+	if res := e.pick("nobody@fjordvik.example", authParams(nil)); res.StatusCode != 400 || !strings.Contains(e.body(res), "AADSTS50034") {
 		t.Errorf("a user that is not there: %d", res.StatusCode)
 	}
 	e.world.SetUser(upn, map[string]any{"accountEnabled": false}, graph.Actor{Source: "admin"})
