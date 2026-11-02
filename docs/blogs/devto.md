@@ -50,10 +50,10 @@ currently supports users, groups, organization, service principals, app registra
 
 ### SSO compliant ish
 
-You can make a webapp that uses this for SSO.
-Currently only OpenID is supported, but I want to add SAML as well but it's more advanced so it might take some time.
+You can make a local webapp that uses this for SSO.
+Currently only OpenID is supported, and I want to add SAML as well but it's more advanced so it might take some time.
 
-I have tested with MSAL,@Azure/identity,OIDC-client-ts and openid-client with varying results. these are documented in repo/docs. if you have other tests of other frameworks you have tested, please let me know the results.
+I have tested with `MSAL`, `@Azure/identity`, `OIDC-client-ts` and `openid-client` with varying results. these are documented in repo/docs. if you have other tests of other frameworks you have tested, please let me know the results.
 
 ### Api documentation
 
@@ -93,7 +93,7 @@ This is great for testing and being able to deliver correct estimates of the nee
 
 The data from this is gathered from microsoft learn and microsoft's own [devx-content](https://github.com/microsoftgraph/microsoft-graph-devx-content), so it should be mostly correct.
 
-However both the microsoft learn data and devx have some missing meta-data and weird formatting so we do have some extra steps to make sure that permissions don't overlap (e.g user read + user update is user.readupdate.all instead of user.read.all + user.readupdate.all).. so this is a best guess, not a guarantee.
+However both the microsoft learn data and devx have some missing meta-data and weird formatting so we do have some extra steps to make sure that permissions don't overlap (e.g user read + user update is `user.readupdate.all` instead of `user.read.all` + `user.readupdate.all`). this is a best guess, not a guarantee.
 
 Of course, any errors can be reported and i will fix them as soon as i can.
 

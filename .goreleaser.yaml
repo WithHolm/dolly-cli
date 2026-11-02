@@ -1,0 +1,51 @@
+# The release of dollycli: the program for Linux, macOS, and Windows, on the releases page of GitHub.
+# How to make one: docs/release.md. A tag that starts with v (v1.2.3) starts it, through .github/workflows/release.yml.
+# Test it with no release: goreleaser release --snapshot --clean
+version: 2
+project_name: dolly-cli
+
+builds:
+  - id: dolly
+    main: ./cmd/dolly
+    binary: dolly
+    env:
+      - CGO_ENABLED=0 # one static program, as in the Dockerfile
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+archives:
+  - id: dolly
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    # dolly_1.2.3_linux_amd64.tar.gz
+    name_template: "dolly_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+      - NOTICE
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^Merge "
+
+release:
+  github:
+    owner: WithHolm
+    name: Dolly-cli
+  prerelease: auto # v1.2.3-rc1 is a pre-release
+  header: |
+    Download the archive for your system, unpack it, and run `dolly serve`. Check it against `checksums.txt`.
+  footer: |
+    Documentation: https://github.com/WithHolm/Dolly-cli/blob/{{ .Tag }}/docs/README.md

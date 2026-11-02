@@ -15,6 +15,7 @@ Start with the [README](../README.md) for what dollycli is and how to run it. Th
 | [Azure CLI](azure-cli.md) | What works with `az`, what does not, and what the setup needs. |
 | [Run in a container](container.md) | Docker, compose, other containers, and settings. |
 | [The portal](portal.md) | The pages of the portal, and how the text of the API page is written. |
+| [Releases](release.md) | How a release is made (a tag), what is in it, how to test it, and the stores that come later. |
 | [Layout and development](development.md) | The packages, how to add an API, and the make targets. |
 | [Library checks](compat/README.md) | The scripts that check the libraries, and the [workflow](compat/WORKFLOW.md) to keep the guidance true. |
 

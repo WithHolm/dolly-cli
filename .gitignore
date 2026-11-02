@@ -15,3 +15,5 @@
 /.playwright-mcp/
 /.impeccable/
 /bin/
+# the output of goreleaser
+/dist/
