@@ -41,7 +41,8 @@ compat:
 # and commit the extract. The description is MIT licensed.
 graph-spec:
 	@curl -sfL -o /tmp/graph-openapi-v1.0.yaml https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml
-	@go run ./graph/spec/gen -in /tmp/graph-openapi-v1.0.yaml -out graph/spec/graph-v1.0.json
+	@curl -sfL -o /tmp/graph-v1.0-metadata.xml https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/clean_v10_metadata/cleanMetadata.xml
+	@go run ./graph/spec/gen -in /tmp/graph-openapi-v1.0.yaml -out graph/spec/graph-v1.0.json -csdl /tmp/graph-v1.0-metadata.xml -csdl-out graph/spec/metadata-v1.0.xml
 
 # Download Microsoft's documents about Graph throttling (the cost of each call, and the
 # limits) into graph/cost/raw. It changes nothing else. Then ask Claude to make

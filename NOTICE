@@ -1,0 +1,111 @@
+dollycli
+========
+
+dollycli is licensed under the Apache License 2.0 (the file LICENSE). The made-up tenants (Fjordvik, Acme and their people) are original work. The characters Nora,
+Torvald, Nils and Dr. Rank are from Henrik Ibsen's play A Doll's House (1879).
+
+dollycli is not affiliated with or endorsed by Microsoft. Microsoft, Entra, Azure, and Microsoft Graph are trademarks of the Microsoft group of companies. The names are
+used only to say what dollycli imitates. This notice does not grant any right to use them.
+
+This product includes data from Microsoft, which is used under the licences below. The Apache License 2.0 of dollycli does not cover that data: it stays under the licences
+below, whoever uses dollycli. The data has been changed: it is read from Microsoft's files, reduced to what dollycli
+needs, matched, reshaped into JSON or XML files of dollycli, and in some places combined with other data. The files in the folders `raw/` are copies of Microsoft's files,
+with the commit and a hash in `SOURCE.json`. Microsoft has not reviewed or approved the result, and the result may be wrong: check it against the real service.
+
+
+1. Microsoft Learn documentation
+--------------------------------
+
+Source:     https://github.com/microsoftgraph/microsoft-graph-docs-contrib (the pages of https://learn.microsoft.com/graph/)
+Copyright:  (c) Microsoft Corporation
+Licence:    Creative Commons Attribution 4.0 International (CC BY 4.0), https://creativecommons.org/licenses/by/4.0/
+            This is the licence in the file LICENSE of that repository. The legal code, and the disclaimer of warranties and the limitation of liability (section 5), are at
+            https://creativecommons.org/licenses/by/4.0/legalcode
+Pinned to:  commit 02cb3eb0ca9f3f278a8ffa934a1304f640e6e792 (2026-10-26)
+
+The same repository also contains a file LICENSE.md. It says that the repository is licensed under Creative Commons Attribution-NonCommercial-NoDerivs 3.0 United States,
+and its grant is to "the Microsoft Office Documentation". The pages used here are the Microsoft Graph API reference, which that grant does not name. dollycli relies on the
+file LICENSE (CC BY 4.0): it is the broader of the two, and the one that GitHub reports as the licence of the repository. If that is not right for these pages, the data
+below is to be removed or replaced, and the copies of Microsoft's pages in the folders raw/ deleted.
+
+What is used:
+  - Which permissions each call needs, from the pages of the calls and their include files: graph/permissions/operations/ (all.json, operations.json, and the copies in raw/).
+  - The throttling limits and the cost of calls: graph/cost/ (cost.json, and the copies in raw/).
+  - Which properties support which query options: graph/query/ (matrix.json, and the copies in raw/).
+  - The client IDs of Microsoft's tools (graph/repo/seed.go), and the entry for the permission User.ReadUpdate.All in the permissions reference
+    (graph/permissions/supplement.json).
+
+Material that was changed from the original is marked as such above. Microsoft does not endorse dollycli or its use of this data.
+
+
+2. microsoft-graph-devx-content
+-------------------------------
+
+Source:     https://github.com/microsoftgraph/microsoft-graph-devx-content
+Licence:    MIT
+Pinned to:  commit 56e1917fe45fb7c52c2d9845f569c2ffdb39e4d9 (2026-10-21)
+
+What is used: the list of the permissions of Microsoft Graph, graph/permissions/raw/permissions-descriptions.json (as it is), and graph/permissions/raw/names.json (the
+texts of the permissions of permissions/new/permissions.json, with the rest left out).
+
+MIT License
+
+Copyright (c) 2020 Microsoft Graph
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+3. msgraph-metadata
+-------------------
+
+Source:     https://github.com/microsoftgraph/msgraph-metadata
+Licence:    MIT
+Taken from: the master branch, on the date in graph/spec/README.md ("make graph-spec"); the files are not pinned to a commit
+
+What is used: parts of the OpenAPI description (openapi/v1.0/openapi.yaml), kept in graph/spec/graph-v1.0.json, and parts of the OData description
+(clean_v10_metadata/cleanMetadata.xml), kept in graph/spec/metadata-v1.0.xml.
+
+MIT License
+
+Copyright (c) 2018 Microsoft Graph
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+Not covered here
+----------------
+
+The Go and JavaScript packages that dollycli is built with (cobra, pflag, golang.org/x, Svelte, and others) have their own licences (Apache-2.0, BSD-3-Clause, MIT). They
+are not listed in this file.

@@ -3,7 +3,7 @@ dollycli spins up a fake tenant on localhost. It speaks the OAuth/OIDC of Entra 
 
 Make a tenant (`dolly serve --users 50`), test against it, then go back to the seed with `dolly graph reset`. Entra first, Azure data plane next.
 
-Warning: dollycli is a development tool. It issues tokens no real service will trust, binds to localhost by default, and must never be used as an identity provider.
+Warning: dolly-cli is a development tool. It issues tokens no real service will trust, binds to localhost by default, and must never be used as an identity provider.
 
 dollycli is not affiliated with or endorsed by Microsoft. Entra, Azure and Microsoft Graph are trademarks of Microsoft Corporation. Its just a product i really needed, and might think you do too :)
 
@@ -31,3 +31,13 @@ Try it:
 ## More
 
 The [documentation](docs/README.md) has the rest: Graph and its data, query rules, sign-in, the portal, and development.
+
+## Licence and credits
+
+dollycli is licensed under Apache-2.0 ([LICENSE](LICENSE)). The made-up tenants are original. It uses data from Microsoft, changed and reshaped, under their licences:
+
+- [Microsoft Learn docs](https://github.com/microsoftgraph/microsoft-graph-docs-contrib) (CC BY 4.0): which permissions each call needs, the throttling and cost tables, which properties support which query options, and the Microsoft client IDs. See [permissions of the calls](graph/permissions/operations/README.md) and [cost data](graph/cost/README.md).
+- [microsoft-graph-devx-content](https://github.com/microsoftgraph/microsoft-graph-devx-content) (MIT): the list of Graph permissions. See [permissions](graph/permissions/README.md).
+- [msgraph-metadata](https://github.com/microsoftgraph/msgraph-metadata) (MIT): the OpenAPI and OData descriptions of Graph. See [Graph descriptions](graph/spec/README.md).
+
+The full notices, with the licence texts, the commits that the data is pinned to, and the files that use it, are in [NOTICE](NOTICE).
