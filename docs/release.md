@@ -4,7 +4,7 @@ A release is the program for Linux, macOS, and Windows (amd64 and arm64), on the
 
 ## Make a release
 
-1. Check that the portal is current. The program has `ui/dist` built in, and a release build does not run Node. After a change in `ui/src`, run `make ui` and commit `ui/dist`.
+1. Run `make ui` to check the portal (types and tests). The program has `ui/dist` built in, but `ui/dist` is not in git: the release workflow builds it with Node before the tests.
 2. Run `go test ./...`.
 3. Tag the commit and push the tag. [scripts/tag.sh](../scripts/tag.sh) asks for major, minor, or patch, tags the latest commit (`HEAD`, pushed or not) with the next version, and prints the push command:
 
