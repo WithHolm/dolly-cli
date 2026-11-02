@@ -1,0 +1,55 @@
+name: Different from the real Graph
+description: dollycli answers in another way than Microsoft Graph does.
+title: "[Caveat]: "
+labels: ["caveat"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        dollycli must be 1:1 with Graph. Use this form when it is not: an error text, a property, a header, paging, a status code, or an option that it accepts or refuses.
+  - type: input
+    id: call
+    attributes:
+      label: The call
+      placeholder: GET /users?$orderby=displayName&$top=5
+    validations:
+      required: true
+  - type: textarea
+    id: dolly
+    attributes:
+      label: What dollycli does
+      description: The status and the body (or the part that differs).
+      render: http
+    validations:
+      required: true
+  - type: textarea
+    id: graph
+    attributes:
+      label: What the real Graph does
+      description: |
+        The status and the body (or the part that differs). **Do not paste tokens, secrets, or data of your own tenant.** An answer from the sample tenant of Graph Explorer is safe to share.
+      render: http
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: How do you know what the real Graph does?
+      options:
+        - I called it (sample tenant of Graph Explorer)
+        - I called it (my own tenant)
+        - Microsoft Learn says so
+        - A client or SDK depends on it
+        - I am not sure
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: dollycli version
+      description: "Run `dolly --version`."
+  - type: textarea
+    id: impact
+    attributes:
+      label: What it breaks
+      description: Which tool or test fails because of it, if any.

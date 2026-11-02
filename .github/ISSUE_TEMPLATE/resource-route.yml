@@ -1,0 +1,53 @@
+name: Resource or route
+description: A Microsoft Graph resource or call that dollycli does not serve yet.
+title: "[Route]: "
+labels: ["resource"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        dollycli serves a small part of Microsoft Graph. Use this form to ask for one more resource or call. Check the **API** page of the portal first: it lists what is served.
+  - type: input
+    id: calls
+    attributes:
+      label: The call or calls
+      description: The method and path, as in Microsoft Learn.
+      placeholder: GET /devices, GET /devices/{id}
+    validations:
+      required: true
+  - type: input
+    id: learn
+    attributes:
+      label: The Microsoft Learn page
+      placeholder: https://learn.microsoft.com/graph/api/device-list
+  - type: textarea
+    id: why
+    attributes:
+      label: What needs it
+      description: The tool, script, or test that calls it, and what happens now.
+      placeholder: My script lists devices. dollycli answers 404, so the script stops.
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: What do you need from it?
+      multiple: true
+      options:
+        - Read (GET)
+        - Create, change, and delete (POST, PATCH, DELETE)
+        - Delta query
+        - Change notifications (subscriptions)
+        - Related objects (members, owners, and so on)
+  - type: textarea
+    id: shape
+    attributes:
+      label: What the real Graph answers (optional)
+      description: |
+        A real answer helps most. Only use data that you may share, such as the sample tenant of Graph Explorer. **Do not paste tokens, secrets, or data of your own tenant.**
+      render: json
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Permissions that the call needs, query options that you use, or a part that you do not need.

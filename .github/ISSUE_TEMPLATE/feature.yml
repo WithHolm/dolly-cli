@@ -1,0 +1,43 @@
+name: Feature wish
+description: Something new for the portal, the sign-in API, the generator, or the command line.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For a Graph resource or call that is missing, use **Resource or route**. For an answer that differs from Graph, use **Different from the real Graph**.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where
+      options:
+        - Portal
+        - Graph API (behavior of a call)
+        - Sign-in API
+        - Generator and profiles
+        - Command line
+        - Container and TLS
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Start with the task, and not with the solution.
+      placeholder: I test a tool that handles throttling. I need to see ...
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What do you want dollycli to do?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What do you do now?
+      description: A workaround, or another tool that you tried.

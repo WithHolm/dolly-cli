@@ -1,0 +1,62 @@
+name: Error
+description: dollycli crashes, shows an error, or does something that it should not.
+title: "[Error]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Do not paste tokens, secrets, or data of your own tenant.** Remove them from the log and the answers first.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: And what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to make it happen
+      description: The steps, or the calls. A `curl` command is best.
+      placeholder: |
+        1. dolly serve
+        2. curl ...
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Log or answer
+      description: The output of dollycli, or the answer that it gave. For a call, the call log of the portal has it.
+      render: shell
+  - type: input
+    id: version
+    attributes:
+      label: dollycli version
+      description: "Run `dolly --version`. Say `dev` for a build from source, with the commit."
+    validations:
+      required: true
+  - type: dropdown
+    id: run
+    attributes:
+      label: How do you run it?
+      multiple: true
+      options:
+        - Binary
+        - Container
+        - Built from source
+        - With --dir (data is kept)
+        - With no --dir (data in memory)
+        - With --tls
+        - With --host for other machines
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Windows 11, macOS 15, Ubuntu 24.04
+  - type: input
+    id: client
+    attributes:
+      label: The tool that calls it (if any)
+      placeholder: Microsoft Graph PowerShell 2.x, msgraph-sdk-go, MSAL Python, Terraform azuread
