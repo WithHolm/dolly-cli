@@ -27,7 +27,7 @@ func newClock() *clock { return &clock{t: time.Date(2026, 10, 10, 8, 0, 0, 0, ti
 
 func openWorld(t *testing.T, dir string, c *clock) *graph.World {
 	t.Helper()
-	opt := graph.OpenOptions{Users: 120, Seed: 9}
+	opt := graph.OpenOptions{Users: 120, Seed: 9, Profile: graph.AcmeProfile()} // the tests are written for Acme: the department Sales
 	if c != nil {
 		opt.Now = c.now
 	}
@@ -261,7 +261,7 @@ func TestReset_GoesBackToTheSeed_AndCanBeUndone(t *testing.T) {
 }
 
 func TestMemoryWorld_HasNoHistory(t *testing.T) {
-	w := graph.NewMemory(graph.Options{Users: 30, Seed: 2})
+	w := graph.NewMemory(graph.Options{Users: 30, Seed: 2, Profile: graph.AcmeProfile()})
 	w.Rename("department", "Sales", "X", person)
 	if len(w.History()) != 0 || w.Dir() != "" {
 		t.Error("a world in memory keeps no history")

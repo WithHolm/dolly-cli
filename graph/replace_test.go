@@ -9,7 +9,7 @@ import (
 // Replace makes new data in the folder: a new seed, and no history. The old changes are gone.
 func TestReplace_NewSeedAndNoHistory(t *testing.T) {
 	dir := t.TempDir()
-	w, err := graph.Open(dir, graph.OpenOptions{Users: 20, Seed: 1})
+	w, err := graph.Open(dir, graph.OpenOptions{Users: 20, Seed: 1, Profile: graph.AcmeProfile()}) // Acme has the department Sales
 	if err != nil {
 		t.Fatal(err)
 	}

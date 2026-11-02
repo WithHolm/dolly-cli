@@ -26,6 +26,17 @@ type Behavior struct {
 	// Throttle makes a request that passes the limits of Graph (see package cost) fail with
 	// 429. The cost of each call is counted in any case.
 	Throttle bool `json:"throttle"`
+	// DuplicatePercent is the share of change notifications (0 to 100) that are sent more than once: 2 to 4 times, with the same message. Graph does this when
+	// the services that hold the data are not in step.
+	DuplicatePercent int `json:"duplicatePercent"`
+}
+
+// copies says how many times the next change notification is sent.
+func (b Behavior) copies() int {
+	if b.DuplicatePercent > 0 && rand.IntN(100) < b.DuplicatePercent {
+		return 2 + rand.IntN(3)
+	}
+	return 1
 }
 
 // check makes the values right: a wrong value is an error, so the person sees it.
@@ -35,6 +46,8 @@ func (b Behavior) check() error {
 		return fmt.Errorf("latencyMs must be from 0 to 60000")
 	case b.FailPercent < 0 || b.FailPercent > 100:
 		return fmt.Errorf("failPercent must be from 0 to 100")
+	case b.DuplicatePercent < 0 || b.DuplicatePercent > 100:
+		return fmt.Errorf("duplicatePercent must be from 0 to 100")
 	case b.RetryAfter < 0 || b.RetryAfter > 300:
 		return fmt.Errorf("retryAfter must be from 0 to 300")
 	case b.PageSize < 0 || b.PageSize > maxPage:

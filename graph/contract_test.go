@@ -15,7 +15,7 @@ import (
 
 func start(t *testing.T, users, pageSize int) (*client, *graph.Server) {
 	t.Helper()
-	srv := graph.New(graph.Generate(graph.Options{Users: users, Seed: 7}), graph.ServerOptions{PageSize: pageSize})
+	srv := graph.New(graph.Generate(graph.Options{Users: users, Seed: 7, Profile: graph.AcmeProfile()}), graph.ServerOptions{PageSize: pageSize})
 	ts := httptest.NewServer(srv.Handler())
 	t.Cleanup(ts.Close)
 	return &client{BaseURL: ts.URL + graph.BasePath}, srv

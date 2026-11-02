@@ -83,6 +83,17 @@ func (s *Server) adminRoutes() {
 	a.HandleFunc("GET /service-principals", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{"servicePrincipals": s.world.ListServicePrincipalInfo()})
 	})
+	// the change notifications: the subscriptions, and what was sent to them
+	a.HandleFunc("GET /subscriptions", func(w http.ResponseWriter, _ *http.Request) { writeJSON(w, http.StatusOK, s.adminSubscriptions()) })
+	a.HandleFunc("POST /subscriptions", s.adminCreateSubscription)
+	a.HandleFunc("POST /subscriptions/{id}/emulate", s.adminEmulate)
+	a.HandleFunc("DELETE /subscriptions/{id}", func(w http.ResponseWriter, r *http.Request) {
+		var e *apiError
+		if err := s.notifier.Delete(r.PathValue("id")); err != nil {
+			e = asAPIError(err)
+		}
+		s.adminChanged(w, e)
+	})
 	// the app registrations, for the page of the same name (a service principal with the same client ID is the instance of each)
 	a.HandleFunc("GET /applications", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{"applications": s.world.ListApplicationInfo()})

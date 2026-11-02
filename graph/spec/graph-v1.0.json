@@ -31834,6 +31834,59 @@
   },
   {
    "method": "GET",
+   "path": "/subscriptions",
+   "summary": "List subscriptions",
+   "doc": "https://learn.microsoft.com/graph/api/subscription-list?view=graph-rest-1.0",
+   "query": [
+    "$orderby",
+    "$select",
+    "$expand"
+   ]
+  },
+  {
+   "method": "POST",
+   "path": "/subscriptions",
+   "summary": "Create subscription",
+   "doc": "https://learn.microsoft.com/graph/api/subscription-post-subscriptions?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
+   "path": "/subscriptions/getVapidPublicKey()",
+   "summary": "Invoke function getVapidPublicKey",
+   "doc": "https://learn.microsoft.com/graph/api/subscription-getvapidpublickey?view=graph-rest-1.0"
+  },
+  {
+   "method": "DELETE",
+   "path": "/subscriptions/{subscription-id}",
+   "summary": "Delete subscription",
+   "doc": "https://learn.microsoft.com/graph/api/subscription-delete?view=graph-rest-1.0",
+   "headers": [
+    "If-Match"
+   ]
+  },
+  {
+   "method": "GET",
+   "path": "/subscriptions/{subscription-id}",
+   "summary": "Get subscription",
+   "doc": "https://learn.microsoft.com/graph/api/subscription-get?view=graph-rest-1.0",
+   "query": [
+    "$select"
+   ]
+  },
+  {
+   "method": "PATCH",
+   "path": "/subscriptions/{subscription-id}",
+   "summary": "Update subscription",
+   "doc": "https://learn.microsoft.com/graph/api/subscription-update?view=graph-rest-1.0"
+  },
+  {
+   "method": "POST",
+   "path": "/subscriptions/{subscription-id}/reauthorize",
+   "summary": "Invoke action reauthorize",
+   "doc": "https://learn.microsoft.com/graph/api/subscription-reauthorize?view=graph-rest-1.0"
+  },
+  {
+   "method": "GET",
    "path": "/users",
    "summary": "List users",
    "doc": "https://learn.microsoft.com/graph/api/user-list?view=graph-rest-1.0",
@@ -46601,6 +46654,100 @@
    },
    "verifiedPublisher": {
     "type": "microsoft.graph.verifiedPublisher",
+    "default": true
+   }
+  },
+  "subscription": {
+   "@odata.type": {
+    "type": "string",
+    "default": true
+   },
+   "applicationId": {
+    "type": "string",
+    "nullable": true,
+    "readOnly": true,
+    "default": true
+   },
+   "changeType": {
+    "type": "string",
+    "default": true
+   },
+   "clientState": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "creatorId": {
+    "type": "string",
+    "nullable": true,
+    "readOnly": true,
+    "default": true
+   },
+   "encryptionCertificate": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "encryptionCertificateId": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "expirationDateTime": {
+    "type": "string",
+    "default": true
+   },
+   "id": {
+    "type": "string",
+    "readOnly": true,
+    "default": true
+   },
+   "includeResourceData": {
+    "type": "boolean",
+    "nullable": true,
+    "default": true
+   },
+   "latestSupportedTlsVersion": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "lifecycleNotificationUrl": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "notificationQueryOptions": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "notificationUrl": {
+    "type": "string",
+    "default": true
+   },
+   "notificationUrlAppId": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "resource": {
+    "type": "string",
+    "default": true
+   },
+   "vapidPublicKey": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "webPushEncryptionP256dhPublicKey": {
+    "type": "string",
+    "nullable": true,
+    "default": true
+   },
+   "webPushEncryptionSecret": {
+    "type": "string",
+    "nullable": true,
     "default": true
    }
   },

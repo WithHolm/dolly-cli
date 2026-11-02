@@ -48,6 +48,8 @@ func (g groups) Register(r *Router) {
 	env := r.Env()
 	s := r.Scope("/groups", "Groups")
 	list := []string{"$select", "$top", "$filter", "$search", "$count", "$orderby"}
+	// a client can subscribe to all groups, or to one. (The members and the owners of a group are a later step.)
+	r.Subscribable(Subscribable{Pattern: "groups", Kind: "group", MaxMinutes: directoryLifetime}, Subscribable{Pattern: "groups/{id}", Kind: "group", MaxMinutes: directoryLifetime})
 
 	s.Handle("GET", "", "List the groups.", list, func(w http.ResponseWriter, req *http.Request) {
 		ServeList(w, req, env, g.b.ListGroups(), ListOptions{Filterable: true, Resource: "group", Context: "groups"})

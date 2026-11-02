@@ -22,14 +22,14 @@ import (
 )
 
 // prefixes are the paths that dolly has, or may have soon.
-var prefixes = []string{"/users", "/groups", "/servicePrincipals", "/applications", "/places", "/organization", "/oauth2PermissionGrants", "/me"}
+var prefixes = []string{"/users", "/groups", "/servicePrincipals", "/applications", "/places", "/organization", "/oauth2PermissionGrants", "/subscriptions", "/me"}
 
 // schemas are the schemas that give the properties.
 var schemas = map[string]string{
 	"user": "microsoft.graph.user", "group": "microsoft.graph.group",
 	"servicePrincipal": "microsoft.graph.servicePrincipal", "directoryObject": "microsoft.graph.directoryObject",
-	"application": "microsoft.graph.application",
-	"place":       "microsoft.graph.place", "room": "microsoft.graph.room", "roomList": "microsoft.graph.roomList",
+	"application": "microsoft.graph.application", "subscription": "microsoft.graph.subscription",
+	"place": "microsoft.graph.place", "room": "microsoft.graph.room", "roomList": "microsoft.graph.roomList",
 	"building": "microsoft.graph.building", "floor": "microsoft.graph.floor", "section": "microsoft.graph.section",
 	"desk": "microsoft.graph.desk", "workspace": "microsoft.graph.workspace",
 	"physicalAddress": "microsoft.graph.physicalAddress", "outlookGeoCoordinates": "microsoft.graph.outlookGeoCoordinates",
@@ -63,13 +63,37 @@ type extract struct {
 
 var filterText = regexp.MustCompile(`Supports \$filter \(([^)]*)\)`)
 
+// metadataRoots are the types of microsoft.graph that dollycli has, and metadataSets the entity sets and singletons of the container that it has. The OData
+// description that dollycli serves at /$metadata is made from them (csdl.go).
+var (
+	metadataRoots = []string{"entity", "directoryObject", "user", "group", "servicePrincipal", "application", "organization", "oAuth2PermissionGrant", "appRoleAssignment",
+		"place", "building", "floor", "section", "desk", "room", "workspace", "roomList", "subscription"}
+	metadataSets = []string{"users", "groups", "servicePrincipals", "applications", "organization", "oauth2PermissionGrants", "directoryObjects", "places", "subscriptions", "me"}
+)
+
 func main() {
 	in := flag.String("in", "openapi.yaml", "the OpenAPI file of Graph v1.0")
 	out := flag.String("out", "graph-v1.0.json", "the extract to write")
+	csdl := flag.String("csdl", "", "the OData description of Graph v1.0 (cleanMetadata.xml). With it, the part that dollycli serves is written to -csdl-out")
+	csdlOut := flag.String("csdl-out", "metadata-v1.0.xml", "the trimmed OData description to write")
 	flag.Parse()
 	if err := run(*in, *out); err != nil {
 		fmt.Fprintln(os.Stderr, "gen:", err)
 		os.Exit(1)
+	}
+	if *csdl != "" {
+		data, err := os.ReadFile(*csdl)
+		if err == nil {
+			var trimmed []byte
+			if trimmed, err = trimMetadata(data, metadataRoots, metadataSets); err == nil {
+				fmt.Printf("%s: %d bytes from %d\n", *csdlOut, len(trimmed), len(data))
+				err = os.WriteFile(*csdlOut, trimmed, 0o644)
+			}
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "gen:", err)
+			os.Exit(1)
+		}
 	}
 }
 

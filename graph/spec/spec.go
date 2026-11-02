@@ -20,6 +20,14 @@ import (
 //go:embed graph-v1.0.json
 var raw []byte
 
+//go:embed metadata-v1.0.xml
+var metadata []byte
+
+// Metadata is the OData description (CSDL, the XML of /$metadata) of the part of Graph that dolly serves: the types that its resources need, the navigation
+// properties between them, and the entity sets. It is made from the description of Microsoft by gen (see `make graph-spec`), with the types written
+// in full (microsoft.graph.user), as the real Graph writes them. The source is msgraph-metadata, clean_v10_metadata/cleanMetadata.xml (MIT).
+func Metadata() []byte { return metadata }
+
 // Operation is one call that Graph has.
 type Operation struct {
 	Method  string   `json:"method"`

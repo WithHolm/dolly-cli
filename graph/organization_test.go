@@ -184,7 +184,7 @@ func TestOrganization_QueriesAsGraphDoes(t *testing.T) {
 // null, another property is refused, and the change is in the history and is still there after a restart.
 func TestOrganization_Update(t *testing.T) {
 	dir := t.TempDir()
-	world, err := graph.Open(dir, graph.OpenOptions{Users: 10, Seed: 1})
+	world, err := graph.Open(dir, graph.OpenOptions{Users: 10, Seed: 1, Profile: graph.AcmeProfile()}) // the test is written for acme.example
 	if err != nil {
 		t.Fatal(err)
 	}

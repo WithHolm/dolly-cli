@@ -33,7 +33,7 @@ func admin(t *testing.T, ts *httptest.Server, method, path string, body string, 
 
 func startServer(t *testing.T, opt graph.ServerOptions) (*httptest.Server, *client, *graph.Server) {
 	t.Helper()
-	srv := graph.New(graph.Generate(graph.Options{Users: 200, Seed: 5}), opt)
+	srv := graph.New(graph.Generate(graph.Options{Users: 200, Seed: 5, Profile: graph.AcmeProfile()}), opt) // the tests are written for Acme: Sales, grp.app.acme.main
 	ts := httptest.NewServer(srv.Handler())
 	t.Cleanup(ts.Close)
 	return ts, &client{BaseURL: ts.URL + graph.BasePath}, srv

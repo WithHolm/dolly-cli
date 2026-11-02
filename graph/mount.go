@@ -26,10 +26,17 @@ func (s *Server) mountAPI() {
 		api.OAuth2PermissionGrants(s.world),
 		api.Places(s.world),
 		api.Organization(s.world),
+		api.Subscriptions(subscriptions{s}),
 	)
+	s.startNotifier(router.Subscribables()) // after the resources: they say what can be subscribed to
 	s.endpoints = router.Endpoints()
 	s.endpoints = append(s.endpoints, meEndpoints(s.endpoints)...)
 
+	s.mux.HandleFunc("GET "+metadataPath, s.metadata)
+	s.endpoints = append(s.endpoints, Endpoint{
+		Method: http.MethodGet, Path: metadataPath, Area: "Metadata",
+		Summary: "The OData description of the API (CSDL, XML): the types, the navigation properties, and the entity sets that dollycli has. It needs no token.",
+	})
 	s.mux.HandleFunc("POST "+BasePath+"/$batch", s.batch)
 	s.endpoints = append(s.endpoints, Endpoint{
 		Method: http.MethodPost, Path: BasePath + "/$batch", Area: "Batch",

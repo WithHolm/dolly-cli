@@ -68,10 +68,11 @@ type Endpoint struct {
 // operations. The table of operations and the routes of the server are the same
 // thing, so the list cannot differ from what is served.
 type Router struct {
-	mux       *http.ServeMux
-	base      string
-	env       Env
-	endpoints []Endpoint
+	mux           *http.ServeMux
+	base          string
+	env           Env
+	endpoints     []Endpoint
+	subscribables []Subscribable // what a client can subscribe to (subscriptions.go)
 }
 
 // NewRouter makes a router for the paths under base (for example /v1.0).

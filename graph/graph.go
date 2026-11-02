@@ -14,6 +14,8 @@ type (
 	Options = repo.Options
 	// Event is one change in the history.
 	Event = repo.Event
+	// ChangeEvent says that an object changed (World.OnChange).
+	ChangeEvent = repo.ChangeEvent
 	// State is a short account of the world.
 	State = repo.State
 	// ValueCount is a value and how many users have it.
@@ -26,8 +28,11 @@ type (
 	ProfilePreview = repo.ProfilePreview
 )
 
-// DefaultProfile is the tenant that dollycli makes when it is given no profile.
+// DefaultProfile is the tenant that dollycli makes when it is given no profile: Fjordvik, a made-up Norwegian energy company.
 func DefaultProfile() *Profile { return repo.DefaultProfile() }
+
+// AcmeProfile is Acme Corporation, the tenant that dollycli made before Fjordvik was the default. A seed with no profile in it was made from it.
+func AcmeProfile() *Profile { return repo.AcmeProfile() }
 
 // ParseProfile reads a profile from JSON, and checks it.
 var ParseProfile = repo.ParseProfile

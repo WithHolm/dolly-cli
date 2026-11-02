@@ -31,8 +31,8 @@ func TestSpec_EveryRouteIsInGraph(t *testing.T) {
 	srv := graph.New(graph.NewMemory(graph.Options{Users: 5, Seed: 1}), graph.ServerOptions{})
 	endpoints, _ := srv.API()
 	for _, e := range endpoints {
-		if e.Area == "Batch" {
-			continue // /$batch is in the root of Graph, not under a resource
+		if e.Area == "Batch" || e.Area == "Metadata" {
+			continue // /$batch and /$metadata are in the root of Graph, not under a resource
 		}
 		// The description writes the type cast of a collection as
 		// /members/{id}/graph.user. The Learn page "List group members" documents

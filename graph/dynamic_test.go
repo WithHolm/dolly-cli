@@ -243,7 +243,7 @@ func TestDynamic_DirectReports(t *testing.T) {
 // members that it had when it was paused.
 func TestDynamic_SurvivesARestartAndARollback(t *testing.T) {
 	dir := t.TempDir()
-	opt := graph.OpenOptions{Users: 60, Seed: 3, Now: func() time.Time { return time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC) }}
+	opt := graph.OpenOptions{Users: 60, Seed: 3, Profile: graph.AcmeProfile(), Now: func() time.Time { return time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC) }}
 	w, err := graph.Open(dir, opt)
 	if err != nil {
 		t.Fatal(err)

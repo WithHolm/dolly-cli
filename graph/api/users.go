@@ -46,6 +46,8 @@ func (u users) Register(r *Router) {
 	env := r.Env()
 	s := r.Scope("/users", "Users")
 	list := []string{"$select", "$top", "$filter", "$search", "$count", "$orderby", "$expand"}
+	// a client can subscribe to all users, or to one (Learn: Supported resources)
+	r.Subscribable(Subscribable{Pattern: "users", Kind: "user", MaxMinutes: directoryLifetime}, Subscribable{Pattern: "users/{id}", Kind: "user", MaxMinutes: directoryLifetime})
 
 	s.Handle("GET", "", "List the users. $expand adds the manager or the direct reports of each user.", list, func(w http.ResponseWriter, req *http.Request) {
 		items := u.b.ListUsers()
