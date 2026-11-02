@@ -38,6 +38,21 @@ test("headings from level 4", () => {
   assert.equal(render("#### Detail\ntext"), "<h4>Detail</h4>\n<p>text</p>");
 });
 
+test("a table: a header, a line of dashes, and rows; a | in code or after a backslash is text", () => {
+  assert.equal(
+    render("Before.\n\n| Resource | Notifies when |\n|---|:-:|\n| `users` | any <user> |\n| `a|b` | one \\| two |\n\nAfter."),
+    "<p>Before.</p>\n" +
+      "<table><thead><tr><th>Resource</th><th>Notifies when</th></tr></thead><tbody>" +
+      "<tr><td><code>users</code></td><td>any &lt;user&gt;</td></tr>" +
+      "<tr><td><code>a|b</code></td><td>one | two</td></tr></tbody></table>\n" +
+      "<p>After.</p>",
+  );
+});
+
+test("a line with a | and no line of dashes under it is a paragraph", () => {
+  assert.equal(render("a | b\nc"), "<p>a | b c</p>");
+});
+
 test("an empty text is empty", () => {
   assert.equal(render(""), "");
   assert.equal(render("\n\n"), "");

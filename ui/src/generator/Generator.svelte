@@ -2,7 +2,7 @@
   import { graph } from "../lib/api";
   import { route } from "../lib/route.svelte";
   import { notices as notice } from "../lib/notice.svelte";
-  import norwayText from "../../../docs/profiles/norway.json?raw";
+  import acmeText from "../../../graph/repo/profiles/acme-english.json?raw";
   import type { Profile } from "./profile";
   import { wiz } from "./state.svelte";
   import StepAdmin from "./StepAdmin.svelte";
@@ -39,10 +39,10 @@
     return wiz.schedule(JSON.stringify(wiz.body()));
   });
 
-  async function start(kind: "default" | "current" | "norway") {
+  async function start(kind: "default" | "current" | "acme") {
     try {
       const profile =
-        kind === "norway" ? (JSON.parse(norwayText) as Profile) : await graph.get<Profile>(kind === "current" ? "/profile/current" : "/profile/default");
+        kind === "acme" ? (JSON.parse(acmeText) as Profile) : await graph.get<Profile>(kind === "current" ? "/profile/current" : "/profile/default");
       wiz.start(profile);
       route.go("generator", "organization");
     } catch (e) {
@@ -121,8 +121,8 @@
       <h3>Start from</h3>
       <div class="cards">
         <button class="card" onclick={() => start("current")}><strong>The current data</strong><span class="muted">The profile this data was made from. Change it, and regenerate.</span></button>
-        <button class="card" onclick={() => start("default")}><strong>The default</strong><span class="muted">Acme, with Nordic offices. What dollycli makes with no profile.</span></button>
-        <button class="card" onclick={() => start("norway")}><strong>Fjordvik (Norway)</strong><span class="muted">An energy company with six Norwegian offices, Norwegian names, and admin accounts named adm.&lt;first name&gt;.</span></button>
+        <button class="card" onclick={() => start("default")}><strong>The default: Fjordvik</strong><span class="muted">An energy company with six Norwegian offices, Norwegian names, and admin accounts named adm.&lt;first name&gt;. What dollycli makes with no profile.</span></button>
+        <button class="card" onclick={() => start("acme")}><strong>Acme (English)</strong><span class="muted">A company with six offices in the US, UK, Ireland, Canada, and Australia. English names and titles. Start here if you are not Norwegian.</span></button>
         <div class="card file">
           <strong>A file</strong><span class="muted">A profile you saved before (JSON).</span>
           <label class="btn">Choose a file<input type="file" accept=".json,application/json" onchange={open} hidden /></label>

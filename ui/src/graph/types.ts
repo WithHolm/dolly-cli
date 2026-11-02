@@ -296,6 +296,38 @@ export interface ServicePrincipal {
   application?: string;
 }
 
+/** A subscription to change notifications (/subscriptions). */
+export interface Subscription {
+  id: string;
+  resource: string;
+  changeType: string;
+  notificationUrl: string;
+  clientState: string | null;
+  expirationDateTime: string;
+  applicationId: string | null;
+}
+
+/** A resource that a client can subscribe to: a path such as users or groups/{id}, and how long a subscription can last. */
+export interface SubscribableResource {
+  pattern: string;
+  kind: string;
+  maxMinutes: number;
+}
+
+/** One change notification that dollycli sent, and what came back. Status 0: no answer. */
+export interface Delivery {
+  time: string;
+  subscriptionId: string;
+  resource: string;
+  changeType: string;
+  url: string;
+  status: number;
+  millis: number;
+  error?: string;
+  /** What was sent (JSON). */
+  body: string;
+}
+
 /** An app registration of this tenant (/applications). */
 export interface AppRegistration {
   id: string;
@@ -325,6 +357,8 @@ export interface Behavior {
   unauthorized: boolean;
   pageSize: number;
   throttle: boolean;
+  /** The share of change notifications that are sent 2 to 4 times, with the same message. */
+  duplicatePercent: number;
 }
 
 export type Kind = "delegated" | "application";

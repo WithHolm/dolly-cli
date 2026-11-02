@@ -8,7 +8,7 @@ export default defineConfig({
   base: "./",
   build: { outDir: "dist", emptyOutDir: true },
   server: {
-    fs: { allow: [".."] }, // the generator reads the Norway example from docs/profiles
+    fs: { allow: [".."] }, // the generator reads the English Acme example from graph/repo/profiles
     proxy: {
       "/_dolly": "http://127.0.0.1:8650",
       "/v1.0": "http://127.0.0.1:8650",

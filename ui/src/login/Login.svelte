@@ -118,7 +118,7 @@
   ];
   // The admin account of the owner. The profile of the data says how it is named (a.philip, adm.philip, and so on), and the server gives
   // the name. Data that was made before it has no such user, and then the example user is used.
-  let adminUser = $state("a.philip@acme.example");
+  let adminUser = $state("adm.philip@fjordvik.example");
   $effect(() => {
     if (!info?.adminUser) return;
     const upn = info.adminUser;

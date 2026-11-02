@@ -1,6 +1,6 @@
 // A small markdown renderer for the documentation files. It makes HTML for {@html}, so it escapes every
 // character of the text first: a file cannot add a tag. It knows what the files use:
-// paragraphs, lists, code blocks, headings from level 4, and in a line: `code`, **bold**, *italic*, and
+// paragraphs, lists, tables, code blocks, headings from level 4, and in a line: `code`, **bold**, *italic*, and
 // [links](https://…). A link must be http, https, or an address in this page (#…).
 
 const escapes: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
@@ -24,6 +24,33 @@ function inline(text: string): string {
     .replace(/(^|[^*\w])\*([^*\s][^*]*)\*(?![*\w])/g, "$1<em>$2</em>");
   return s.replace(/\u0000(\d+)\u0000/g, (_, i: string) => `<code>${code[Number(i)]}</code>`);
 }
+
+/** cells splits a row of a table. A | in `code` or after a backslash is text. */
+function cells(row: string): string[] {
+  const out: string[] = [];
+  let cur = "";
+  let inCode = false;
+  for (let i = 0; i < row.length; i++) {
+    const c = row[i];
+    if (c === "\\" && row[i + 1] === "|") {
+      cur += "|";
+      i++;
+    } else if (c === "`") {
+      inCode = !inCode;
+      cur += c;
+    } else if (c === "|" && !inCode) {
+      out.push(cur.trim());
+      cur = "";
+    } else cur += c;
+  }
+  out.push(cur.trim());
+  // the | at the start and at the end of a row make an empty part: not a cell
+  if (row.trim().startsWith("|")) out.shift();
+  if (row.trim().endsWith("|") && !row.trim().endsWith("\\|")) out.pop();
+  return out;
+}
+
+const isDashes = (line: string | undefined) => !!line && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(line) && line.includes("|");
 
 /** render turns markdown into HTML. */
 export function render(md: string): string {
@@ -49,6 +76,18 @@ export function render(md: string): string {
       const body: string[] = [];
       for (i++; i < lines.length && !lines[i].trim().startsWith("```"); i++) body.push(lines[i]);
       out.push(`<pre><code>${escape(body.join("\n"))}</code></pre>`);
+      continue;
+    }
+    // a table: a row with a |, and under it a line of dashes
+    if (line.includes("|") && isDashes(lines[i + 1])) {
+      endPara();
+      endList();
+      const row = (tag: "th" | "td", cs: string[]) => `<tr>${cs.map((c) => `<${tag}>${inline(c)}</${tag}>`).join("")}</tr>`;
+      const head = cells(line);
+      const body: string[] = [];
+      for (i += 2; i < lines.length && lines[i].trim() && lines[i].includes("|"); i++) body.push(row("td", cells(lines[i])));
+      i--; // the line after the table is read by the loop
+      out.push(`<table><thead>${row("th", head)}</thead><tbody>${body.join("")}</tbody></table>`);
       continue;
     }
     const item = /^\s*(?:([-*])|(\d+)\.)\s+(.*)$/.exec(line);
