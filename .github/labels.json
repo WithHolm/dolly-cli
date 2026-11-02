@@ -12,7 +12,7 @@
   {
     "name": "caveat",
     "color": "fbca04",
-    "description": "Dolly answers differently than the real Graph"
+    "description": "Dolly answers differently than the real Graph or real Graph has a quirk that we should emulate"
   },
   {
     "name": "resource",
