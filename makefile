@@ -1,4 +1,4 @@
-.PHONY: build release test ui ui-dev dev compat graph-spec update-cost update-query update-permissions
+.PHONY: build release tag test ui ui-dev dev compat graph-spec update-cost update-query update-permissions
 
 build:
 	@go build -o bin/dolly ./cmd/dolly
@@ -6,6 +6,10 @@ build:
 # A release build: make release VERSION=1.2.3. It has no --docs flag.
 release:
 	@go build -ldflags "-X main.version=$(VERSION)" -o bin/dolly ./cmd/dolly
+
+# Tag HEAD with the next semver tag (asks major, minor, or patch). See docs/release.md.
+tag:
+	@scripts/tag.sh
 
 serve: ui
 	@go run ./cmd/dolly serve

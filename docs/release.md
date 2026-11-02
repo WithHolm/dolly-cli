@@ -6,12 +6,14 @@ A release is the program for Linux, macOS, and Windows (amd64 and arm64), on the
 
 1. Check that the portal is current. The program has `ui/dist` built in, and a release build does not run Node. After a change in `ui/src`, run `make ui` and commit `ui/dist`.
 2. Run `go test ./...`.
-3. Tag the commit and push the tag:
+3. Tag the commit and push the tag. [scripts/tag.sh](../scripts/tag.sh) asks for major, minor, or patch, tags the latest commit (`HEAD`, pushed or not) with the next version, and prints the push command:
 
 ```
-git tag v1.2.3
+make tag
 git push origin v1.2.3
 ```
+
+   By hand, it is `git tag v1.2.3` and the same push.
 
 The tag starts the workflow [release.yml](../.github/workflows/release.yml). It runs the Go tests, builds every archive, and makes the release with the checksums and the changelog. A tag such as `v1.2.3-rc1` makes a pre-release.
 
