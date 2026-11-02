@@ -12,6 +12,8 @@ As a server:
 The Graph address is `http://127.0.0.1:8650/v1.0`. Any token works. The portal is at
 `http://127.0.0.1:8650/`, with a page for each API. The admin API of Graph is at `/_dolly/graph/`. Settings are flags or env (`DOLLY_DIR`, `DOLLY_PORT`, `DOLLY_USERS`,
 `DOLLY_SEED`, `DOLLY_PAGE_SIZE`). The Graph data is in `dolly-data/graph/`: `seed.json`, `state.jsonl`, and `.lock`.
+
+**If port 8650 is busy**, dollycli stops with `address already in use` and exit code 1. It does not pick another port, because the tools that you point at it have a fixed address. Use `--port 8651` (or `DOLLY_PORT`). The port is tried first, so a failed start leaves no data folder behind. If another dollycli runs on the same data folder, the message names its process and its address, and says to stop it or point your tool at that address (delete `dolly-data/graph/.lock` only if no dollycli runs).
 In a second terminal: `dolly graph show | rename | move | reset | history | rollback | generate`.
 
 As a package, for tests:
@@ -62,13 +64,29 @@ Granted permissions are saved and shown in Graph. They do not decide a call yet.
 
 ## The data
 
-`--users N` makes N fake people. One of them is always **Philip Meholm** (`philip.meholm@acme.example`), a *Tech Lead* in
-Engineering: the last user of the seed. The examples of the portal use this user, and a tool that signs in as a user can
+The default tenant is **Fjordvik**, a made-up Norwegian energy company (`fjordvik.example`): see [profiles](profile.md). A data folder that was made before keeps its
+old seed, which was Acme (`acme.example`), and dollycli reads it as Acme.
+
+`--users N` makes N fake people. One of them is always **Philip Meholm** (`philip.meholm@fjordvik.example`), an *Identitetsarkitekt* in
+*IT og digitalisering*: the last user of the seed. (In Acme he is a *Tech Lead* in Engineering: the profile says.) The examples of the portal use this user, and a tool that signs in as a user can
 use them too. The address is fake. The other users of a seed are the same with or without this user. Data in a folder
 that was made before keeps its old seed: use a new `--dir`, or delete `dolly-data/graph`, to get the new one.
 
-The user before the last is the admin account of Philip Meholm: `a.philip@acme.example` (*Philip (admin)*, Administrator, IT). The quick
+The user before the last is the admin account of Philip Meholm: `adm.philip@fjordvik.example` (*Philip (adm)*, Administrator, IT og digitalisering). The quick
 connect for PowerShell signs in as this user. A seed of one user has the owner only.
+
+The user before the admin account is **Nora Helmer** (`nora.helmer@fjordvik.example`), a member of the tenant, from Ibsen's *A Doll's House*. The address uses the domain of the profile. She keeps the
+department and the job title that the seed gave that user. A seed of fewer than three users has no room for her. Like the owner, she draws nothing from the random numbers.
+
+Three more people from the play are there when there is room, as the users four, five, and six from the end (a seed of four users has Torvald, five has Nils too, six has Dr. Rank too):
+
+| Person | Address | What they are |
+|---|---|---|
+| **Torvald Helmer** | `torvald.helmer@<domain>` | Nora's boss, in her department and office. He has the title of that department that says that someone leads (*Salgsleder* at Fjordvik, *Sales Manager* at Acme), when it has one. He keeps the manager he got from the tree. |
+| **Nils Krogstad** | `nils.krogstad@<domain>` | A colleague of Nora: the same department and office. His account is **disabled**. Torvald is his manager too. |
+| **Dr. Rank** | `dr.rank_<guest domain>#EXT#@<initial domain>` | A **guest**, invited and accepted, as a generated guest is. He has no manager. |
+
+They are made after the users and before the manager tree and the groups, so the department and office groups agree with them. The links to Torvald are set after the tree is made, and a loop is checked for: if Torvald's own manager chain reaches Nora or Nils, Torvald has no manager. Like the owner, they draw nothing from the random numbers.
 
 ## Where the data of Microsoft comes from
 
@@ -81,6 +99,6 @@ with the commit, the date, and a hash of each file.
 | Query rules (see [query rules](query-rules.md)) | `microsoftgraph/microsoft-graph-docs-contrib` | `make update-query` |
 | The list of permissions ([graph/permissions](../graph/permissions/README.md)) | `microsoftgraph/microsoft-graph-devx-content` | `make update-permissions` |
 | The permissions that each call needs ([graph/permissions/operations](../graph/permissions/operations/README.md)) | `microsoftgraph/microsoft-graph-docs-contrib` | `make update-operation-permissions` |
-| Routes and properties of Graph (`graph/spec`) | `microsoftgraph/msgraph-metadata` | `make graph-spec` |
+| Routes and properties of Graph (OpenAPI), and the OData description of the types ([graph/spec](../graph/spec/README.md)). The second is served at `/v1.0/$metadata`. | `microsoftgraph/msgraph-metadata` | `make graph-spec` |
 
 The data of `docs-contrib` is CC BY 4.0. The data of the other two repositories is MIT licensed.

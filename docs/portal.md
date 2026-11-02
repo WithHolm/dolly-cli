@@ -52,7 +52,7 @@ minute to 24 hours. It is gone when dollycli stops, and `DELETE /_dolly/graph/us
 that are counted together as `other`.
 
 The page *Generator* (next to *Sign-in* in the bar) is a wizard for a [profile](profile.md). You start from the current data (the profile that
-it was made from), the default, Fjordvik (the example in [profiles/norway.json](profiles/norway.json)), or a file. Then you go through these steps:
+it was made from), the default (Fjordvik, [fjordvik.json](../graph/repo/profiles/fjordvik.json)), Acme (English, for people who are not Norwegian, [acme-english.json](../graph/repo/profiles/acme-english.json)), or a file. Then you go through these steps:
 
 - *Organization*: the display name and the tenant name are enough. The initial domain follows the tenant name, and the country sets the usage
   location, the language, and the phone code. "+ Domain" adds a domain. A radio marks the default domain, and the bars say how often a domain is used

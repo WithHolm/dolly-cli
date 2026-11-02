@@ -1,6 +1,6 @@
 # Profiles
 
-A profile is a JSON file that says what the generated tenant looks like. Without one, dollycli makes the default tenant: Acme, with Nordic offices. With one, it can make a Norwegian energy company, a small clinic, or your own company with made-up people.
+A profile is a JSON file that says what the generated tenant looks like. Without one, dollycli makes the default tenant: Fjordvik, a made-up Norwegian energy company. With one, it can make another company, a small clinic, or your own company with made-up people.
 
 The same profile and the same `--seed` make the same data every time.
 
@@ -27,12 +27,19 @@ A running dollycli can take a profile too. The page *Generator* of the portal do
 ## The data keeps its profile
 
 When a profile is given, `seed.json` keeps it (the field `profile`). A restart, a reset, and a new generation with no profile use it. Data from the
-default profile has no such field, so its seed is the same as before profiles. Data from before profiles has none either, and `GET /_dolly/profile/current`
-then gives the default profile.
+default profile has it too (Fjordvik). A seed that has **no** profile field was made before Fjordvik became the default: it was made from Acme, and dollycli reads it as Acme.
+`GET /_dolly/profile/current` gives Acme for it, a reset and a new generation from it make Acme again, and its admin account is `a.philip@acme.example`. A data folder that
+you made earlier keeps working as it was.
 
-## The Norway example
+## The profiles in the program
 
-[profiles/norway.json](profiles/norway.json) is a made-up Norwegian company, Fjordvik, with six offices, Norwegian names, titles, and groups, `+47` phone numbers, and admin accounts named `adm.<first name>`. Use it as a start.
+They are in [graph/repo/profiles](../graph/repo/profiles), and every one is a valid profile to start from. A test checks that each one is valid and makes the same data twice.
+
+- [fjordvik.json](../graph/repo/profiles/fjordvik.json) is the **default**: a made-up Norwegian energy company with six offices, Norwegian names, titles, and groups, `+47` phone numbers, and admin accounts named `adm.<first name>` (`adm.philip@fjordvik.example`). The owner's title is *Identitetsarkitekt*.
+- [acme-english.json](../graph/repo/profiles/acme-english.json) is **Acme (English)**, for people who are not Norwegian: a made-up company with six offices in New York, Austin, London, Dublin, Toronto, and Sydney, English names and titles, English languages (`en-US`, `en-GB`, `en-AU`, `en-CA`), `acme.example`, the owner as *Tech Lead* in Engineering, and admin accounts named `a.<first name>` (`a.philip@acme.example`). It is the card *Acme (English)* in the *Generator* of the portal.
+- [acme.json](../graph/repo/profiles/acme.json) is Acme with Nordic offices and Swedish names, the tenant that dollycli made before Fjordvik. It is in the program because a seed with no profile in it is read as this one. A test holds that it makes exactly the data that the old default made. It is not in the wizard.
+
+`dolly profile default > mine.json` prints Fjordvik. For Acme (English), use the card in the wizard, or copy [acme-english.json](../graph/repo/profiles/acme-english.json).
 
 ## The format
 
@@ -78,17 +85,17 @@ An organization names its admin accounts in its own way. `admin.userPrincipalNam
 
 | Pattern | Account |
 |---|---|
-| `a.{first}` (default) | `a.philip@acme.example` |
-| `adm.{first}` | `adm.philip@acme.example` |
-| `{first}.a.{last}` | `philip.a.meholm@acme.example` |
-| `{first}.{last}.adm` | `philip.meholm.adm@acme.example` |
+| `a.{first}` (Acme) | `a.philip@acme.example` |
+| `adm.{first}` (Fjordvik, the default) | `adm.philip@fjordvik.example` |
+| `{first}.a.{last}` | `philip.a.meholm@fjordvik.example` |
+| `{first}.{last}.adm` | `philip.meholm.adm@fjordvik.example` |
 
 The pattern must have `{first}` or `{last}`, and no spaces. The quick connect on the sign-in page and `/pwsh` use this account.
 
 ## Checked and not checked
 
-- The default profile makes the same bytes as dollycli made before profiles. A test holds the hashes for four sizes.
-- The limits, the pattern language, the admin names, the Norway world, preview, and replace (in a folder and in memory) have tests.
+- The profile `acme.json` makes the same bytes as dollycli made before Fjordvik (and before profiles). A test holds the hashes for four sizes, and so does one for Fjordvik, the default now.
+- The limits, the pattern language, the admin names, the Norwegian world, preview, replace (in a folder and in memory), and the reading of a seed with no profile as Acme have tests.
 - Not checked against the real Graph: a profile is a dollycli feature. The data it makes follows the same shapes as before.
-- The wizard in the portal (page *Generator*, see [the portal](portal.md)) was opened in a browser: Norway as the start, the steps, the preview, and making the data. A test holds the helpers of the editor.
+- The wizard in the portal (page *Generator*, see [the portal](portal.md)) was opened in a browser (with Norway, which is now the default, as the start): the steps, the preview, and making the data. A test holds the helpers of the editor.
 - Not done yet: a tool that reads a profile from a real tenant.

@@ -39,7 +39,7 @@ A call that fails answers as Entra does: `error`, `error_codes`, and `AADSTS` nu
 
 ## Microsoft Graph PowerShell
 
-One line connects it, as the admin account `a.philip@acme.example`: `iwr 'http://127.0.0.1:8650/pwsh' | iex`.
+One line connects it, as the admin account `adm.philip@fjordvik.example` (`a.philip@acme.example` in data that was made with Acme): `iwr 'http://127.0.0.1:8650/pwsh' | iex`.
 dollycli gives three lines at `/pwsh`. They run `Add-MgEnvironment -Name Dolly -AzureADEndpoint <address> -GraphEndpoint <address>`, get a token from
 `/jwtToken?hint=<user principal name or object ID>`, and run `Connect-MgGraph -Environment Dolly -AccessToken ...` with it. `/pwsh?user=` sets another user.
 The token is good for ten years, and it has a message in its claims. The page *Sign-in* has the lines to copy.

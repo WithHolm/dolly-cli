@@ -24,7 +24,10 @@ Some steps are for a **stored** resource only (one that can be made, changed, or
 
 1. **The spec.** Add the path prefix (and the schema names of its objects) to [graph/spec/gen/main.go](../graph/spec/gen/main.go), run `make graph-spec`,
    and read the operations and properties that come out. The spec lacks the alternate keys, such as `applications(appId='…')`, and it lists more than the
-   service does (it has `$orderby` on `/organization`, which the real Graph refuses).
+   service does (it has `$orderby` on `/organization`, which the real Graph refuses). There are two descriptions, see [graph/spec](../graph/spec/README.md): the OpenAPI
+   one (routes, summaries, properties) and the **OData** one (CSDL: the types and their base types, the navigation properties between them, containment, the entity sets). Read
+   the OData one for step 3: it says what a resource relates to. Add the names of the new types to `metadataRoots`, and of the new entity sets to `metadataSets`, in `gen/main.go`:
+   dollycli serves that description at `/v1.0/$metadata`, and a test checks it.
 2. **The documentation.** Read the Learn pages of each call (at the commit of [SOURCE.json](../graph/cost/raw/SOURCE.json)), and ask the real Graph through the
    proxy of Graph Explorer (GET only, see [CLAUDE.md](../CLAUDE.md)): the properties, the error texts, the paging, the headers. Write down what each behavior is:
    *checked* (and where), or *guess*. A write cannot be tried on the real Graph, so it is a guess unless a page says it.
