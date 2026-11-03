@@ -22,7 +22,7 @@ import (
 )
 
 // prefixes are the paths that dolly has, or may have soon.
-var prefixes = []string{"/users", "/groups", "/servicePrincipals", "/applications", "/places", "/organization", "/oauth2PermissionGrants", "/subscriptions", "/me"}
+var prefixes = []string{"/users", "/groups", "/servicePrincipals", "/applications", "/places", "/organization", "/oauth2PermissionGrants", "/subscriptions", "/sites", "/drives", "/me"}
 
 // schemas are the schemas that give the properties.
 var schemas = map[string]string{
@@ -35,6 +35,10 @@ var schemas = map[string]string{
 	"physicalAddress": "microsoft.graph.physicalAddress", "outlookGeoCoordinates": "microsoft.graph.outlookGeoCoordinates",
 	"organization": "microsoft.graph.organization", "verifiedDomain": "microsoft.graph.verifiedDomain",
 	"oAuth2PermissionGrant": "microsoft.graph.oAuth2PermissionGrant", "appRoleAssignment": "microsoft.graph.appRoleAssignment",
+	"site": "microsoft.graph.site", "siteCollection": "microsoft.graph.siteCollection", "drive": "microsoft.graph.drive",
+	"baseItem": "microsoft.graph.baseItem", "root": "microsoft.graph.root", "sharepointIds": "microsoft.graph.sharepointIds",
+	"driveItem": "microsoft.graph.driveItem", "itemReference": "microsoft.graph.itemReference", "folder": "microsoft.graph.folder",
+	"file": "microsoft.graph.file", "fileSystemInfo": "microsoft.graph.fileSystemInfo", "quota": "microsoft.graph.quota",
 }
 
 type operation struct {
@@ -67,8 +71,9 @@ var filterText = regexp.MustCompile(`Supports \$filter \(([^)]*)\)`)
 // description that dollycli serves at /$metadata is made from them (csdl.go).
 var (
 	metadataRoots = []string{"entity", "directoryObject", "user", "group", "servicePrincipal", "application", "organization", "oAuth2PermissionGrant", "appRoleAssignment",
-		"place", "building", "floor", "section", "desk", "room", "workspace", "roomList", "subscription"}
-	metadataSets = []string{"users", "groups", "servicePrincipals", "applications", "organization", "oauth2PermissionGrants", "directoryObjects", "places", "subscriptions", "me"}
+		"place", "building", "floor", "section", "desk", "room", "workspace", "roomList", "subscription",
+		"baseItem", "site", "drive", "siteCollection", "root", "sharepointIds", "driveItem", "itemReference", "folder", "file", "fileSystemInfo", "quota"}
+	metadataSets = []string{"users", "groups", "servicePrincipals", "applications", "organization", "oauth2PermissionGrants", "directoryObjects", "places", "subscriptions", "sites", "drives", "me"}
 )
 
 func main() {

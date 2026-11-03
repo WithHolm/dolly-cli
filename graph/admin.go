@@ -98,6 +98,7 @@ func (s *Server) adminRoutes() {
 	a.HandleFunc("GET /applications", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{"applications": s.world.ListApplicationInfo()})
 	})
+	s.adminSiteRoutes() // the sites and their drives (admin_sites.go)
 	a.HandleFunc("PUT /service-principals/{appId}/mode", s.adminSetServicePrincipalMode)
 	a.HandleFunc("PUT /service-principals/{appId}/flags", s.adminSetServicePrincipalFlags)
 	a.HandleFunc("POST /service-principals/{appId}/credential/arm", func(w http.ResponseWriter, r *http.Request) {

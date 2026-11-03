@@ -31,6 +31,12 @@ type World struct {
 	// lists (places.go). RoomListMembersOf gives the IDs of the rooms and workspaces
 	// of each room list, by the lowercase ID of the room list.
 	Places []Object `json:"places,omitempty"`
+	// Sites are the SharePoint sites, and Drives the document libraries on them (sites.go).
+	Sites  []*Site  `json:"sites,omitempty"`
+	Drives []*Drive `json:"drives,omitempty"`
+	// Items are the folders and files on the drives (drive_items.go). blobs holds the content of the files when dollycli has no data folder.
+	Items []*Item `json:"items,omitempty"`
+	blobs map[string][]byte
 	// Organization is the tenant (organization.go).
 	Organization      Object              `json:"organization,omitempty"`
 	RoomListMembersOf map[string][]string `json:"roomListMembers,omitempty"`
@@ -51,6 +57,10 @@ type World struct {
 	sps     map[string]*ServicePrincipal
 	byAppID map[string]*ServicePrincipal // by the lowercase application (client) ID
 	places  map[string]Object
+	// the sites and the drives, by the lowercase ID
+	sitesByID  map[string]*Site
+	drivesByID map[string]*Drive
+	itemsByID  map[string]*Item
 	// the applications, by the lowercase object ID and by the lowercase appId
 	apps        map[string]Object
 	appsByAppID map[string]Object
@@ -79,6 +89,7 @@ func (w *World) index() {
 	for _, p := range w.Places {
 		w.places[strings.ToLower(str(p["id"]))] = p
 	}
+	w.indexSites()
 	w.sps = make(map[string]*ServicePrincipal, len(w.SPs))
 	w.byAppID = make(map[string]*ServicePrincipal, len(w.SPs))
 	for _, s := range w.SPs {
@@ -100,6 +111,7 @@ func (w *World) replaceWith(o *World) {
 	w.Seed, w.Users, w.Groups, w.SPs, w.Assignments, w.Managers = o.Seed, o.Users, o.Groups, o.SPs, o.Assignments, o.Managers
 	w.Grants, w.Applications = o.Grants, o.Applications
 	w.Places, w.RoomListMembersOf, w.Organization = o.Places, o.RoomListMembersOf, o.Organization
+	w.Sites, w.Drives, w.Items = o.Sites, o.Drives, o.Items
 	w.Admin = o.Admin
 	w.Profile = o.Profile
 	w.index()

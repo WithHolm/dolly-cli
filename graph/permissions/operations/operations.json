@@ -105,6 +105,209 @@
         ]
       }
     },
+    "drive-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.Read"
+        ],
+        "higher": [
+          "Files.Read.All",
+          "Files.ReadWrite",
+          "Files.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All",
+          "User.Read"
+        ]
+      },
+      "application": {
+        "notSupported": true
+      }
+    },
+    "drive-list": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.Read"
+        ],
+        "higher": [
+          "Files.Read.All",
+          "Files.ReadWrite",
+          "Files.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Files.Read.All"
+        ],
+        "higher": [
+          "Files.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "driveitem-delete": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.ReadWrite"
+        ],
+        "higher": [
+          "Files.ReadWrite.All",
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Files.ReadWrite.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "driveitem-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.Read"
+        ],
+        "higher": [
+          "Files.ReadWrite",
+          "Files.Read.All",
+          "Files.ReadWrite.All",
+          "Group.Read.All",
+          "Group.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Files.Read.All"
+        ],
+        "higher": [
+          "Files.ReadWrite.All",
+          "Group.Read.All",
+          "Group.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "driveitem-get-content": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.Read"
+        ],
+        "higher": [
+          "Files.ReadWrite",
+          "Files.Read.All",
+          "Files.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Files.Read.All"
+        ],
+        "higher": [
+          "Files.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "driveitem-list-children": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.Read"
+        ],
+        "higher": [
+          "Files.ReadWrite",
+          "Files.Read.All",
+          "Files.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Files.Read.All"
+        ],
+        "higher": [
+          "Files.ReadWrite.All",
+          "Sites.Read.All",
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "driveitem-post-children": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.ReadWrite"
+        ],
+        "higher": [
+          "Files.ReadWrite.All",
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Files.ReadWrite.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "driveitem-put-content": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.ReadWrite"
+        ],
+        "higher": [
+          "Files.ReadWrite.All",
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Files.ReadWrite.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "driveitem-update": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Files.ReadWrite"
+        ],
+        "higher": [
+          "Files.ReadWrite.All",
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Files.ReadWrite.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
     "group-delete": {
       "table": true,
       "delegated": {
@@ -1044,6 +1247,93 @@
           "AgentIdentity.ReadWrite.All",
           "Application.ReadWrite.All",
           "Directory.ReadWrite.All"
+        ]
+      }
+    },
+    "site-get": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Sites.Read.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Sites.Read.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "site-getallsites": {
+      "table": true,
+      "delegated": {
+        "notSupported": true
+      },
+      "application": {
+        "least": [
+          "Sites.Read.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
+        ]
+      }
+    },
+    "site-list": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "scenario": "List all site collections",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Sites.Read.All"
+            ],
+            "higher": [
+              "Sites.ReadWrite.All"
+            ]
+          }
+        },
+        {
+          "scenario": "Discover the home site for each geography",
+          "delegated": {
+            "notSupported": true
+          },
+          "application": {
+            "least": [
+              "Sites.Read.All"
+            ],
+            "higher": [
+              "Sites.ReadWrite.All"
+            ]
+          }
+        }
+      ]
+    },
+    "site-list-subsites": {
+      "table": true,
+      "delegated": {
+        "least": [
+          "Sites.Read.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
+        ]
+      },
+      "application": {
+        "least": [
+          "Sites.Read.All"
+        ],
+        "higher": [
+          "Sites.ReadWrite.All"
         ]
       }
     },
@@ -5107,7 +5397,9 @@
   },
   "routes": {
     "DELETE /v1.0/applications/{id}": "application-delete",
+    "DELETE /v1.0/drives/{drive}/items/{item}": "driveitem-delete",
     "DELETE /v1.0/groups/{id}": "group-delete",
+    "DELETE /v1.0/groups/{id}/drive/items/{item}": "driveitem-delete",
     "DELETE /v1.0/groups/{id}/members/{member}/$ref": "group-delete-members",
     "DELETE /v1.0/groups/{id}/owners/{owner}/$ref": "group-delete-owners",
     "DELETE /v1.0/oauth2PermissionGrants/{id}": "oauth2permissiongrant-delete",
@@ -5115,18 +5407,30 @@
     "DELETE /v1.0/servicePrincipals/{id}": "serviceprincipal-delete",
     "DELETE /v1.0/servicePrincipals/{id}/appRoleAssignedTo/{assignmentId}": "serviceprincipal-delete-approleassignedto",
     "DELETE /v1.0/servicePrincipals/{id}/appRoleAssignments/{assignmentId}": "serviceprincipal-delete-approleassignments",
+    "DELETE /v1.0/sites/{id}/drive/items/{item}": "driveitem-delete",
     "DELETE /v1.0/subscriptions/{id}": "subscription-delete",
     "DELETE /v1.0/users/{id}": "user-delete",
+    "DELETE /v1.0/users/{id}/drive/items/{item}": "driveitem-delete",
     "DELETE /v1.0/users/{id}/manager/$ref": "user-delete-manager",
     "GET /v1.0/applications": "application-list",
     "GET /v1.0/applications/$count": "application-list",
     "GET /v1.0/applications/{id}": "application-get",
+    "GET /v1.0/drives/{drive}": "drive-get",
+    "GET /v1.0/drives/{drive}/items/{item}": "driveitem-get",
+    "GET /v1.0/drives/{drive}/items/{item}/children": "driveitem-list-children",
+    "GET /v1.0/drives/{drive}/items/{item}/content": "driveitem-get-content",
+    "GET /v1.0/drives/{drive}/root:/{rest...}": "driveitem-get",
     "GET /v1.0/groups": "group-list",
     "GET /v1.0/groups/$count": "group-list",
     "GET /v1.0/groups/delta": "group-delta",
     "GET /v1.0/groups/delta()": "group-delta",
     "GET /v1.0/groups/{id}": "group-get",
     "GET /v1.0/groups/{id}/appRoleAssignments": "group-list-approleassignments",
+    "GET /v1.0/groups/{id}/drive": "drive-get",
+    "GET /v1.0/groups/{id}/drive/items/{item}": "driveitem-get",
+    "GET /v1.0/groups/{id}/drive/items/{item}/children": "driveitem-list-children",
+    "GET /v1.0/groups/{id}/drive/items/{item}/content": "driveitem-get-content",
+    "GET /v1.0/groups/{id}/drive/root:/{rest...}": "driveitem-get",
     "GET /v1.0/groups/{id}/memberOf": "group-list-memberof",
     "GET /v1.0/groups/{id}/memberOf/$count": "group-list-memberof",
     "GET /v1.0/groups/{id}/memberOf/microsoft.graph.group": "group-list-memberof",
@@ -5146,6 +5450,11 @@
     "GET /v1.0/me/appRoleAssignments": "user-list-approleassignments",
     "GET /v1.0/me/directReports": "user-list-directreports",
     "GET /v1.0/me/directReports/$count": "user-list-directreports",
+    "GET /v1.0/me/drive": "drive-get",
+    "GET /v1.0/me/drive/items/{item}": "driveitem-get",
+    "GET /v1.0/me/drive/items/{item}/children": "driveitem-list-children",
+    "GET /v1.0/me/drive/items/{item}/content": "driveitem-get-content",
+    "GET /v1.0/me/drive/root:/{rest...}": "driveitem-get",
     "GET /v1.0/me/manager": "user-list-manager",
     "GET /v1.0/me/memberOf": "user-list-memberof",
     "GET /v1.0/me/memberOf/$count": "user-list-memberof",
@@ -5178,6 +5487,16 @@
     "GET /v1.0/servicePrincipals/{id}": "serviceprincipal-get",
     "GET /v1.0/servicePrincipals/{id}/appRoleAssignedTo": "serviceprincipal-list-approleassignedto",
     "GET /v1.0/servicePrincipals/{id}/appRoleAssignments": "serviceprincipal-list-approleassignments",
+    "GET /v1.0/sites": "site-list",
+    "GET /v1.0/sites/getAllSites()": "site-getallsites",
+    "GET /v1.0/sites/{id}": "site-get",
+    "GET /v1.0/sites/{id}/drive": "drive-get",
+    "GET /v1.0/sites/{id}/drive/items/{item}": "driveitem-get",
+    "GET /v1.0/sites/{id}/drive/items/{item}/children": "driveitem-list-children",
+    "GET /v1.0/sites/{id}/drive/items/{item}/content": "driveitem-get-content",
+    "GET /v1.0/sites/{id}/drive/root:/{rest...}": "driveitem-get",
+    "GET /v1.0/sites/{id}/drives": "drive-list",
+    "GET /v1.0/sites/{id}/sites": "site-list-subsites",
     "GET /v1.0/subscriptions": "subscription-list",
     "GET /v1.0/subscriptions/{id}": "subscription-get",
     "GET /v1.0/users": "user-list",
@@ -5188,6 +5507,11 @@
     "GET /v1.0/users/{id}/appRoleAssignments": "user-list-approleassignments",
     "GET /v1.0/users/{id}/directReports": "user-list-directreports",
     "GET /v1.0/users/{id}/directReports/$count": "user-list-directreports",
+    "GET /v1.0/users/{id}/drive": "drive-get",
+    "GET /v1.0/users/{id}/drive/items/{item}": "driveitem-get",
+    "GET /v1.0/users/{id}/drive/items/{item}/children": "driveitem-list-children",
+    "GET /v1.0/users/{id}/drive/items/{item}/content": "driveitem-get-content",
+    "GET /v1.0/users/{id}/drive/root:/{rest...}": "driveitem-get",
     "GET /v1.0/users/{id}/manager": "user-list-manager",
     "GET /v1.0/users/{id}/memberOf": "user-list-memberof",
     "GET /v1.0/users/{id}/memberOf/$count": "user-list-memberof",
@@ -5196,26 +5520,41 @@
     "GET /v1.0/users/{id}/transitiveMemberOf/$count": "user-list-transitivememberof",
     "GET /v1.0/users/{id}/transitiveMemberOf/microsoft.graph.group": "user-list-transitivememberof",
     "PATCH /v1.0/applications/{id}": "application-update",
+    "PATCH /v1.0/drives/{drive}/items/{item}": "driveitem-update",
     "PATCH /v1.0/groups/{id}": "group-update",
+    "PATCH /v1.0/groups/{id}/drive/items/{item}": "driveitem-update",
     "PATCH /v1.0/me": "user-update",
+    "PATCH /v1.0/me/drive/items/{item}": "driveitem-update",
     "PATCH /v1.0/oauth2PermissionGrants/{id}": "oauth2permissiongrant-update",
     "PATCH /v1.0/organization/{id}": "organization-update",
     "PATCH /v1.0/places/{id}": "place-update",
     "PATCH /v1.0/servicePrincipals/{id}": "serviceprincipal-update",
+    "PATCH /v1.0/sites/{id}/drive/items/{item}": "driveitem-update",
     "PATCH /v1.0/subscriptions/{id}": "subscription-update",
     "PATCH /v1.0/users/{id}": "user-update",
+    "PATCH /v1.0/users/{id}/drive/items/{item}": "driveitem-update",
     "POST /v1.0/applications": "application-post-applications",
+    "POST /v1.0/drives/{drive}/items/{item}/children": "driveitem-post-children",
     "POST /v1.0/groups": "group-post-groups",
+    "POST /v1.0/groups/{id}/drive/items/{item}/children": "driveitem-post-children",
     "POST /v1.0/groups/{id}/members/$ref": "group-post-members",
     "POST /v1.0/groups/{id}/owners/$ref": "group-post-owners",
+    "POST /v1.0/me/drive/items/{item}/children": "driveitem-post-children",
     "POST /v1.0/oauth2PermissionGrants": "oauth2permissiongrant-post",
     "POST /v1.0/places": "place-post",
     "POST /v1.0/servicePrincipals": "serviceprincipal-post-serviceprincipals",
     "POST /v1.0/servicePrincipals/{id}/appRoleAssignedTo": "serviceprincipal-post-approleassignedto",
     "POST /v1.0/servicePrincipals/{id}/appRoleAssignments": "serviceprincipal-post-approleassignments",
+    "POST /v1.0/sites/{id}/drive/items/{item}/children": "driveitem-post-children",
     "POST /v1.0/subscriptions": "subscription-post-subscriptions",
     "POST /v1.0/users": "user-post-users",
+    "POST /v1.0/users/{id}/drive/items/{item}/children": "driveitem-post-children",
+    "PUT /v1.0/drives/{drive}/items/{item}/content": "driveitem-put-content",
+    "PUT /v1.0/groups/{id}/drive/items/{item}/content": "driveitem-put-content",
+    "PUT /v1.0/me/drive/items/{item}/content": "driveitem-put-content",
     "PUT /v1.0/me/manager/$ref": "user-post-manager",
+    "PUT /v1.0/sites/{id}/drive/items/{item}/content": "driveitem-put-content",
+    "PUT /v1.0/users/{id}/drive/items/{item}/content": "driveitem-put-content",
     "PUT /v1.0/users/{id}/manager/$ref": "user-post-manager"
   },
   "inherited": {
@@ -5244,7 +5583,49 @@
     "PUT /v1.0/me/manager/$ref": "PUT /v1.0/users/{id}/manager/$ref"
   },
   "noPage": [
+    "DELETE /v1.0/drives/{drive}/root:/{rest...}",
+    "DELETE /v1.0/groups/{id}/drive/root:/{rest...}",
+    "DELETE /v1.0/sites/{id}/drive/root:/{rest...}",
+    "DELETE /v1.0/users/{id}/drive/root:/{rest...}",
     "GET /v1.0/$metadata",
-    "POST /v1.0/$batch"
+    "GET /v1.0/drives/{drive}/root",
+    "GET /v1.0/drives/{drive}/root/children",
+    "GET /v1.0/groups/{id}/drive/root",
+    "GET /v1.0/groups/{id}/drive/root/children",
+    "GET /v1.0/groups/{id}/sites/{site}",
+    "GET /v1.0/me/drive/root",
+    "GET /v1.0/me/drive/root/children",
+    "GET /v1.0/sites/{host}/{path...}",
+    "GET /v1.0/sites/{id}/drive/root",
+    "GET /v1.0/sites/{id}/drive/root/children",
+    "GET /v1.0/sites/{id}/drives/{drive}",
+    "GET /v1.0/users/{id}/drive/root",
+    "GET /v1.0/users/{id}/drive/root/children",
+    "PATCH /v1.0/drives/{drive}/root:/{rest...}",
+    "PATCH /v1.0/groups/{id}/drive/root:/{rest...}",
+    "PATCH /v1.0/me/drive/root:/{rest...}",
+    "PATCH /v1.0/sites/{id}/drive/root:/{rest...}",
+    "PATCH /v1.0/users/{id}/drive/root:/{rest...}",
+    "POST /v1.0/$batch",
+    "POST /v1.0/drives/{drive}/root/children",
+    "POST /v1.0/drives/{drive}/root:/{rest...}",
+    "POST /v1.0/groups/{id}/drive/root/children",
+    "POST /v1.0/groups/{id}/drive/root:/{rest...}",
+    "POST /v1.0/me/drive/root/children",
+    "POST /v1.0/me/drive/root:/{rest...}",
+    "POST /v1.0/sites/{id}/drive/root/children",
+    "POST /v1.0/sites/{id}/drive/root:/{rest...}",
+    "POST /v1.0/users/{id}/drive/root/children",
+    "POST /v1.0/users/{id}/drive/root:/{rest...}",
+    "PUT /v1.0/drives/{drive}/items/{item}/{rest...}",
+    "PUT /v1.0/drives/{drive}/root:/{rest...}",
+    "PUT /v1.0/groups/{id}/drive/items/{item}/{rest...}",
+    "PUT /v1.0/groups/{id}/drive/root:/{rest...}",
+    "PUT /v1.0/me/drive/items/{item}/{rest...}",
+    "PUT /v1.0/me/drive/root:/{rest...}",
+    "PUT /v1.0/sites/{id}/drive/items/{item}/{rest...}",
+    "PUT /v1.0/sites/{id}/drive/root:/{rest...}",
+    "PUT /v1.0/users/{id}/drive/items/{item}/{rest...}",
+    "PUT /v1.0/users/{id}/drive/root:/{rest...}"
   ]
 }

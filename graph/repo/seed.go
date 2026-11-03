@@ -141,6 +141,8 @@ func Generate(o Options) *World {
 	g.apps()
 	g.places()
 	g.w.Organization = newOrganization(o.Profile)
+	g.sites() // after the organization: the host of the sites comes from it
+	g.driveItems()
 	if admin := adminUPN(o.Profile); admin != AdminUPN {
 		g.w.Admin = admin // a world with the admin account of the default profile has no field
 	}

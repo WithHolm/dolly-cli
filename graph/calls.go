@@ -135,7 +135,11 @@ func readBody(r *http.Request) string {
 	if err != nil {
 		return ""
 	}
-	r.Body = io.NopCloser(bytes.NewReader(data))
+	// The handler gets the whole body: what was read, and the rest (a file that is put can be larger than what the log keeps).
+	r.Body = struct {
+		io.Reader
+		io.Closer
+	}{io.MultiReader(bytes.NewReader(data), r.Body), r.Body}
 	if len(data) > maxBody {
 		return string(data[:maxBody]) + "…"
 	}

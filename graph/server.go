@@ -202,7 +202,8 @@ func (s *Server) serve(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	// The description of the API is public: a client reads /$metadata before it signs in (a guess, from what Graph is known to do: it is not checked).
-	public := r.Method == http.MethodGet && r.URL.Path == metadataPath
+	// So is the address of a download (@microsoft.graph.downloadUrl): the real one is "pre-authenticated", and a client does not send its token to it.
+	public := r.Method == http.MethodGet && (r.URL.Path == metadataPath || strings.HasPrefix(r.URL.Path, api.DownloadPrefix))
 	if !public && !strings.HasPrefix(strings.ToLower(r.Header.Get("Authorization")), "bearer ") {
 		writeError(rec, apiErr(http.StatusUnauthorized, "InvalidAuthenticationToken", "Access token is empty."))
 		return

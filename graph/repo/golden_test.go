@@ -14,10 +14,12 @@ type golden struct {
 }
 
 // hashWorld is the hash of the data of a world. The profile and the admin account are left out: the seed file keeps them, and these tests are about the people and the
-// groups. The app registrations came later (applications.go), they draw nothing, and they are left out too.
+// groups. The app registrations came later (applications.go), they draw nothing, and they are left out too. So do the sites and their drives (sites.go): they are
+// made from the names, they draw nothing, and they change nothing else.
 func hashWorld(t *testing.T, w *World) string {
 	t.Helper()
 	w.Profile, w.Admin, w.Applications = nil, "", nil
+	w.Sites, w.Drives, w.Items = nil, nil, nil
 	b, err := json.Marshal(w)
 	if err != nil {
 		t.Fatal(err)

@@ -1,7 +1,7 @@
 {
   "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
   "commitDate": "2026-10-26T13:31:32Z",
-  "fetchedDate": "2026-11-02",
+  "fetchedDate": "2026-11-03",
   "files": [
     {
       "path": "api-reference/v1.0/api/application-delete.md",
@@ -27,6 +27,51 @@
       "path": "api-reference/v1.0/api/application-update.md",
       "bytes": 22186,
       "sha256": "1d8fba1c3fec4ba9caff2fd06bf4e4ddc36c4e192e1170c43b76c889185beb89"
+    },
+    {
+      "path": "api-reference/v1.0/api/drive-get.md",
+      "bytes": 6990,
+      "sha256": "91847f488c7b6b7539f827e73f93c1eaebd090d9778b3a42103fce7874979fa7"
+    },
+    {
+      "path": "api-reference/v1.0/api/drive-list.md",
+      "bytes": 5958,
+      "sha256": "28d4db24f04a122959e412256a96f0be597b473e873a325023a924ddedcf6e76"
+    },
+    {
+      "path": "api-reference/v1.0/api/driveitem-delete.md",
+      "bytes": 4530,
+      "sha256": "11cf9240d66bb5bb263c053ab528e2c28346f9aa97358aaed8b16cd71f117325"
+    },
+    {
+      "path": "api-reference/v1.0/api/driveitem-get-content.md",
+      "bytes": 7226,
+      "sha256": "6ab531b32557fd13168ef43d71ca8bf5ed72fa980b59b9fb79aa300022962ac5"
+    },
+    {
+      "path": "api-reference/v1.0/api/driveitem-get.md",
+      "bytes": 6208,
+      "sha256": "170653648da38eba96aeb99b9788cdfea06f8c872cc50464e05f73fc209ee073"
+    },
+    {
+      "path": "api-reference/v1.0/api/driveitem-list-children.md",
+      "bytes": 7596,
+      "sha256": "6ec70dd8cba74e7b6875f6310417f382961f511da4f7e4ecc0ac8e0140e1813e"
+    },
+    {
+      "path": "api-reference/v1.0/api/driveitem-post-children.md",
+      "bytes": 5583,
+      "sha256": "4ad3319bf32aa3218a562dee337d1add33a7865f66402be3b5afaaf93392fb48"
+    },
+    {
+      "path": "api-reference/v1.0/api/driveitem-put-content.md",
+      "bytes": 5258,
+      "sha256": "309dd6c08c1d5035a3f5dd4f7782e8f960b745cd7955caadd7442dc00ad0ca25"
+    },
+    {
+      "path": "api-reference/v1.0/api/driveitem-update.md",
+      "bytes": 5058,
+      "sha256": "0c72cc276b88457df0ade80d5aa40e3280e0c32fbe817255b4f6d0220d67f4f3"
     },
     {
       "path": "api-reference/v1.0/api/group-delete-members.md",
@@ -234,6 +279,26 @@
       "sha256": "b586b902a6f362e182696b24cecd5dd007662eaa412ed0222485203e04107f19"
     },
     {
+      "path": "api-reference/v1.0/api/site-get.md",
+      "bytes": 8128,
+      "sha256": "5ee21133c7036fd87e13449d1a51323f367b9211f30d5a5997d86d0be21af24b"
+    },
+    {
+      "path": "api-reference/v1.0/api/site-getallsites.md",
+      "bytes": 8078,
+      "sha256": "34698866b9e8c1c6510b5a47bfd5cb7d236b0c83eb8ac493316a491455e2f97e"
+    },
+    {
+      "path": "api-reference/v1.0/api/site-list-subsites.md",
+      "bytes": 4388,
+      "sha256": "aa3e749148131bed36fe2b9d5706973c82a28ba9593a3e77c518467bca491a71"
+    },
+    {
+      "path": "api-reference/v1.0/api/site-list.md",
+      "bytes": 9091,
+      "sha256": "0dbd899a90a1bc35fe381c735159b469f6bf05fec570ad8e7cea05a863d3176d"
+    },
+    {
       "path": "api-reference/v1.0/api/subscription-delete.md",
       "bytes": 14533,
       "sha256": "b26b745a4a8a963344e719ec5493c3b42a827b622eb4695d18084c5b9462c468"
@@ -347,6 +412,51 @@
       "path": "api-reference/v1.0/includes/permissions/application-update-permissions.md",
       "bytes": 443,
       "sha256": "f124f253c720bf67924025c71a5d34294216302af911824fa86a3e47b99508d9"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/drive-get-permissions.md",
+      "bytes": 511,
+      "sha256": "0c365ce668b8b6f89e2101265d8e60eb9c1fc878c8f53f311f757d4d864db2d9"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/drive-list-permissions.md",
+      "bytes": 542,
+      "sha256": "c99599566a1b4bbf257a9e672db540fabdabae8357fbff4697b42bb758a8e55b"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/driveitem-delete-permissions.md",
+      "bytes": 438,
+      "sha256": "2031857f7ad14b67ed272ccc85185af73cb30b58ff4b2262b93d84524986958d"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/driveitem-get-content-permissions.md",
+      "bytes": 542,
+      "sha256": "961ecf1a460aaa4d7dea4a65333b9f77f21d3cce3f1ee1e43f0e092adbf911f8"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/driveitem-get-permissions.md",
+      "bytes": 616,
+      "sha256": "1a878d42138afc5b2deefb32a2fc57cbf7392731567b154fd3d91e099a0aeebe"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/driveitem-list-children-permissions.md",
+      "bytes": 542,
+      "sha256": "961ecf1a460aaa4d7dea4a65333b9f77f21d3cce3f1ee1e43f0e092adbf911f8"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/driveitem-post-children-permissions.md",
+      "bytes": 438,
+      "sha256": "2031857f7ad14b67ed272ccc85185af73cb30b58ff4b2262b93d84524986958d"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/driveitem-put-content-permissions.md",
+      "bytes": 438,
+      "sha256": "2031857f7ad14b67ed272ccc85185af73cb30b58ff4b2262b93d84524986958d"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/driveitem-update-permissions.md",
+      "bytes": 438,
+      "sha256": "2031857f7ad14b67ed272ccc85185af73cb30b58ff4b2262b93d84524986958d"
     },
     {
       "path": "api-reference/v1.0/includes/permissions/group-delete-members-permissions.md",
@@ -537,6 +647,21 @@
       "path": "api-reference/v1.0/includes/permissions/serviceprincipal-update-permissions.md",
       "bytes": 524,
       "sha256": "002d16ce79089d9a1aa4498de7a48358ab72b8869500c6de8232cbd12499e341"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/site-get-permissions.md",
+      "bytes": 405,
+      "sha256": "5d91933b503be9a71d5c2b8f490650e9db4779d7968b8011d048c82984257e93"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/site-getallsites-permissions.md",
+      "bytes": 400,
+      "sha256": "165a6255bdf3f0f0b6ffd05dfa39a90ea355b8c1a0d2f1097b0016b3ca7dfa00"
+    },
+    {
+      "path": "api-reference/v1.0/includes/permissions/site-list-subsites-permissions.md",
+      "bytes": 405,
+      "sha256": "5d91933b503be9a71d5c2b8f490650e9db4779d7968b8011d048c82984257e93"
     },
     {
       "path": "api-reference/v1.0/includes/permissions/user-delete-manager-permissions.md",

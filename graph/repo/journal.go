@@ -76,6 +76,19 @@ type Event struct {
 	Place     string `json:"place,omitempty"`
 	PlaceName string `json:"placeName,omitempty"`
 
+	// site.create (Site and its Drives), site.update (Set), site.delete, drive.create (Drive), drive.update (Set), drive.delete. See sites.go.
+	Site      *Site   `json:"site,omitempty"`
+	Drives    []Drive `json:"drives,omitempty"`
+	Drive     *Drive  `json:"drive,omitempty"`
+	SiteID    string  `json:"siteId,omitempty"`
+	SiteName  string  `json:"siteName,omitempty"`
+	DriveID   string  `json:"driveId,omitempty"`
+	DriveName string  `json:"driveName,omitempty"`
+	// item.create and item.change (Item has the whole item), item.delete. See drive_items.go.
+	Item     *Item  `json:"item,omitempty"`
+	ItemID   string `json:"itemId,omitempty"`
+	ItemName string `json:"itemName,omitempty"`
+
 	// application.create (Object has the whole application), application.update (Set), application.delete. App is the object ID.
 	App     string `json:"app,omitempty"`
 	AppName string `json:"appName,omitempty"`
@@ -112,7 +125,7 @@ func (e Event) Text() string {
 		return fmt.Sprintf("Went back to the state after change %d", e.Target)
 	}
 	// the events of the resources: each file says its own
-	for _, text := range []func(Event) (string, bool){userEventText, managerEventText, groupEventText, memberEventText, ownerEventText, placeEventText, principalEventText, servicePrincipalWriteText, applicationEventText, grantEventText, organizationEventText} {
+	for _, text := range []func(Event) (string, bool){userEventText, managerEventText, groupEventText, memberEventText, ownerEventText, placeEventText, siteEventText, itemEventText, principalEventText, servicePrincipalWriteText, applicationEventText, grantEventText, organizationEventText} {
 		if s, ok := text(e); ok {
 			return s
 		}
@@ -402,7 +415,7 @@ func (w *World) apply(e Event) {
 	defer w.noteChange(e.Seq, e) // the log of delta query
 	// the events of the resources: each file does its own
 	switch {
-	case w.applyUserEvent(e), w.applyManagerEvent(e), w.applyGroupEvent(e), w.applyMemberEvent(e), w.applyOwnerEvent(e), w.applyPlaceEvent(e), w.applyPrincipalEvent(e), w.applyServicePrincipalWriteEvent(e), w.applyApplicationEvent(e), w.applyGrantEvent(e), w.applyOrganizationEvent(e):
+	case w.applyUserEvent(e), w.applyManagerEvent(e), w.applyGroupEvent(e), w.applyMemberEvent(e), w.applyOwnerEvent(e), w.applyPlaceEvent(e), w.applySiteEvent(e), w.applyItemEvent(e), w.applyPrincipalEvent(e), w.applyServicePrincipalWriteEvent(e), w.applyApplicationEvent(e), w.applyGrantEvent(e), w.applyOrganizationEvent(e):
 	}
 	// The members of a dynamic group are not in the history: they are worked out again, as
 	// they were when the change was made (a paused group keeps the members that it had).

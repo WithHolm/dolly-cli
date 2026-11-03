@@ -25,6 +25,8 @@ func (s *Server) mountAPI() {
 		api.Applications(s.world),
 		api.OAuth2PermissionGrants(s.world),
 		api.Places(s.world),
+		api.Sites(s.world),
+		api.Drives(s.world),
 		api.Organization(s.world),
 		api.Subscriptions(subscriptions{s}),
 	)
@@ -32,6 +34,7 @@ func (s *Server) mountAPI() {
 	s.endpoints = router.Endpoints()
 	s.endpoints = append(s.endpoints, meEndpoints(s.endpoints)...)
 
+	s.mux.HandleFunc("GET "+api.DownloadPrefix+"{drive}/{item}/{tag}/{name}", s.download)
 	s.mux.HandleFunc("GET "+metadataPath, s.metadata)
 	s.endpoints = append(s.endpoints, Endpoint{
 		Method: http.MethodGet, Path: metadataPath, Area: "Metadata",

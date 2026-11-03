@@ -45,6 +45,16 @@ func TestSpec_EveryRouteIsInGraph(t *testing.T) {
 		if e.Method == "GET" && spec.Normal(e.Path) == "/places/{}" {
 			continue
 		}
+		// The Learn page "Get a site" documents GET /sites/{hostname}:/{relative-path} (a site by its link). The description does not have it.
+		if e.Method == "GET" && spec.Normal(e.Path) == "/sites/{}/{}" {
+			continue
+		}
+		// The Learn pages of the items ("Get a DriveItem", "List children", "Upload or replace the contents of a DriveItem", "Update a DriveItem", "Delete a
+		// DriveItem") document the calls on /me/drive, /users/{id}/drive, /groups/{id}/drive, and /sites/{id}/drive, on /root/children, and on a path
+		// (/root:/{item-path}, /items/{parent-id}:/{filename}:/content). The description has the items only below /drives/{drive-id}/items.
+		if strings.Contains(e.Path, "/drive/") || strings.Contains(e.Path, "/root:/") || strings.HasSuffix(e.Path, "/root/children") || strings.Contains(e.Path, "/items/{item}/{rest...}") {
+			continue
+		}
 		// The Learn pages write delta query as GET /users/delta, and the description as /users/delta(). The real Graph answers both
 		// (checked with the proxy of Graph Explorer), so dolly does too.
 		if e.Method == "GET" && strings.HasSuffix(e.Path, "/delta") {
