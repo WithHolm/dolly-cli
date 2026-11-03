@@ -8,6 +8,7 @@
   import History from "./History.svelte";
   import Organization from "./Organization.svelte";
   import ServicePrincipals from "./ServicePrincipals.svelte";
+  import Sites from "./Sites.svelte";
   import Subscriptions from "./Subscriptions.svelte";
   import Users from "./Users.svelte";
 
@@ -17,6 +18,7 @@
     { id: "groups", label: "Groups", page: Groups },
     { id: "app-registrations", label: "App registrations", page: AppRegistrations },
     { id: "service-principals", label: "Service principals", page: ServicePrincipals },
+    { id: "sites", label: "Sites", page: Sites },
     { id: "subscriptions", label: "Subscriptions", page: Subscriptions },
     { id: "organization", label: "Organization", page: Organization },
     { id: "data", label: "Data", page: Data },

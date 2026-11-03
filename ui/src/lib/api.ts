@@ -34,6 +34,7 @@ export function adminClient(name: string) {
     get: <T>(path: string) => request<T>(base, "GET", path),
     post: <T = void>(path: string, body?: unknown) => request<T>(base, "POST", path, body),
     put: <T = void>(path: string, body?: unknown) => request<T>(base, "PUT", path, body),
+    patch: <T = void>(path: string, body?: unknown) => request<T>(base, "PATCH", path, body),
     del: <T = void>(path: string) => request<T>(base, "DELETE", path),
   };
 }

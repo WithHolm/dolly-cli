@@ -407,3 +407,46 @@ export interface Grants {
   application: AppGrant[];
   delegated: DelegatedGrant[];
 }
+
+/** A drive (a document library) of a site, as the admin API gives it. */
+export interface SiteDrive {
+  id: string;
+  name: string;
+  description: string;
+  webUrl: string;
+}
+
+/** A SharePoint site, as the admin API gives it: what Graph shows, and the kind, the group, and the drives (Graph does not show those). */
+export interface Site {
+  id: string;
+  name: string;
+  displayName: string;
+  description: string;
+  webUrl: string;
+  /** "group": the team site of a Microsoft 365 group. "sharepoint": a site with no group. */
+  kind: "group" | "sharepoint";
+  groupId: string;
+  groupName?: string;
+  /** The ID of the site that has this one as a subsite. Empty for the root of a site collection. */
+  parentId: string;
+  path: string;
+  drives: SiteDrive[];
+}
+
+/** A folder or a file on a drive, as the admin API lists it (flat: the portal makes the tree). */
+export interface DriveItem {
+  id: string;
+  /** The ID of the folder that holds it. Empty for the root of the drive. */
+  parentId: string;
+  name: string;
+  folder: boolean;
+  size: number;
+  mimeType?: string;
+  modified: string;
+}
+
+export interface SitesAnswer {
+  sites: Site[] | null;
+  /** The Microsoft 365 groups that have no site yet. */
+  groups: { id: string; displayName: string }[] | null;
+}
