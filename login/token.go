@@ -129,15 +129,7 @@ func (a *API) issue(r *http.Request, tid string, v2 bool) (map[string]any, SignI
 			return bad(http.StatusBadRequest, "invalid_resource", 500011, "The resource principal named "+strings.TrimSuffix(scope[0], "/.default")+" was not found in the tenant named "+tid+". This can happen if the application has not been installed by the administrator of the tenant or consented to by any user in the tenant.")
 		}
 		si.Resource = res.Name
-		var roles []string
-		if g, ok := a.world.GrantsOf(clientID); ok {
-			for _, ag := range g.Application {
-				if strings.EqualFold(ag.ResourceAppID, res.AppID) {
-					roles = append(roles, ag.Value)
-				}
-			}
-		}
-		sort.Strings(roles)
+		roles := a.world.ApplicationRoleValues(clientID, res.AppID) // enabled roles for applications that have a value
 		claims["aud"], claims["oid"], claims["sub"] = res.AppID, sp.ID, sp.ID
 		claims["idtyp"], claims["appidacr"] = "app", "1"
 		if kind == repo.KindCertificate {

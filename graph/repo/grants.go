@@ -224,6 +224,29 @@ func (w *World) UserRoles(userID, appID string) []string {
 	return out
 }
 
+// ApplicationRoleValues gives the values of the app roles that a client has on an API: the application permissions that go in the claim roles of its token. Only a role
+// that is enabled, is for applications, and has a value is in it, as for UserRoles. An assignment of any other role stays in the data (the portal shows it, and an
+// administrator can take it away), and it is not in the token. The values are sorted, each once. Both are found by their client IDs.
+func (w *World) ApplicationRoleValues(clientAppID, resourceAppID string) []string {
+	w.mu.RLock()
+	defer w.mu.RUnlock()
+	client, res := w.byAppID[strings.ToLower(clientAppID)], w.byAppID[strings.ToLower(resourceAppID)]
+	if client == nil || res == nil {
+		return nil
+	}
+	var out []string
+	for _, a := range w.Assignments {
+		if !isID(a.PrincipalID, client.ID) || !isID(a.ResourceID, res.ID) {
+			continue
+		}
+		if r, ok := res.role(a.RoleID); ok && !r.Disabled && r.Value != "" && slices.Contains(r.Types, MemberApplication) && !slices.Contains(out, r.Value) {
+			out = append(out, r.Value)
+		}
+	}
+	slices.Sort(out)
+	return out
+}
+
 // AppRoleAssignment gives one app role assignment. spID is the principal (asResource false) or the resource (asResource true), as in the two paths of Graph.
 func (w *World) AppRoleAssignment(spID, id string, asResource bool) (Object, bool) {
 	w.mu.RLock()
