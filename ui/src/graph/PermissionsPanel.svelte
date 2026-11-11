@@ -45,6 +45,10 @@
 
 <div class="top"><button type="button" class="btn" onclick={() => (adding = true)}>+ Permission</button></div>
 
+{#if !sp.builtin}
+  <p class="hint">These are the permissions this client has on other apps. Who has the roles of this app itself is on the tab Users and groups.</p>
+{/if}
+
 <PermissionsNeeded {sp} />
 
   <section>

@@ -1,11 +1,14 @@
 <script lang="ts">
+  import { graph } from "../lib/api";
   import Avatar from "../lib/Avatar.svelte";
   import Icon from "../lib/Icon.svelte";
   import { listGroups, listUsers } from "./directory";
+  import type { ServicePrincipal } from "./types";
 
-  // Finds one user or one group by a search, and gives its ID. Used where the person picks one object (a subscription to one user). The text matches as on the Users
-  // and Groups pages.
-  let { kind, id = $bindable(""), label }: { kind: "user" | "group"; id: string; label: string } = $props();
+  // Finds one user, one group, or one service principal by a search, and gives its ID. Used where the person picks one object (a subscription to one user, a role
+  // for a group). The text matches as on the Users and Groups pages. A service principal matches by name or client ID.
+  let { kind, id = $bindable(""), label }: { kind: "user" | "group" | "servicePrincipal"; id: string; label: string } = $props();
+  const noun = $derived(kind === "servicePrincipal" ? "service principal" : kind);
 
   type Hit = { id: string; name: string; detail: string };
   const SHOWN = 8;
@@ -24,6 +27,12 @@
         if (kind === "user") {
           const r = await listUsers(text, SHOWN);
           if (text === query) [hits, total] = [r.users.map((u) => ({ id: u.id, name: u.displayName, detail: u.userPrincipalName })), r.total];
+        } else if (kind === "servicePrincipal") {
+          const t = text.trim().toLowerCase();
+          const all = (await graph.get<{ servicePrincipals: ServicePrincipal[] }>("/service-principals")).servicePrincipals.filter(
+            (s) => !t || s.displayName.toLowerCase().includes(t) || s.appId.toLowerCase().includes(t),
+          );
+          if (text === query) [hits, total] = [all.slice(0, SHOWN).map((s) => ({ id: s.id, name: s.displayName, detail: s.appId })), all.length];
         } else {
           const t = text.trim().toLowerCase();
           const all = (await listGroups()).filter((g) => !t || g.name.toLowerCase().includes(t));
@@ -51,7 +60,7 @@
   <span class="label">{label}</span>
   {#if picked}
     <div class="chosen">
-      <Avatar name={picked.name} size={24} square={kind === "group"} />
+      <Avatar name={picked.name} size={24} square={kind !== "user"} />
       <span class="name">{picked.name}</span>
       <span class="detail">{picked.detail}</span>
       <button type="button" class="btn ghost" onclick={clear}>Change</button>
@@ -59,7 +68,12 @@
   {:else}
     <label class="search">
       <Icon name="search" />
-      <input type="search" placeholder={kind === "user" ? "Find by name, user principal name, department, title, or office" : "Find a group by name"} bind:value={query} aria-label={label} />
+      <input
+        type="search"
+        placeholder={kind === "user" ? "Find by name, user principal name, department, title, or office" : kind === "group" ? "Find a group by name" : "Find a service principal by name or client ID"}
+        bind:value={query}
+        aria-label={label}
+      />
     </label>
     {#if failed}
       <p class="none" role="alert">{failed}</p>
@@ -68,7 +82,7 @@
         {#each hits as h (h.id)}
           <li>
             <button type="button" onclick={() => pick(h)}>
-              <Avatar name={h.name} size={24} square={kind === "group"} />
+              <Avatar name={h.name} size={24} square={kind !== "user"} />
               <span class="name">{h.name}</span>
               <span class="detail">{h.detail}</span>
             </button>
@@ -77,7 +91,7 @@
       </ul>
       {#if total > hits.length}<p class="more">Showing {hits.length} of {total}. Type more to narrow it.</p>{/if}
     {:else}
-      <p class="none">No {kind} matches.</p>
+      <p class="none">No {noun} matches.</p>
     {/if}
   {/if}
 </div>

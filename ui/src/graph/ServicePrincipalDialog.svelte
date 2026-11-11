@@ -9,6 +9,7 @@
   import Tabs from "../lib/Tabs.svelte";
   import { ENTERPRISE_TAG, missingTagAdvice, registrationText } from "./identity";
   import PermissionsPanel from "./PermissionsPanel.svelte";
+  import RoleAssignmentsPanel from "./RoleAssignmentsPanel.svelte";
   import type { ServicePrincipal, Usage } from "./types";
   import UsageHistory from "./UsageHistory.svelte";
 
@@ -33,11 +34,13 @@
     changed: () => Promise<void>;
   } = $props();
 
-  const TABS = [
+  // A built-in service principal (Microsoft Graph) has no users and groups: its roles are the application permissions.
+  const TABS = $derived([
     { id: "overview", label: "Overview" },
+    ...(sp.builtin ? [] : [{ id: "users-and-groups", label: "Users and groups" }]),
     { id: "sign-in", label: "Sign-in" },
     { id: "permissions", label: "Permissions" },
-  ];
+  ]);
   const tab = $derived(TABS.some((t) => t.id === wanted) ? wanted! : "overview");
 
   async function change(action: () => Promise<unknown>, done?: string) {
@@ -180,6 +183,8 @@
           {/if}
         </section>
       {/if}
+    {:else if tab === "users-and-groups"}
+      <RoleAssignmentsPanel {sp} />
     {:else}
       <PermissionsPanel {sp} />
     {/if}

@@ -336,8 +336,67 @@ export interface AppRegistration {
   signInAudience: string;
   /** How many permissions it asks for (requiredResourceAccess). */
   requested: number;
+  /** How many app roles it defines (appRoles). */
+  roles: number;
   /** The object ID of the service principal with the same client ID. Missing: no client has signed in with it yet. */
   servicePrincipal?: string;
+}
+
+/** An app role, as Graph writes it. An app registration defines it, and the service principal of the app has it. */
+export interface AppRoleDef {
+  id: string;
+  displayName: string;
+  description: string;
+  /** The text in the claim roles of a token. null: the role has no value, so it is never in the claim. */
+  value: string | null;
+  /** User: users and groups can have the role. Application: another app can (an application permission). */
+  allowedMemberTypes: ("User" | "Application")[];
+  /** A role is disabled first, and then it can be removed. */
+  isEnabled: boolean;
+  /** Application: the app registration defines it. ServicePrincipal: only this tenant has it. */
+  origin: string;
+}
+
+/** Who has a role of a service principal: a user, a group, or another service principal. */
+export interface RoleAssignment {
+  id: string;
+  principalId: string;
+  principalType: "User" | "Group" | "ServicePrincipal";
+  principalDisplayName: string;
+  appRoleId: string;
+}
+
+export interface RoleAssignments {
+  roles: AppRoleDef[];
+  assignments: RoleAssignment[];
+}
+
+/** A scope that an app registration exposes: a delegated permission that a client can ask for. The value is in the claim scp of the token. */
+export interface ApiScopeDef {
+  id: string;
+  value: string;
+  /** User: a user can consent for himself or herself. Admin: only an administrator can consent. */
+  type: "User" | "Admin";
+  /** A scope is disabled first, and then it can be removed. */
+  isEnabled: boolean;
+  adminConsentDisplayName: string;
+  adminConsentDescription: string;
+  userConsentDisplayName: string | null;
+  userConsentDescription: string | null;
+}
+
+/** A client that needs no consent for some of the scopes of an API. */
+export interface PreAuthorizedClient {
+  appId: string;
+  delegatedPermissionIds: string[];
+}
+
+/** The API that an app registration exposes. */
+export interface ApiSettings {
+  identifierUris: string[];
+  scopes: ApiScopeDef[];
+  preAuthorizedApplications: PreAuthorizedClient[];
+  requestedAccessTokenVersion: number | null;
 }
 
 export interface Usage {
