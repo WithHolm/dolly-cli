@@ -20,6 +20,10 @@ domains, or `common`:
   - `password`: a delegated token for a user. dollycli accepts any password.
   - `refresh_token`: with `offline_access`. A refresh token is a signed JWT, so it is good for 90 days and after a restart.
   - A delegated token has `scp`, the user (`oid`, `upn`), and an `id_token` with `openid` (with the `nonce`).
+  - A client asks for a scope of an [exposed API](graph.md#exposing-an-api-scopes) as `api://<Application ID URI>/<value>`. The token has the value in `scp`. For `.default` it
+    has the scopes that are consented to the client, and the scopes that the app registration pre-authorizes the client for.
+  - A user who has [app roles](graph.md#app-roles) of the app gets `roles` in the ID token (the app is the client) and in the access token for the app (the app is
+    the resource): the `value` of each role that is assigned to the user, or to a group that the user is a direct member of.
   - A browser that picked a user has a session (the cookie `dolly_session`, 24 hours). A request with no `prompt`, or with `prompt=none`, gets a code at once.
     `prompt=login`, `select_account`, and `consent` show the page again. Without a session, `prompt=none` is `login_required`.
   - Sign-out: `end_session_endpoint` is in the discovery document (`/<tenant>/oauth2/v2.0/logout`). It ends the session and goes to

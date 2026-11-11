@@ -37,8 +37,54 @@ with the tag `WindowsAzureActiveDirectoryIntegratedApp` is an enterprise applica
 - `requiredResourceAccess` is what the app asks for. For Microsoft Graph each permission ID must be one that dollycli knows, else the answer is
   404 with what to do (use the permission names, or add [your tenant's permissions](permissions.md)).
 
-Not in this part: the app roles and scopes of a registration are not copied to its service principal (the service principal keeps its own), and there is
-no `addPassword`, owners, or federated credentials.
+Not in this part: there is no `addPassword`, owners, or federated credentials.
+
+### Exposing an API (scopes)
+
+An app registration exposes an API with an **Application ID URI** (`identifierUris`), **scopes** (`api.oauth2PermissionScopes`, the delegated permissions that a client can
+ask for), and **authorized clients** (`api.preAuthorizedApplications`). All of it is written with `PATCH /applications`: Graph has no route for a scope, so there is
+no new route here.
+
+- A client asks for a scope as the URI, a slash, and the value (`api://files-api/Files.Read`), and the token has the value in `scp`. A scope has `id`, `value`,
+  `type` (`User`: a user can consent for himself or herself, `Admin`: only an administrator), `isEnabled`, and the consent texts
+  (`adminConsentDisplayName`, `adminConsentDescription`, `userConsentDisplayName`, `userConsentDescription`).
+- The rules are from the Learn pages *permissionScope* and *apiApplication*: the `value` follows the rules of the value of an app role, a scope is disabled in one call and
+  removed in a later one, and `id` is a GUID. The checks that are dollycli's own guesses: the two admin consent texts are required, an Application ID URI is `api://…`
+  or `https://…`, and no other registration has it (the real Graph also asks for a verified domain in an `https` URI).
+- `requestedAccessTokenVersion` is null, 1, or 2, and `knownClientApplications` is a list of client IDs. Both are kept, and neither changes a token yet.
+- The service principal of the app follows the registration: its scopes and its `servicePrincipalNames` change when the registration changes, and a scope that is
+  removed (or gets a new value) is taken out of the consents that have it. A consent with no scope left is deleted.
+- A disabled scope cannot be consented to or asked for (`AADSTS70011`, as for an unknown scope).
+- An **authorized client** needs no consent for the scopes that it is listed with: when it asks for `.default`, the token has them. Each scope must be a scope of the app, and a
+  scope that is removed goes out of the list. In the *Open* permission mode a client can ask for any scope by name, with or without consent: the mode *Enforce* is not active yet.
+
+Checked against the real Graph (the sample tenant, read-only): the shape of a scope (`user_impersonation`, `type: User`, with the four consent texts). From Learn, and not
+tried: the rules. Guesses: the texts of the errors, that pre-authorized scopes count as consented for `.default`, and what the real Graph does with the consents of
+a scope that is removed.
+
+### App roles
+
+An **app role** is what a user, a group, or another app can be given in an app. The app registration defines the roles (`appRoles`), and the service principal of
+the app has them, with `origin` `Application`. A role that only this tenant needs is set on the service principal (`origin` `ServicePrincipal`).
+
+- A role has `id`, `displayName`, `description`, `value`, `allowedMemberTypes` (`User`, `Application`, or both), and `isEnabled`. The rules are from the Learn page
+  *appRole resource type*: a new role needs an `id` that is a GUID, a `value` has at most 120 characters from a list of characters (no space, and it does not
+  start with a dot), `origin` is read-only, and `Application` is a member type of the roles of an application only. A role is disabled in one call (`isEnabled`
+  false), and removed in a later one. A role that is removed takes its assignments with it.
+- A change to `appRoles` on the registration reaches its service principal, and a service principal made from a registration starts with its roles.
+- `POST /servicePrincipals/{id}/appRoleAssignedTo` gives a user, a group, or a service principal a role of the app. The role must exist, be enabled, and allow
+  the type: a role for `Application` only is not for a user. `GET` of one assignment, and `/$count` (it needs `ConsistencyLevel: eventual`), work on
+  `appRoleAssignedTo` and on `appRoleAssignments`.
+- **The token has the roles.** When a user signs in to the app, the ID token has `roles` with the `value` of each role of the user, and so has the access token for
+  the app. The roles are those that are assigned to the user, and to a group that the user is a direct member of (a group in a group does not count). A role with no
+  value, a disabled role, and *Default access* are not in the claim. See [sign-in](sign-in.md).
+- The [portal](portal.md) edits the roles on the page *App registrations*, and assigns them on the tab *Users and groups* of a service principal.
+
+Checked against the real Graph (the sample tenant, read-only): the shape of an app role and of an assignment, `GET` of one assignment (200, with
+`@odata.context` `#appRoleAssignments/$entity`), and the 400 `Request_UnsupportedQuery` for a raw `/$count` with no `ConsistencyLevel`. From Learn, and not
+tried: the rules above. Guesses: the texts of the errors, that a removed role takes its assignments, and the claim `roles` for a group (Entra's own
+rules for nested groups come from memory). The IDs of assignments are `<principal ID>.<role ID>`, and the real Graph writes a 43-character string: a client
+treats the ID as opaque, and it is not made the same yet.
 
 Checked against the real Graph (the sample tenant, read-only): the properties of an application, `GET` by ID, by `appId`, `$filter=appId eq`, the 404 for an
 unknown ID, and the owners list. Not checked, because a write cannot be tried there: what `PATCH` and `DELETE` answer, and what the Azure CLI sends.
@@ -87,6 +133,23 @@ Three more people from the play are there when there is room, as the users four,
 | **Dr. Rank** | `dr.rank_<guest domain>#EXT#@<initial domain>` | A **guest**, invited and accepted, as a generated guest is. He has no manager. |
 
 They are made after the users and before the manager tree and the groups, so the department and office groups agree with them. The links to Torvald are set after the tree is made, and a loop is checked for: if Torvald's own manager chain reaches Nora or Nils, Torvald has no manager. Like the owner, they draw nothing from the random numbers.
+
+## Copy the data of another folder (`--clone-from`)
+
+`dolly serve --clone-from SOURCE` serves a copy of the data in another data folder. SOURCE is a data root, as `--dir` is (dollycli reads `SOURCE/graph`), or the folder with `seed.json`. The seed and every change in `state.jsonl` are in the copy. The source is only read: it is never changed, it is not locked, and a dollycli can run on it while you copy. `--users`, `--seed`, and `--profile` do not go with it, because the copy has the data of its source.
+
+- Without `--dir` the copy is in memory, and gone when dollycli stops. It has no history of its own.
+- With `--dir DIR` the copy is written to `DIR/graph` and has the history. That folder must have no data: a copy never replaces data. It is a second copy of the source data on disk, so treat it as you treat the source.
+
+One baseline, many copies. Make the baseline once, and give each test run or each agent a copy of its own:
+
+```
+dolly --dir ./base graph generate --users 200
+dolly serve --clone-from ./base --port 8661
+dolly serve --clone-from ./base --port 8662
+```
+
+A change in one copy is not in another. To see a problem in someone's data, ask for their data folder (or a copy of it) and serve it with `--clone-from`. [The MCP server](mcp.md) does the same with `start_instance`.
 
 ## Where the data of Microsoft comes from
 

@@ -1,4 +1,4 @@
-# Fake entra is the best entra
+# Stop testing your Graph automation in production: meet Dolly
 
 For some time i've had a lot of work doing identity management stuff, and a huge part of that work has been management of Entra.
 Entra is the identity management for Microsoft Azure and is the baseline for all identity for the entire Azure/M365 stack. at the heart of Entra is graph api. 
@@ -93,7 +93,7 @@ This is great for testing and being able to deliver correct estimates of the nee
 
 The data from this is gathered from microsoft learn and microsoft's own [devx-content](https://github.com/microsoftgraph/microsoft-graph-devx-content), so it should be mostly correct.
 
-However both the microsoft learn data and devx have some missing meta-data and weird formatting so we do have some extra steps to make sure that permissions don't overlap (e.g user read + user update is `user.readupdate.all` instead of `user.read.all` + `user.readupdate.all`). this is a best guess, not a guarantee.
+However both the microsoft learn data and devx have some missing meta-data and weird formatting so we do have some extra steps to make sure that permissions don't overlap (e.g user read + user update is `user.readupdate.all` instead of `user.read.all` + `user.readupdate.all`). the overlap checker is a best guess, not a guarantee.
 
 Of course, any errors can be reported and i will fix them as soon as i can.
 
