@@ -85,10 +85,22 @@ func openGraph(s *settings, _ []shared.API) (shared.API, func(), error) {
 		return nil, nil, err
 	}
 	var world *graph.World
-	if s.dir == "" {
+	var err error
+	switch {
+	case s.cloneFrom != "" && s.dir == "":
+		if world, err = graph.OpenClone(s.cloneFrom); err != nil {
+			return nil, nil, err
+		}
+		slog.Info("Dolly serves a copy of this data, in memory. It is gone when Dolly stops.", "api", "graph", "from", s.cloneFrom)
+	case s.dir == "":
 		world = graph.NewMemory(graph.Options{Users: s.users, Seed: s.seed, Profile: s.profile})
-	} else {
-		var err error
+	default:
+		if s.cloneFrom != "" {
+			if err = graph.CopyData(s.cloneFrom, s.dir); err != nil {
+				return nil, nil, err
+			}
+			slog.Info("Dolly copied the data.", "api", "graph", "from", s.cloneFrom, "to", s.dir)
+		}
 		if world, err = graph.Open(s.dir, graph.OpenOptions{Users: s.users, Seed: s.seed, Profile: s.profile}); err != nil {
 			return nil, nil, err
 		}

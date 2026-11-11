@@ -28,6 +28,7 @@ type settings struct {
 	allowHosts            []string      // names (not loopback) that the admin API accepts in the Host header
 	docs                  string        // a folder of documentation files, for a dev build (see below)
 	usageHistory          time.Duration // how long the use of each client over time is kept
+	cloneFrom             string        // serve a copy of this data folder
 	profilePath           string        // a profile (JSON) that says what the generated tenant looks like
 	permissionsPath       string        // the permissions of Microsoft Graph that the person downloaded from their tenant (JSON)
 	profile               *graph.Profile
@@ -86,7 +87,9 @@ func main() {
 		SilenceErrors: true,
 		Version:       version,
 	}
-	f := root.PersistentFlags()
+	// Every flag is defined once, here, on a set that belongs to no command. A command takes the flags that it uses (see with, below), so
+	// its help lists those and no others, and a flag that does nothing for a command is refused by it.
+	f := (&cobra.Command{}).Flags()
 	if version == "dev" {
 		// The documentation is in the program. A person who writes it can read a folder instead, and see a change
 		// at the next reload of the page. A release build does not have this flag.
@@ -106,36 +109,71 @@ func main() {
 	f.Int64Var(&s.seed, "seed", envInt[int64]("DOLLY_SEED", 1), "The seed of the fake people (env DOLLY_SEED). The same seed makes the same people.")
 	f.IntVar(&s.pageSize, "page-size", envInt("DOLLY_PAGE_SIZE", 0), "Force the size of every page, whatever $top says (env DOLLY_PAGE_SIZE). 0 uses $top.")
 	f.BoolVar(&s.throttle, "throttle", os.Getenv("DOLLY_THROTTLE") == "1", "Answer 429 when a service principal passes the limits of Graph (env DOLLY_THROTTLE=1). The cost of each call is counted in any case. A person can change it while Dolly runs.")
-	root.PersistentPreRunE = func(cmd *cobra.Command, _ []string) error {
-		if !cmd.Flags().Changed("dir") {
-			if _, ok := os.LookupEnv("DOLLY_DIR"); !ok {
-				s.root = "dolly-data"
+	f.StringVar(&s.cloneFrom, "clone-from", os.Getenv("DOLLY_CLONE_FROM"), "Serve a copy of the data of another data folder (env DOLLY_CLONE_FROM): a data root as --dir is, or the folder with seed.json. The source is only read, and a dolly can run on it. Without --dir the copy is in memory. With --dir it is written there, and the folder must have no data. For 'serve' only.")
+	// The groups of flags. A command that has none of a group's flags skips the checks of that group.
+	var (
+		dataFlags   = []string{"dir"}                                // where the data is kept
+		clientFlags = []string{"port", "tls", "tls-cert", "tls-key"} // where a running dolly is, and how it is reached
+		makeFlags   = []string{"users", "seed", "profile"}           // how new data is made
+		serveFlags  = []string{"docs", "host", "allow-host", "permissions", "usage-history", "page-size", "throttle", "clone-from"}
+	)
+	// with gives a command the flags that it uses.
+	with := func(c *cobra.Command, groups ...[]string) *cobra.Command {
+		for _, g := range groups {
+			for _, name := range g {
+				if fl := f.Lookup(name); fl != nil { // --docs is in a dev build only
+					c.Flags().AddFlag(fl)
+				}
 			}
 		}
-		s.dir = ""
-		if s.root != "" {
-			s.dir = filepath.Join(s.root, "graph") // the commands below are for Graph
+		return c
+	}
+	root.PersistentPreRunE = func(cmd *cobra.Command, _ []string) error {
+		has := func(name string) bool { return cmd.Flags().Lookup(name) != nil }
+		if !has("clone-from") {
+			s.cloneFrom = "" // the variable of the environment is for 'serve' only
 		}
-		if s.port < 1 || s.port > 65535 {
+		if s.cloneFrom != "" {
+			for _, name := range makeFlags {
+				if cmd.Flags().Changed(name) {
+					return fmt.Errorf("--clone-from and --%s do not go together: the copy has the data of its source", name)
+				}
+			}
+		}
+		if has("dir") {
+			if !cmd.Flags().Changed("dir") {
+				if _, ok := os.LookupEnv("DOLLY_DIR"); !ok {
+					s.root = "dolly-data"
+					if s.cloneFrom != "" {
+						s.root = "" // a copy that no folder was asked for stays in memory
+					}
+				}
+			}
+			s.dir = ""
+			if s.root != "" {
+				s.dir = filepath.Join(s.root, "graph") // the commands below are for Graph
+			}
+		}
+		if has("port") && (s.port < 1 || s.port > 65535) {
 			return fmt.Errorf("--port must be a whole number from 1 to 65535")
 		}
-		if s.users < 1 || s.users > 100000 {
+		if has("users") && (s.users < 1 || s.users > 100000) {
 			return fmt.Errorf("--users must be a whole number from 1 to 100000")
 		}
-		if (s.tlsCert == "") != (s.tlsKey == "") {
+		if has("tls-cert") && (s.tlsCert == "") != (s.tlsKey == "") {
 			return fmt.Errorf("--tls-cert and --tls-key go together")
 		}
-		if s.profilePath != "" {
+		if has("profile") && s.profilePath != "" {
 			p, err := loadProfile(s.profilePath)
 			if err != nil {
 				return err
 			}
 			s.profile = p
 		}
-		if s.usageHistory < time.Minute || s.usageHistory > 24*time.Hour {
+		if has("usage-history") && (s.usageHistory < time.Minute || s.usageHistory > 24*time.Hour) {
 			return fmt.Errorf("--usage-history must be from 1m to 24h, for example 1h")
 		}
-		if s.pageSize < 0 || s.pageSize > 999 {
+		if has("page-size") && (s.pageSize < 0 || s.pageSize > 999) {
 			return fmt.Errorf("--page-size must be a whole number from 0 to 999")
 		}
 		return nil
@@ -151,9 +189,17 @@ func main() {
 			"'dolly graph history' shows it, and 'dolly graph rollback 1h' takes the data back one hour.\n" +
 			"Delete the folder to start again. The folder has one server at a time.",
 	}
-	graph.AddCommand(serveCmd(&s, "graph"), showCmd(&s), renameCmd(&s), moveCmd(&s), resetCmd(&s),
-		historyCmd(&s), rollbackCmd(&s), generateCmd(&s))
-	root.AddCommand(serveCmd(&s, ""), graph, healthCmd(&s), profileCmd(), tlsCmd(&s))
+	// the commands that talk to a running dolly need to know where it is: the data folder and the port
+	talk := func(c *cobra.Command) *cobra.Command { return with(c, dataFlags, clientFlags) }
+	graph.AddCommand(
+		with(serveCmd(&s, "graph"), dataFlags, clientFlags, makeFlags, serveFlags),
+		talk(showCmd(&s)), talk(renameCmd(&s)), talk(moveCmd(&s)), talk(resetCmd(&s)), talk(historyCmd(&s)), talk(rollbackCmd(&s)),
+		with(generateCmd(&s), dataFlags, makeFlags))
+	tlsC := tlsCmd(&s)
+	for _, c := range tlsC.Commands() {
+		with(c, dataFlags)
+	}
+	root.AddCommand(with(serveCmd(&s, ""), dataFlags, clientFlags, makeFlags, serveFlags), graph, talk(healthCmd(&s)), profileCmd(), tlsC, mcpCmd())
 
 	if err := root.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, "dolly:", err)
