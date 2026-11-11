@@ -69,6 +69,12 @@ func NewMemory(o Options) *World { return repo.NewMemory(o) }
 // Open opens the data folder, and makes it when it is not there.
 func Open(dir string, o OpenOptions) (*World, error) { return repo.Open(dir, o) }
 
+// OpenClone gives a world in memory with the data of another data folder (a data root, or the folder with seed.json). It does not change the folder.
+func OpenClone(path string) (*World, error) { return repo.OpenClone(path) }
+
+// CopyData writes the data of another data folder into dst, which must have no data. Open opens it after that.
+func CopyData(path, dst string) error { return repo.CopyData(path, dst) }
+
 // Replace makes a new world in the data folder, in place of the old one and its history.
 func Replace(dir string, o OpenOptions) (State, error) { return repo.Replace(dir, o) }
 
