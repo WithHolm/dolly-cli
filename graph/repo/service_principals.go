@@ -149,13 +149,15 @@ func (w *World) CreateServicePrincipal(props map[string]any, a Actor) (Object, *
 	for _, u := range anyStrings(app["identifierUris"]) {
 		sp.IdentifierURIs = append(sp.IdentifierURIs, u)
 	}
-	for _, r := range anyObjects(app["appRoles"]) {
-		sp.Roles = append(sp.Roles, AppRole{ID: str(r["id"]), Name: str(r["displayName"])})
+	sp.Roles = rolesFromList(app["appRoles"])
+	if e := normalizeServicePrincipalRoles(sp, body); e != nil {
+		return nil, e
 	}
 	if apiObj, ok := app["api"].(map[string]any); ok {
-		for _, s := range anyObjects(apiObj["oauth2PermissionScopes"]) {
-			sp.Scopes = append(sp.Scopes, AppScope{ID: str(s["id"]), Value: str(s["value"]), Name: str(s["adminConsentDisplayName"]), Description: str(s["adminConsentDescription"])})
-		}
+		sp.Scopes = scopesFromList(apiObj["oauth2PermissionScopes"])
+	}
+	if e := normalizeServicePrincipalScopes(sp, body); e != nil {
+		return nil, e
 	}
 	var reply []any
 	for _, key := range []string{"web", "spa", "publicClient"} {
@@ -192,6 +194,23 @@ func checkServicePrincipalBody(body map[string]any) *apiError {
 	return nil
 }
 
+// applySPSet is applyServicePrincipalSet for a service principal that is in the world: a role that a change takes away takes its assignments with it.
+// Call it with the lock held. A change that was checked cannot fail, so a replay never does.
+func (w *World) applySPSet(sp *ServicePrincipal, set map[string]any) {
+	oldRoles, oldScopes := sp.Roles, sp.Scopes
+	_ = applyServicePrincipalSet(sp, set)
+	if _, has := set["appRoles"]; has {
+		now := sp.Roles
+		sp.Roles = oldRoles
+		w.setRoles(sp, now)
+	}
+	if _, has := set["oauth2PermissionScopes"]; has {
+		now := sp.Scopes
+		sp.Scopes = oldScopes
+		w.setScopes(sp, now)
+	}
+}
+
 // applyServicePrincipalSet sets properties of a change on a service principal. The properties that the type keeps (name, tags, roles, scopes, names) go
 // to their fields, and the rest to Props. A change that was checked cannot fail, so a replay never does.
 func applyServicePrincipalSet(sp *ServicePrincipal, set map[string]any) *apiError {
@@ -217,17 +236,9 @@ func applyServicePrincipalSet(sp *ServicePrincipal, set map[string]any) *apiErro
 				}
 			}
 		case "appRoles":
-			sp.Roles = nil
-			for _, r := range anyObjects(v) {
-				id := firstNonEmpty(str(r["id"]), newGUID())
-				sp.Roles = append(sp.Roles, AppRole{ID: id, Name: firstNonEmpty(str(r["displayName"]), str(r["value"]))})
-			}
+			sp.Roles = rolesFromList(v) // a call has been checked and written in full (normalizeServicePrincipalRoles)
 		case "oauth2PermissionScopes":
-			sp.Scopes = nil
-			for _, s := range anyObjects(v) {
-				id := firstNonEmpty(str(s["id"]), newGUID())
-				sp.Scopes = append(sp.Scopes, AppScope{ID: id, Value: str(s["value"]), Name: firstNonEmpty(str(s["adminConsentDisplayName"]), str(s["value"])), Description: str(s["adminConsentDescription"])})
-			}
+			sp.Scopes = scopesFromList(v) // a call has been checked and written in full (normalizeServicePrincipalScopes)
 		default:
 			if sp.Props == nil {
 				sp.Props = map[string]any{}
@@ -264,7 +275,13 @@ func (w *World) UpdateServicePrincipal(ref string, props map[string]any, a Actor
 	if len(body) == 0 {
 		return nil
 	}
-	applyServicePrincipalSet(sp, deepCopy(body))
+	if e := normalizeServicePrincipalRoles(sp, body); e != nil {
+		return e
+	}
+	if e := normalizeServicePrincipalScopes(sp, body); e != nil {
+		return e
+	}
+	w.applySPSet(sp, deepCopy(body))
 	w.record(Event{Type: evSPUpdate, Actor: a, AppID: sp.AppID, PrincipalName: sp.Name, Set: deepCopy(body), SP: &ServicePrincipal{ID: sp.ID, AppID: sp.AppID}})
 	return nil
 }
@@ -328,7 +345,7 @@ func (w *World) applyServicePrincipalWriteEvent(e Event) bool {
 	switch e.Type {
 	case evSPUpdate:
 		if sp := w.spByAppID(e.AppID); sp != nil {
-			applyServicePrincipalSet(sp, deepCopy(e.Set))
+			w.applySPSet(sp, deepCopy(e.Set))
 		}
 	case evSPDelete:
 		if sp := w.spByAppID(e.AppID); sp != nil {

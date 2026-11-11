@@ -704,9 +704,10 @@ func (g *gen) apps() {
 			}
 		}
 
-		sp := &ServicePrincipal{ID: g.guid(), Name: a.Title, AppID: g.guid(), Enterprise: true, Roles: []AppRole{
-			{g.guid(), "Admin"}, {g.guid(), "Contributor"}, {g.guid(), "Reader"},
-		}}
+		sp := &ServicePrincipal{ID: g.guid(), Name: a.Title, AppID: g.guid(), Enterprise: true}
+		for _, name := range []string{"Admin", "Contributor", "Reader"} { // the order of the draws: the ID of the service principal, the client ID, then the roles
+			sp.Roles = append(sp.Roles, AppRole{ID: g.guid(), Name: name})
+		}
 		g.w.SPs = append(g.w.SPs, sp)
 		if firstEnterprise == nil {
 			firstEnterprise = sp
@@ -730,12 +731,8 @@ func (g *gen) apps() {
 			continue
 		}
 		app := g.w.newApplication(stableGUID("dolly/application/"+sp.AppID), sp.AppID, sp.Name, seedEpoch.Add(time.Duration(i+1)*24*time.Hour))
-		var roles []any
-		for _, r := range sp.Roles {
-			roles = append(roles, Object{"allowedMemberTypes": []any{"User"}, "description": r.Name, "displayName": r.Name, "id": r.ID, "isEnabled": true, "origin": "Application", "value": nil})
-		}
-		if roles != nil {
-			app["appRoles"] = roles
+		if len(sp.Roles) > 0 {
+			app["appRoles"] = roleObjects(sp.Roles)
 		}
 		g.w.Applications = append(g.w.Applications, app)
 	}

@@ -8,18 +8,29 @@ import (
 // The apps of the tenant (service principals), and the roles that users and
 // groups have on them. The data side of api/apps.go. It satisfies api.ServicePrincipalsBackend.
 
-// AppRole is a role of a service principal: an application permission, or a role for users.
+// AppRole is a role of a service principal: an application permission, or a role for users (roles.go has the rules). A role of an old data
+// folder has an ID and a name only: it has no MemberTypes, and then it is a legacy role (see legacy).
 type AppRole struct {
-	ID   string `json:"id"`
-	Name string `json:"displayName"`
+	ID          string   `json:"id"`
+	Name        string   `json:"displayName"`
+	Description string   `json:"description,omitempty"`
+	Value       string   `json:"value,omitempty"`              // empty: the role has no value (null), and it is not in the claim roles
+	MemberTypes []string `json:"allowedMemberTypes,omitempty"` // User, Application, or both
+	Disabled    bool     `json:"disabled,omitempty"`           // isEnabled is false
+	Origin      string   `json:"origin,omitempty"`             // ServicePrincipal when the role is the service principal's own. Empty: Application.
 }
 
-// AppScope is a delegated permission that a service principal gives.
+// AppScope is a delegated permission that a service principal gives (scopes.go has the rules). Name and Description are the texts for an administrator
+// (adminConsentDisplayName and adminConsentDescription). A scope of an old data folder has no Type: it is an Admin scope, enabled.
 type AppScope struct {
-	ID          string `json:"id"`
-	Value       string `json:"value"`
-	Name        string `json:"displayName"`
-	Description string `json:"description,omitempty"`
+	ID              string `json:"id"`
+	Value           string `json:"value"`
+	Name            string `json:"displayName"`
+	Description     string `json:"description,omitempty"`
+	UserName        string `json:"userConsentDisplayName,omitempty"`
+	UserDescription string `json:"userConsentDescription,omitempty"`
+	Type            string `json:"type,omitempty"`     // User: a user can consent for himself or herself. Admin: only an administrator.
+	Disabled        bool   `json:"disabled,omitempty"` // isEnabled is false
 }
 
 // ServicePrincipal is an app in the tenant. An enterprise application has the
@@ -102,17 +113,8 @@ func (s *ServicePrincipal) object(full bool) Object {
 		}
 		return o
 	}
-	roles := make([]Object, 0, len(s.Roles))
-	for _, r := range s.Roles {
-		roles = append(roles, Object{"id": r.ID, "displayName": r.Name, "value": strings.ToLower(r.Name), "isEnabled": true})
-	}
-	o["appRoles"] = roles
-	scopes := make([]Object, 0, len(s.Scopes))
-	for _, c := range s.Scopes {
-		scopes = append(scopes, Object{"id": c.ID, "value": c.Value, "type": "Admin", "isEnabled": true,
-			"adminConsentDisplayName": c.Name, "adminConsentDescription": c.Description})
-	}
-	o["oauth2PermissionScopes"] = scopes
+	o["appRoles"] = roleObjects(s.Roles)
+	o["oauth2PermissionScopes"] = scopeObjects(s.Scopes)
 	return o
 }
 
@@ -177,10 +179,7 @@ func (w *World) AppRoleAssignedTo(appID string) ([]Object, bool) {
 	var items []Object
 	for _, a := range w.Assignments {
 		if isID(a.ResourceID, id) {
-			items = append(items, Object{
-				"id": a.PrincipalID + "." + a.RoleID, "resourceId": a.ResourceID, "principalId": a.PrincipalID,
-				"principalType": a.PrincipalType, "principalDisplayName": w.principalName(a.PrincipalID), "appRoleId": a.RoleID,
-			})
+			items = append(items, w.assignmentObject(a))
 		}
 	}
 	return items, true

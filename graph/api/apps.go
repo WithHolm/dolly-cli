@@ -19,6 +19,8 @@ type ServicePrincipalsBackend interface {
 	AppRoleAssignedTo(appID string) ([]Object, bool)
 	// AppRoleAssignments lists the app roles that are assigned to a service principal.
 	AppRoleAssignments(spID string) ([]Object, bool)
+	// AppRoleAssignment gives one assignment. spID is the principal (asResource false) or the resource (asResource true).
+	AppRoleAssignment(spID, assignmentID string, asResource bool) (Object, bool)
 	AssignAppRole(resourceID, principalID, roleID string, a Actor) (Object, *Error)
 	// DeleteAppRoleAssignment takes one away. asResource says that spID is the resource and not the principal.
 	DeleteAppRoleAssignment(spID, assignmentID string, asResource bool, a Actor) *Error
@@ -157,6 +159,31 @@ func (a servicePrincipals) Register(r *Router) {
 			respond(w, a.b.DeleteAppRoleAssignment(req.PathValue("id"), req.PathValue("assignmentId"), asResource, env.Actor(req)))
 		}
 	}
+	// one assignment, and the counts (a count of a directory object needs ConsistencyLevel: eventual)
+	getOne := func(asResource bool) http.HandlerFunc {
+		return func(w http.ResponseWriter, req *http.Request) {
+			o, ok := a.b.AppRoleAssignment(req.PathValue("id"), req.PathValue("assignmentId"), asResource)
+			if !ok {
+				WriteError(w, NotFound("appRoleAssignment", req.PathValue("assignmentId")))
+				return
+			}
+			WriteJSON(w, http.StatusOK, one("appRoleAssignments", o, req, nil, nil, ""))
+		}
+	}
+	count := func(list func(string) ([]Object, bool)) http.HandlerFunc {
+		return func(w http.ResponseWriter, req *http.Request) {
+			items, ok := list(req.PathValue("id"))
+			if !ok {
+				WriteError(w, NotFound("servicePrincipal", req.PathValue("id")))
+				return
+			}
+			ServeCount(w, req, items, ListOptions{})
+		}
+	}
+	s.Handle("GET", "/{id}/appRoleAssignedTo/$count", "Count who is assigned to a service principal. Needs ConsistencyLevel: eventual.", nil, count(a.b.AppRoleAssignedTo))
+	s.Handle("GET", "/{id}/appRoleAssignments/$count", "Count the app roles that are assigned to a service principal. Needs ConsistencyLevel: eventual.", nil, count(a.b.AppRoleAssignments))
+	s.Handle("GET", "/{id}/appRoleAssignedTo/{assignmentId}", "Get one assignment of an app role of this resource.", []string{"$select"}, getOne(true))
+	s.Handle("GET", "/{id}/appRoleAssignments/{assignmentId}", "Get one app role that is assigned to this service principal.", []string{"$select"}, getOne(false))
 	s.Handle("POST", "/{id}/appRoleAssignments", "Assign an app role to this service principal: give it an application permission of a resource. Needs principalId (this one), resourceId, and appRoleId. The application permissions of Microsoft Graph are for a service principal only. Gives 201.", nil, assign(false))
 	s.Handle("DELETE", "/{id}/appRoleAssignments/{assignmentId}", "Take an app role away from this service principal. Gives 204.", nil, remove(false))
 	s.Handle("POST", "/{id}/appRoleAssignedTo", "Assign an app role of this resource to a user, a group, or a service principal. Needs principalId, resourceId (this one), and appRoleId. Gives 201.", nil, assign(true))

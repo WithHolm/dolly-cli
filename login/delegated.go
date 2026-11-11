@@ -30,6 +30,10 @@ func (a *API) userTokens(si *SignIn, claims, resp, user map[string]any, clientID
 	claims["aud"], claims["oid"], claims["sub"] = res.AppID, user["id"], user["id"]
 	claims["name"], claims["preferred_username"], claims["upn"] = user["displayName"], user["userPrincipalName"], user["userPrincipalName"]
 	claims["scp"], claims["appidacr"] = strings.Join(scp, " "), "1"
+	// the roles of the user on the app that the token is for: the app roles that were assigned to the user, or to a group of the user
+	if roles := a.world.UserRoles(str(user["id"]), res.AppID); len(roles) > 0 {
+		claims["roles"] = roles
+	}
 	if si.Credential == "none" {
 		claims["appidacr"] = "0" // a public client: it showed no secret
 	}
@@ -42,6 +46,9 @@ func (a *API) userTokens(si *SignIn, claims, resp, user map[string]any, clientID
 		}
 		if nonce != "" {
 			id["nonce"] = nonce
+		}
+		if roles := a.world.UserRoles(str(user["id"]), clientID); len(roles) > 0 { // the app that the user signs in to
+			id["roles"] = roles
 		}
 		tok, err := a.sign(id)
 		if err != nil {

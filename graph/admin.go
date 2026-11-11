@@ -99,6 +99,8 @@ func (s *Server) adminRoutes() {
 		writeJSON(w, http.StatusOK, map[string]any{"applications": s.world.ListApplicationInfo()})
 	})
 	s.adminSiteRoutes() // the sites and their drives (admin_sites.go)
+	s.adminRoleRoutes() // the app roles of an app registration, and who has them (admin_roles.go)
+	s.adminAPIRoutes()  // the API that an app registration exposes (admin_api.go)
 	a.HandleFunc("PUT /service-principals/{appId}/mode", s.adminSetServicePrincipalMode)
 	a.HandleFunc("PUT /service-principals/{appId}/flags", s.adminSetServicePrincipalFlags)
 	a.HandleFunc("POST /service-principals/{appId}/credential/arm", func(w http.ResponseWriter, r *http.Request) {

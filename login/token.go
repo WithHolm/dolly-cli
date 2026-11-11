@@ -262,6 +262,12 @@ func (a *API) delegated(clientID, userID string, scope []string) (repo.ResourceI
 			}
 		}
 	}
+	// the app registration of the API pre-authorizes some clients: they need no consent for those scopes
+	for _, v := range a.world.PreAuthorizedScopes(clientID, res.AppID) {
+		if !slices.Contains(consented, v) {
+			consented = append(consented, v)
+		}
+	}
 	var out []string
 	for _, v := range values {
 		if v == ".default" {

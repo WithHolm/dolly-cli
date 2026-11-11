@@ -1,7 +1,7 @@
 {
   "commit": "02cb3eb0ca9f3f278a8ffa934a1304f640e6e792",
   "commitDate": "2026-10-26T13:31:32Z",
-  "fetchedDate": "2026-11-03",
+  "fetchedDate": "2026-11-09",
   "files": [
     {
       "path": "api-reference/v1.0/api/application-delete.md",
@@ -27,6 +27,11 @@
       "path": "api-reference/v1.0/api/application-update.md",
       "bytes": 22186,
       "sha256": "1d8fba1c3fec4ba9caff2fd06bf4e4ddc36c4e192e1170c43b76c889185beb89"
+    },
+    {
+      "path": "api-reference/v1.0/api/approleassignment-get.md",
+      "bytes": 10582,
+      "sha256": "afb550bfc56643e556dad375aed4af7d45659a7ec926e96b138bdaee62a873ef"
     },
     {
       "path": "api-reference/v1.0/api/drive-get.md",

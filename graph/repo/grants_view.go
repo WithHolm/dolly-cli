@@ -143,12 +143,18 @@ func (w *World) ResourcePermissions(resourceAppID string, kind permissions.Kind,
 			all = append(all, permissionInfo(ns, kind, p.ID, p.Value, p.AdminConsentDisplayName, p.AdminConsentDescription, p.IsAdmin))
 		}
 	case kind == permissions.Application:
+		// an application permission is a role that is enabled, is for applications, and has a value (the value is what the claim roles has)
 		for _, r := range res.Roles {
-			all = append(all, permissionInfo(ns, kind, r.ID, strings.ToLower(r.Name), r.Name, "", true))
+			if r.Disabled || r.value() == "" || !slices.Contains(r.memberTypes(), MemberApplication) {
+				continue
+			}
+			all = append(all, permissionInfo(ns, kind, r.ID, r.value(), r.Name, r.description(), true))
 		}
 	default:
 		for _, s := range res.Scopes {
-			all = append(all, permissionInfo(ns, kind, s.ID, s.Value, s.Name, s.Description, true))
+			if !s.Disabled {
+				all = append(all, permissionInfo(ns, kind, s.ID, s.Value, s.Name, s.Description, s.typ() == ScopeAdmin))
+			}
 		}
 	}
 	if q := strings.ToLower(strings.TrimSpace(query)); q != "" {
@@ -306,13 +312,13 @@ func roleList(sp *ServicePrincipal) []roleInfo {
 		list := catalogOnce().Application
 		out := make([]roleInfo, len(list))
 		for i, p := range list {
-			out[i] = roleInfo{p.ID, p.Value, p.AdminConsentDisplayName, p.AdminConsentDescription}
+			out[i] = roleInfo{ID: p.ID, Value: p.Value, Name: p.AdminConsentDisplayName, Description: p.AdminConsentDescription, Types: []string{MemberApplication}}
 		}
 		return out
 	}
 	out := make([]roleInfo, len(sp.Roles))
 	for i, r := range sp.Roles {
-		out[i] = roleInfo{r.ID, strings.ToLower(r.Name), r.Name, ""}
+		out[i] = roleInfo{ID: r.ID, Value: r.value(), Name: r.Name, Description: r.description(), Disabled: r.Disabled, Types: r.memberTypes()}
 	}
 	return out
 }

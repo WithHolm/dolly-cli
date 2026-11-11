@@ -88,7 +88,11 @@ func (w *World) ensureGraphServicePrincipal() {
 const BuiltinGraph = "graph"
 
 // roleInfo is an app role, from the data or from the catalog.
-type roleInfo struct{ ID, Value, Name, Description string }
+type roleInfo struct {
+	ID, Value, Name, Description string
+	Disabled                     bool
+	Types                        []string // the member types: User, Application
+}
 
 // scopeInfo is a delegated permission, from the data or from the catalog.
 type scopeInfo struct {
@@ -99,13 +103,13 @@ type scopeInfo struct {
 func (sp *ServicePrincipal) role(id string) (roleInfo, bool) {
 	if sp.Builtin == BuiltinGraph {
 		if p, ok := catalogOnce().ByID(permissions.Application, id); ok {
-			return roleInfo{p.ID, p.Value, p.AdminConsentDisplayName, p.AdminConsentDescription}, true
+			return roleInfo{ID: p.ID, Value: p.Value, Name: p.AdminConsentDisplayName, Description: p.AdminConsentDescription, Types: []string{MemberApplication}}, true
 		}
 		return roleInfo{}, false
 	}
 	for _, r := range sp.Roles {
 		if isID(r.ID, id) {
-			return roleInfo{r.ID, strings.ToLower(r.Name), r.Name, ""}, true
+			return roleInfo{ID: r.ID, Value: r.value(), Name: r.Name, Description: r.description(), Disabled: r.Disabled, Types: r.memberTypes()}, true
 		}
 	}
 	return roleInfo{}, false
@@ -119,8 +123,8 @@ func (sp *ServicePrincipal) scope(value string) (scopeInfo, bool) {
 		return scopeInfo{}, false
 	}
 	for _, s := range sp.Scopes {
-		if strings.EqualFold(s.Value, value) {
-			return scopeInfo{s.ID, s.Value, s.Name, s.Description, true}, true
+		if strings.EqualFold(s.Value, value) && !s.Disabled { // a disabled scope cannot be consented to, or asked for
+			return scopeInfo{s.ID, s.Value, s.Name, s.Description, s.typ() == ScopeAdmin}, true
 		}
 	}
 	return scopeInfo{}, false
@@ -185,6 +189,57 @@ func (w *World) AppRoleAssignments(spID string) ([]Object, bool) {
 	return items, true
 }
 
+// UserRoles gives the values of the app roles that a user has on an app (found by its client ID): the roles that are assigned to the user, and to a group that
+// the user is a direct member of (a group in a group does not count, as in Entra). It is what the claim roles of a token has. A role that has no value, a
+// disabled role, and Default access are not in it. The values are sorted, each once.
+func (w *World) UserRoles(userID, appID string) []string {
+	w.mu.RLock()
+	defer w.mu.RUnlock()
+	res := w.byAppID[strings.ToLower(appID)]
+	if res == nil || res.Builtin != "" {
+		return nil
+	}
+	var out []string
+	for _, a := range w.Assignments {
+		if !isID(a.ResourceID, res.ID) {
+			continue
+		}
+		switch a.PrincipalType {
+		case PrincipalUser:
+			if !isID(a.PrincipalID, userID) {
+				continue
+			}
+		case PrincipalGroup:
+			if g := w.groups[strings.ToLower(a.PrincipalID)]; g == nil || !g.has(userID) {
+				continue
+			}
+		default:
+			continue
+		}
+		if r, ok := res.role(a.RoleID); ok && !r.Disabled && r.ID != DefaultAccess && r.Value != "" && !slices.Contains(out, r.Value) {
+			out = append(out, r.Value)
+		}
+	}
+	slices.Sort(out)
+	return out
+}
+
+// AppRoleAssignment gives one app role assignment. spID is the principal (asResource false) or the resource (asResource true), as in the two paths of Graph.
+func (w *World) AppRoleAssignment(spID, id string, asResource bool) (Object, bool) {
+	w.mu.RLock()
+	defer w.mu.RUnlock()
+	for _, a := range w.Assignments {
+		side := a.PrincipalID
+		if asResource {
+			side = a.ResourceID
+		}
+		if isID(side, spID) && isID(assignmentID(a), id) {
+			return w.assignmentObject(a), true
+		}
+	}
+	return nil, false
+}
+
 // AssignAppRole assigns an app role of a resource to a user, a group, or a service principal. The
 // application permissions of Microsoft Graph go to a service principal only. The role
 // DefaultAccess (no role) is for a user or a group, on a resource with its own roles.
@@ -210,6 +265,10 @@ func (w *World) AssignAppRole(resourceID, principalID, roleID string, a Actor) (
 		return nil, badRequest("Permission being assigned was not found on application '%s'.", res.AppID)
 	case res.Builtin != "" && kind != PrincipalService:
 		return nil, badRequest("The permissions of %s are for a service principal. A %s cannot have them.", res.Name, strings.ToLower(kind))
+	case role.Disabled:
+		return nil, badRequest("The app role '%s' is disabled, so it cannot be assigned.", firstNonEmpty(role.Value, role.Name))
+	case role.ID != DefaultAccess && !slices.Contains(role.Types, memberTypeOf(kind)):
+		return nil, badRequest("The app role '%s' cannot be assigned to this principal: its allowedMemberTypes (%s) do not include %s.", firstNonEmpty(role.Value, role.Name), strings.Join(role.Types, ", "), memberTypeOf(kind))
 	}
 	asg := Assignment{ResourceID: res.ID, PrincipalID: pid, PrincipalType: kind, RoleID: role.ID}
 	if slices.ContainsFunc(w.Assignments, func(x Assignment) bool {

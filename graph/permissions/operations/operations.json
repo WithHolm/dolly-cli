@@ -105,6 +105,52 @@
         ]
       }
     },
+    "approleassignment-get": {
+      "table": true,
+      "delegated": {},
+      "application": {},
+      "variants": [
+        {
+          "resource": "group",
+          "delegated": {
+            "least": [
+              "Group.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Group.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "servicePrincipal",
+          "delegated": {
+            "least": [
+              "Application.Read.All"
+            ]
+          },
+          "application": {
+            "least": [
+              "Application.Read.All"
+            ]
+          }
+        },
+        {
+          "resource": "user",
+          "delegated": {
+            "least": [
+              "User.Read"
+            ]
+          },
+          "application": {
+            "least": [
+              "Directory.Read.All"
+            ]
+          }
+        }
+      ]
+    },
     "drive-get": {
       "table": true,
       "delegated": {
@@ -5486,7 +5532,11 @@
     "GET /v1.0/servicePrincipals/delta()": "serviceprincipal-delta",
     "GET /v1.0/servicePrincipals/{id}": "serviceprincipal-get",
     "GET /v1.0/servicePrincipals/{id}/appRoleAssignedTo": "serviceprincipal-list-approleassignedto",
+    "GET /v1.0/servicePrincipals/{id}/appRoleAssignedTo/$count": "serviceprincipal-list-approleassignedto",
+    "GET /v1.0/servicePrincipals/{id}/appRoleAssignedTo/{assignmentId}": "approleassignment-get",
     "GET /v1.0/servicePrincipals/{id}/appRoleAssignments": "serviceprincipal-list-approleassignments",
+    "GET /v1.0/servicePrincipals/{id}/appRoleAssignments/$count": "serviceprincipal-list-approleassignments",
+    "GET /v1.0/servicePrincipals/{id}/appRoleAssignments/{assignmentId}": "approleassignment-get",
     "GET /v1.0/sites": "site-list",
     "GET /v1.0/sites/getAllSites()": "site-getallsites",
     "GET /v1.0/sites/{id}": "site-get",
@@ -5575,6 +5625,8 @@
     "GET /v1.0/oauth2PermissionGrants/$count": "GET /v1.0/oauth2PermissionGrants",
     "GET /v1.0/organization/$count": "GET /v1.0/organization",
     "GET /v1.0/servicePrincipals/$count": "GET /v1.0/servicePrincipals",
+    "GET /v1.0/servicePrincipals/{id}/appRoleAssignedTo/$count": "GET /v1.0/servicePrincipals/{id}/appRoleAssignedTo",
+    "GET /v1.0/servicePrincipals/{id}/appRoleAssignments/$count": "GET /v1.0/servicePrincipals/{id}/appRoleAssignments",
     "GET /v1.0/users/$count": "GET /v1.0/users",
     "GET /v1.0/users/{id}/directReports/$count": "GET /v1.0/users/{id}/directReports",
     "GET /v1.0/users/{id}/memberOf/$count": "GET /v1.0/users/{id}/memberOf",

@@ -187,8 +187,17 @@ func (w *World) CreateApplication(props map[string]any, a Actor) (Object, *apiEr
 	if e := checkApplicationBody(body); e != nil {
 		return nil, e
 	}
+	if e := normalizeApplicationRoles(body, nil); e != nil {
+		return nil, e
+	}
+	if e := normalizeApplicationAPI(body, nil); e != nil {
+		return nil, e
+	}
 	w.mu.Lock()
 	defer w.mu.Unlock()
+	if e := w.checkIdentifierURIs(body["identifierUris"], ""); e != nil {
+		return nil, e
+	}
 	app := w.newApplication(newGUID(), newGUID(), str(body["displayName"]), w.now())
 	maps.Copy(app, deepCopy(body))
 	app = deepCopy(app)
@@ -216,8 +225,21 @@ func (w *World) UpdateApplication(ref string, props map[string]any, a Actor) *ap
 	if app == nil {
 		return notFound("application", ref)
 	}
+	if e := normalizeApplicationRoles(body, rolesFromList(app["appRoles"])); e != nil {
+		return e
+	}
+	if e := normalizeApplicationAPI(body, app); e != nil {
+		return e
+	}
+	if uris, has := body["identifierUris"]; has {
+		if e := w.checkIdentifierURIs(uris, str(app["id"])); e != nil {
+			return e
+		}
+	}
 	if len(body) > 0 {
 		mergeApplication(app, deepCopy(body))
+		w.syncRolesFromApp(app)
+		w.syncAPIFromApp(app)
 		w.record(Event{Type: evAppUpdate, Actor: a, App: str(app["id"]), AppName: str(app["displayName"]), Set: deepCopy(body)})
 	}
 	return nil
@@ -273,6 +295,8 @@ func (w *World) applyApplicationEvent(e Event) bool {
 	case evAppUpdate:
 		if app := w.apps[strings.ToLower(e.App)]; app != nil {
 			mergeApplication(app, deepCopy(e.Set))
+			w.syncRolesFromApp(app)
+			w.syncAPIFromApp(app)
 		}
 	case evAppDelete:
 		w.removeApplication(e.App)
@@ -291,6 +315,7 @@ type ApplicationInfo struct {
 	Name             string `json:"displayName"`
 	SignInAudience   string `json:"signInAudience"`
 	Requested        int    `json:"requested"`                  // permissions that it asks for (requiredResourceAccess)
+	Roles            int    `json:"roles"`                      // app roles that it defines (appRoles)
 	ServicePrincipal string `json:"servicePrincipal,omitempty"` // the object ID of the service principal of the same appId, in this tenant
 }
 
@@ -301,6 +326,7 @@ func (w *World) ListApplicationInfo() []ApplicationInfo {
 	out := make([]ApplicationInfo, 0, len(w.Applications))
 	for _, a := range w.Applications {
 		i := ApplicationInfo{ID: str(a["id"]), AppID: str(a["appId"]), Name: str(a["displayName"]), SignInAudience: str(a["signInAudience"])}
+		i.Roles = len(anyObjects(a["appRoles"]))
 		list, _ := a["requiredResourceAccess"].([]any)
 		for _, r := range list {
 			entry, _ := r.(map[string]any)
