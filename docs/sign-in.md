@@ -20,6 +20,8 @@ domains, or `common`:
   - `password`: a delegated token for a user. dollycli accepts any password.
   - `refresh_token`: with `offline_access`. A refresh token is a signed JWT, so it is good for 90 days and after a restart.
   - A delegated token has `scp`, the user (`oid`, `upn`), and an `id_token` with `openid` (with the `nonce`).
+  - The access token for an app registration's own API has the version that the API asks for, whatever endpoint the client used: `ver`, `iss`, and `aud` follow
+    `requestedAccessTokenVersion` (see [exposing an API](graph.md#exposing-an-api-scopes)). The ID token follows the endpoint. Tokens for Microsoft Graph are as they were.
   - A client asks for a scope of an [exposed API](graph.md#exposing-an-api-scopes) as `api://<Application ID URI>/<value>`. The token has the value in `scp`. For `.default` it
     has the scopes that are consented to the client, and the scopes that the app registration pre-authorizes the client for.
   - A user who has [app roles](graph.md#app-roles) of the app gets `roles` in the ID token (the app is the client) and in the access token for the app (the app is

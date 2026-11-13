@@ -51,7 +51,13 @@ no new route here.
 - The rules are from the Learn pages *permissionScope* and *apiApplication*: the `value` follows the rules of the value of an app role, a scope is disabled in one call and
   removed in a later one, and `id` is a GUID. The checks that are dollycli's own guesses: the two admin consent texts are required, an Application ID URI is `api://…`
   or `https://…`, and no other registration has it (the real Graph also asks for a verified domain in an `https` URI).
-- `requestedAccessTokenVersion` is null, 1, or 2, and `knownClientApplications` is a list of client IDs. Both are kept, and neither changes a token yet.
+- `knownClientApplications` is a list of client IDs. It is kept, and it changes nothing yet.
+- **The version of the access tokens.** `requestedAccessTokenVersion` (null, 1, or 2; null is 1) says which version of access token the API gets, whatever endpoint (v1.0 or
+  v2.0) the client used: the endpoint only decides the version of an ID token (Learn: *apiApplication*). Version 1 gives `ver` `1.0`, the issuer
+  `https://sts.windows.net/<tenant>/`, and `aud` the Application ID URI of the API (its client ID when it has none). Version 2 gives `ver` `2.0`, the issuer of dollycli
+  (`<address>/<tenant>/v2.0`), and `aud` the client ID. A library that validates the tokens of an API must expect the audience and the issuer of the version. When
+  `signInAudience` lets personal Microsoft accounts in (`AzureADandPersonalMicrosoftAccount` or `PersonalMicrosoftAccount`) the version must be 2 (a rule of Learn). A call that makes
+  an app personal and says nothing about the version sets it to 2 (a guess). Microsoft Graph keeps the tokens that it had.
 - The service principal of the app follows the registration: its scopes and its `servicePrincipalNames` change when the registration changes, and a scope that is
   removed (or gets a new value) is taken out of the consents that have it. A consent with no scope left is deleted.
 - A disabled scope cannot be consented to or asked for (`AADSTS70011`, as for an unknown scope).
@@ -59,8 +65,10 @@ no new route here.
   scope that is removed goes out of the list. In the *Open* permission mode a client can ask for any scope by name, with or without consent: the mode *Enforce* is not active yet.
 
 Checked against the real Graph (the sample tenant, read-only): the shape of a scope (`user_impersonation`, `type: User`, with the four consent texts). From Learn, and not
-tried: the rules. Guesses: the texts of the errors, that pre-authorized scopes count as consented for `.default`, and what the real Graph does with the consents of
-a scope that is removed.
+tried: the rules, and that the version of an access token is the one that the API asks for. Guesses: the texts of the errors, that pre-authorized scopes count as consented for
+`.default`, and what the real Graph does with the consents of a scope that is removed. From the docs of Entra as remembered, not from Learn: that the audience of a version 1
+token is the Application ID URI. The claims of a token are the same for both versions apart from `iss`, `ver`, and `aud`: a real version 2 token has `azp` and no `appid`, and
+dollycli's tokens have both.
 
 ### App roles
 

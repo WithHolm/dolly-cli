@@ -33,10 +33,11 @@ a role of the app, and assigns one: pick a user, a group, or a service principal
 the token has the value of the roles of the user in `roles` (see [app roles](graph.md#app-roles)). The calls of the portal are in the admin API:
 `/_dolly/graph/applications/<id>/app-roles` and `/_dolly/graph/service-principals/<client ID>/role-assignments`.
 
-The tab **Expose an API** of an app registration sets the Application ID URI (with Entra's suggestion, `api://` and the client ID), adds, edits, disables, and removes
+The tab **Expose an API** of an app registration sets the Application ID URI (with Entra's suggestion, `api://` and the client ID), sets the version of the access tokens of the API
+(and says which `aud` they have), adds, edits, disables, and removes
 scopes (a scope is disabled first, as in Graph), and lists the *authorized client applications*: a client that needs no consent for the scopes that are ticked. The tab shows each
 scope with the name that a client asks for. A client that has the scope can then be given consent on the tab *Permissions* of its service principal. The admin API:
-`/_dolly/graph/applications/<id>/api`, `…/identifier-uris`, `…/api-scopes`, and `…/pre-authorized`. See [exposing an API](graph.md#exposing-an-api-scopes).
+`/_dolly/graph/applications/<id>/api`, `…/identifier-uris`, `…/access-token-version`, `…/api-scopes`, and `…/pre-authorized`. See [exposing an API](graph.md#exposing-an-api-scopes).
 
 The *Permissions* tab of a service principal starts with *Needed by its calls*. dollycli notes the calls of a client by kind of token (delegated:
 the token has `scp`, application: it has `roles`), and looks up in [graph/permissions/operations](../graph/permissions/operations/README.md) which
