@@ -193,6 +193,9 @@ func (w *World) CreateApplication(props map[string]any, a Actor) (Object, *apiEr
 	if e := normalizeApplicationAPI(body, nil); e != nil {
 		return nil, e
 	}
+	if e := applyTokenVersionRule(body, nil); e != nil {
+		return nil, e
+	}
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	if e := w.checkIdentifierURIs(body["identifierUris"], ""); e != nil {
@@ -229,6 +232,9 @@ func (w *World) UpdateApplication(ref string, props map[string]any, a Actor) *ap
 		return e
 	}
 	if e := normalizeApplicationAPI(body, app); e != nil {
+		return e
+	}
+	if e := applyTokenVersionRule(body, app); e != nil {
 		return e
 	}
 	if uris, has := body["identifierUris"]; has {

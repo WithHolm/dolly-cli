@@ -90,7 +90,7 @@ func (a *API) jwtToken(w http.ResponseWriter, r *http.Request) {
 	}
 	si := SignIn{AppID: client, App: sp.Name, Registered: !existed, Grant: "jwtToken", Credential: "none"}
 	scope := []string{"User.Read", "User.Read.All", "Group.Read.All", "Directory.Read.All"}
-	if e := a.userTokens(&si, claims, map[string]any{}, user, client, tid, scope, ""); e != nil {
+	if e := a.userTokens(&si, claims, map[string]any{}, user, client, tid, issuerOf(r, tid), scope, ""); e != nil {
 		si.Result, si.Message = "AADSTS"+itoa(e.aadsts), e.desc
 		a.record(si)
 		a.fail(w, e)

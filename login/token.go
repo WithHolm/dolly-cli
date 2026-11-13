@@ -131,6 +131,7 @@ func (a *API) issue(r *http.Request, tid string, v2 bool) (map[string]any, SignI
 		si.Resource = res.Name
 		roles := a.world.ApplicationRoleValues(clientID, res.AppID) // enabled roles for applications that have a value
 		claims["aud"], claims["oid"], claims["sub"] = res.AppID, sp.ID, sp.ID
+		shapeAccessToken(a.world, claims, res, tid, issuerOf(r, tid))
 		claims["idtyp"], claims["appidacr"] = "app", "1"
 		if kind == repo.KindCertificate {
 			claims["appidacr"] = "2"
@@ -146,7 +147,7 @@ func (a *API) issue(r *http.Request, tid string, v2 bool) (map[string]any, SignI
 		if !ok {
 			return bad(http.StatusBadRequest, "invalid_grant", 50034, "The user account "+f.Get("username")+" does not exist in the "+tid+" directory. To sign into this application, the account must be added to the directory.")
 		}
-		if e := a.userTokens(&si, claims, resp, user, clientID, tid, scope, ""); e != nil {
+		if e := a.userTokens(&si, claims, resp, user, clientID, tid, issuerOf(r, tid), scope, ""); e != nil {
 			return nil, si, e
 		}
 	case "authorization_code":
@@ -161,7 +162,7 @@ func (a *API) issue(r *http.Request, tid string, v2 bool) (map[string]any, SignI
 		if !ok {
 			return bad(http.StatusBadRequest, "invalid_grant", 50034, "The user of this code is not in the directory any more.")
 		}
-		if e := a.userTokens(&si, claims, resp, user, clientID, tid, strings.Fields(code.scope), code.nonce); e != nil {
+		if e := a.userTokens(&si, claims, resp, user, clientID, tid, issuerOf(r, tid), strings.Fields(code.scope), code.nonce); e != nil {
 			return nil, si, e
 		}
 	case "refresh_token":
@@ -179,7 +180,7 @@ func (a *API) issue(r *http.Request, tid string, v2 bool) (map[string]any, SignI
 		if len(scope) == 0 {
 			scope = strings.Fields(str(rt["scope"]))
 		}
-		if e := a.userTokens(&si, claims, resp, user, clientID, tid, scope, ""); e != nil {
+		if e := a.userTokens(&si, claims, resp, user, clientID, tid, issuerOf(r, tid), scope, ""); e != nil {
 			return nil, si, e
 		}
 	}

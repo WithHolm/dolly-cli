@@ -374,6 +374,96 @@ func (w *World) syncAPIFromApp(app Object) {
 	w.setScopes(sp, scopesFromList(api["oauth2PermissionScopes"]))
 }
 
+// versionOf reads requestedAccessTokenVersion: 1, 2, or 0 for null.
+func versionOf(v any) int {
+	switch n := v.(type) {
+	case float64:
+		return int(n)
+	case int:
+		return n
+	}
+	return 0
+}
+
+// AccessTokenVersion gives the version of the access tokens of an API (1 or 2, from requestedAccessTokenVersion of its app registration, null is 1), and its first
+// Application ID URI ("" when it has none, and for an API with no app registration in this tenant).
+func (w *World) AccessTokenVersion(resourceAppID string) (int, string) {
+	w.mu.RLock()
+	defer w.mu.RUnlock()
+	app := w.appsByAppID[strings.ToLower(resourceAppID)]
+	if app == nil {
+		return 1, ""
+	}
+	api, _ := app["api"].(map[string]any)
+	version := 1
+	if versionOf(api["requestedAccessTokenVersion"]) == 2 {
+		version = 2
+	}
+	uri := ""
+	if uris := anyStrings(app["identifierUris"]); len(uris) > 0 {
+		uri = uris[0]
+	}
+	return version, uri
+}
+
+// personalAudience says whether an app can be signed in to with a personal Microsoft account.
+func personalAudience(audience string) bool {
+	return audience == "AzureADandPersonalMicrosoftAccount" || audience == "PersonalMicrosoftAccount"
+}
+
+// applyTokenVersionRule keeps the rule of Learn (apiApplication): when signInAudience lets personal Microsoft accounts in, requestedAccessTokenVersion must be 2. A call
+// that says another version is refused. A call that makes the app personal, and says nothing about the version, sets it to 2 (a guess: Learn gives the rule, not what
+// the portal or the service do). app is the application that is changed, nil for a new one.
+func applyTokenVersionRule(body map[string]any, app Object) *apiError {
+	audience := "AzureADMyOrg"
+	_, audienceGiven := body["signInAudience"]
+	switch {
+	case audienceGiven:
+		audience = str(body["signInAudience"])
+	case app != nil:
+		audience = str(app["signInAudience"])
+	}
+	if !personalAudience(audience) {
+		return nil
+	}
+	api, _ := body["api"].(map[string]any)
+	if v, given := api["requestedAccessTokenVersion"]; given {
+		if versionOf(v) != 2 {
+			return badRequest("Invalid value specified for property 'requestedAccessTokenVersion' of resource 'Application': it must be 2 when signInAudience is %s.", audience)
+		}
+		return nil
+	}
+	current := 0
+	if app != nil {
+		old, _ := app["api"].(map[string]any)
+		current = versionOf(old["requestedAccessTokenVersion"])
+	}
+	if current != 2 && (audienceGiven || app == nil) {
+		if api == nil {
+			api = map[string]any{}
+			body["api"] = api
+		}
+		api["requestedAccessTokenVersion"] = float64(2)
+	}
+	return nil
+}
+
+// SetAccessTokenVersion sets requestedAccessTokenVersion of an application: 1, 2, or 0 for null.
+func (w *World) SetAccessTokenVersion(ref string, version int, a Actor) *apiError {
+	var v any
+	switch version {
+	case 0:
+	case 1, 2:
+		v = float64(version)
+	default:
+		return badRequest("Invalid value specified for property 'requestedAccessTokenVersion' of resource 'Application': it must be null, 1, or 2.")
+	}
+	return w.changeAPI(ref, func(_, set map[string]any) *apiError {
+		set["requestedAccessTokenVersion"] = v
+		return nil
+	}, a)
+}
+
 // PreAuthorizedScopes gives the values of the scopes of an API that need no consent from a client: the client is pre-authorized for them, and they are enabled.
 func (w *World) PreAuthorizedScopes(clientAppID, resourceAppID string) []string {
 	w.mu.RLock()

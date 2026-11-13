@@ -43,8 +43,9 @@ func TestScopes_OfAnExposedAPI(t *testing.T) {
 	if code != 200 {
 		t.Fatalf("ask for a scope: %d %v", code, resp)
 	}
-	if c := claimsOf(t, resp["access_token"].(string)); c["scp"] != "Files.Read" || c["aud"] != apiID {
-		t.Errorf("claims: scp=%v aud=%v (want Files.Read, %s)", c["scp"], c["aud"], apiID)
+	// the API has no requestedAccessTokenVersion, so it gets version 1 tokens: the audience is its Application ID URI (token_version_test.go has the rest)
+	if c := claimsOf(t, resp["access_token"].(string)); c["scp"] != "Files.Read" || c["aud"] != "api://files-api" {
+		t.Errorf("claims: scp=%v aud=%v (want Files.Read, api://files-api)", c["scp"], c["aud"])
 	}
 
 	code, resp = ask("api://files-api/Files.Old")

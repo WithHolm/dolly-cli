@@ -31,6 +31,23 @@ func (s *Server) adminAPIRoutes() {
 		}
 		s.adminChanged(w, e)
 	})
+	// the version of the access tokens of this API: 1, 2, or null (1)
+	a.HandleFunc("PUT /applications/{id}/access-token-version", func(w http.ResponseWriter, r *http.Request) {
+		props, e := readAdminJSON(r)
+		if e == nil {
+			v, has := props["version"]
+			n, isNumber := v.(float64)
+			switch {
+			case !has:
+				e = badRequest("Invalid value specified for property 'requestedAccessTokenVersion' of resource 'Application': send version: null, 1, or 2.")
+			case v != nil && !isNumber:
+				e = badRequest("Invalid value specified for property 'requestedAccessTokenVersion' of resource 'Application': it must be null, 1, or 2.")
+			default:
+				e = s.world.SetAccessTokenVersion(r.PathValue("id"), int(n), adminActor)
+			}
+		}
+		s.adminChanged(w, e)
+	})
 	a.HandleFunc("POST /applications/{id}/api-scopes", func(w http.ResponseWriter, r *http.Request) {
 		props, e := readAdminJSON(r)
 		if e != nil {

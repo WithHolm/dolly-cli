@@ -17,7 +17,9 @@ const (
 
 // userTokens fills the claims and the answer of a delegated token for a user. The password grant, a
 // code, and a refresh token all end here. The scope is the one that the client asked for, as it wrote it.
-func (a *API) userTokens(si *SignIn, claims, resp, user map[string]any, clientID, tid string, scope []string, nonce string) *oauthErr {
+// issuerV2 is the issuer of a v2.0 token: claims has the issuer and the version of the endpoint that the client used, and that is what the ID token has.
+// The access token has the version that the API asks for (shapeAccessToken).
+func (a *API) userTokens(si *SignIn, claims, resp, user map[string]any, clientID, tid, issuerV2 string, scope []string, nonce string) *oauthErr {
 	si.User = str(user["userPrincipalName"])
 	if enabled, _ := user["accountEnabled"].(bool); !enabled {
 		return &oauthErr{http.StatusBadRequest, "invalid_grant", 50057, "The user account is disabled."}
@@ -27,7 +29,9 @@ func (a *API) userTokens(si *SignIn, claims, resp, user map[string]any, clientID
 		return e
 	}
 	si.Resource = res.Name
+	idIssuer, idVersion := claims["iss"], claims["ver"] // the endpoint decides the version of the ID token
 	claims["aud"], claims["oid"], claims["sub"] = res.AppID, user["id"], user["id"]
+	shapeAccessToken(a.world, claims, res, tid, issuerV2)
 	claims["name"], claims["preferred_username"], claims["upn"] = user["displayName"], user["userPrincipalName"], user["userPrincipalName"]
 	claims["scp"], claims["appidacr"] = strings.Join(scp, " "), "1"
 	// the roles of the user on the app that the token is for: the app roles that were assigned to the user, or to a group of the user
@@ -40,8 +44,8 @@ func (a *API) userTokens(si *SignIn, claims, resp, user map[string]any, clientID
 	resp["scope"] = strings.Join(scp, " ")
 	if slices.Contains(scope, "openid") {
 		id := map[string]any{
-			"iss": claims["iss"], "aud": clientID, "iat": claims["iat"], "nbf": claims["nbf"], "exp": claims["exp"],
-			"sub": user["id"], "oid": user["id"], "tid": tid, "ver": claims["ver"],
+			"iss": idIssuer, "aud": clientID, "iat": claims["iat"], "nbf": claims["nbf"], "exp": claims["exp"],
+			"sub": user["id"], "oid": user["id"], "tid": tid, "ver": idVersion,
 			"name": user["displayName"], "preferred_username": user["userPrincipalName"],
 		}
 		if nonce != "" {
