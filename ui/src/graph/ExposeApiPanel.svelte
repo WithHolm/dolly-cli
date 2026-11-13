@@ -5,7 +5,7 @@
   import Chip from "../lib/Chip.svelte";
   import ConfirmButton from "../lib/ConfirmButton.svelte";
   import CopyButton from "../lib/CopyButton.svelte";
-  import { consentWho, defaultIdentifierUri, scopeFullName } from "./scopes";
+  import { accessTokenAudience, consentWho, defaultIdentifierUri, scopeFullName } from "./scopes";
   import type { ApiScopeDef, ApiSettings, AppRegistration, ServicePrincipal } from "./types";
 
   // The API that an app registration exposes: the Application ID URI, the scopes that a client can ask for, and the clients that need no consent for some of them.
@@ -48,6 +48,10 @@
     e.preventDefault();
     if (await setUris([...uris, newUri.trim()], "Added the Application ID URI.")) newUri = "";
   }
+
+  // ---- the version of the access tokens ----
+  const version = $derived(api?.requestedAccessTokenVersion === 2 ? 2 : 1);
+  const setVersion = async (v: string) => after(await succeeded(() => graph.put(`${base}/access-token-version`, { version: v === "2" ? 2 : null }), `The access tokens of this API are version ${v}.`));
 
   // ---- the scopes ----
   const newScope = (): ScopeForm => ({ value: "", type: "Admin", adminName: "", adminDesc: "", userName: "", userDesc: "" });
@@ -116,6 +120,20 @@
       <button type="button" class="btn ghost" onclick={() => (newUri = defaultIdentifierUri(app.appId))}>Use the suggestion</button>
     {/if}
   </form>
+</section>
+
+<section>
+  <h3>Access token version</h3>
+  <p class="hint">
+    The version of the access tokens that this API gets, whatever endpoint the client used (the endpoint only decides the version of an ID token). Validate the tokens as the
+    version says: in version 1 the audience <code>aud</code> is the Application ID URI and the issuer is <code>https://sts.windows.net/&lt;tenant&gt;/</code>, and in version 2 the
+    audience is the client ID.
+  </p>
+  <select value={String(version)} onchange={(e) => setVersion(e.currentTarget.value)} aria-label="Access token version">
+    <option value="1">Version 1.0 (the default)</option>
+    <option value="2">Version 2.0</option>
+  </select>
+  <p class="hint now">The tokens for this API now have <code>ver</code> {version}.0 and <code>aud</code> <code>{accessTokenAudience(version, uris, app.appId)}</code>.</p>
 </section>
 
 <section>
@@ -240,6 +258,7 @@
   .hint { margin: 2px 0 10px; color: var(--muted); max-width: 72ch; }
   label > .hint { display: block; margin: 2px 0 0; font-size: 12.5px; font-weight: 400; }
   .none { color: var(--faint); }
+  .hint.now { margin: 8px 0 0; }
   .uris { margin: 0 0 8px; padding: 0; list-style: none; }
   .uris li { display: flex; align-items: center; gap: 4px; min-height: 32px; }
   .inline { display: flex; gap: 8px; align-items: center; max-width: 640px; }
