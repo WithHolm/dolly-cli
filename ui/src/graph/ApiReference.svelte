@@ -9,7 +9,7 @@
   import OperationDetail from "./OperationDetail.svelte";
   import { buildPages, type Node } from "./reference";
 
-  // The address says what is open: #/graph/api/<resource>/<call>. A link from another page (a call in the
+  // The address says what is open: #/api/<resource>/<call>. A link from another page (a call in the
   // list of calls) opens the call here, and a call that is open can be sent to someone as a link.
   $effect(() => poll(() => apiDocs.load(), 2000));
 
@@ -18,12 +18,12 @@
   const pages = $derived(docs ? buildPages(docs.endpoints, text, docs.pages) : []);
   const unsupported = $derived(docs?.unsupported ?? []);
 
-  const pageId = $derived(route.segments[2] ?? "");
-  const openKey = $derived(route.segments[3] ?? "");
+  const pageId = $derived(route.segments[1] ?? "");
+  const openKey = $derived(route.segments[2] ?? "");
   const showUnsupported = $derived(pageId === "unsupported");
   const current = $derived(pages.find((p) => p.id === pageId) ?? pages[0]);
 
-  const toggle = (key: string, isOpen: boolean) => route.go("graph", "api", current.id, isOpen ? "" : key);
+  const toggle = (key: string, isOpen: boolean) => route.go("api", current.id, isOpen ? "" : key);
 
   // the hints on a closed call: what else its path can end with
   const hints = (node: Node) => [
@@ -47,13 +47,13 @@
     </label>
     <nav aria-label="Resources">
       {#each pages as p (p.id)}
-        <a href={route.href("graph", "api", p.id)} aria-current={!showUnsupported && p.id === current?.id ? "page" : undefined} class={{ none: !p.count }}>
+        <a href={route.href("api", p.id)} aria-current={!showUnsupported && p.id === current?.id ? "page" : undefined} class={{ none: !p.count }}>
           <span>{p.name}</span>
           <span class="count">{p.count}</span>
         </a>
       {/each}
       {#if unsupported.length}
-        <a href={route.href("graph", "api", "unsupported")} aria-current={showUnsupported ? "page" : undefined}>
+        <a href={route.href("api", "unsupported")} aria-current={showUnsupported ? "page" : undefined}>
           <span>Not supported yet</span>
           <Chip tone="amber">{unsupported.length}</Chip>
         </a>

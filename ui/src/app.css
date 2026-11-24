@@ -25,6 +25,9 @@
   --red: #b91c1c;
   --red-soft: #fee2e2;
 
+  /* The width of the page: 75% of the window, and never less than 1200px (a small window is as it was). The bar and the page use it. */
+  --page-width: max(1200px, 75vw);
+
   --radius: 6px;
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
   --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.16);

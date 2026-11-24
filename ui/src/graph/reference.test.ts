@@ -5,6 +5,7 @@ import {
   buildPages,
   filterOperators,
   humanize,
+  legacyReferenceAddress,
   matchEndpoint,
   matches,
   missingOptions,
@@ -60,7 +61,7 @@ test("the server says the page of a call, and the section when the page only cov
   );
   // a call to /me finds its page in the reference
   assert.equal(matchEndpoint(calls, "GET", "/v1.0/me/manager")?.path, "/v1.0/me/manager");
-  assert.match(referenceHref(calls, calls[5]), /^#\/graph\/api\/users\/GET%20%2Fv1.0%2Fme%2Fmanager$/);
+  assert.match(referenceHref(calls, calls[5]), /^#\/api\/users\/GET%20%2Fv1.0%2Fme%2Fmanager$/);
 });
 
 test("the {type} and $count calls are folded into the main call", () => {
@@ -143,6 +144,17 @@ test("a request is matched with the most specific call", () => {
 
 test("the address of a call is the address of its main call", () => {
   const variant = groups[4];
-  assert.equal(referenceHref(groups, variant), "#/graph/api/groups/" + encodeURIComponent("GET /v1.0/groups/{id}/members"));
-  assert.equal(referenceHref(groups, groups[0]), "#/graph/api/groups/" + encodeURIComponent("GET /v1.0/groups"));
+  assert.equal(referenceHref(groups, variant), "#/api/groups/" + encodeURIComponent("GET /v1.0/groups/{id}/members"));
+  assert.equal(referenceHref(groups, groups[0]), "#/api/groups/" + encodeURIComponent("GET /v1.0/groups"));
+});
+
+test("the reference was a page of Graph (#/graph/api/...) and is a page of its own (#/api/...): an old address goes to the new one", () => {
+  assert.deepEqual(legacyReferenceAddress(["graph", "api"]), ["api"]);
+  assert.deepEqual(legacyReferenceAddress(["graph", "api", "groups"]), ["api", "groups"]);
+  assert.deepEqual(legacyReferenceAddress(["graph", "api", "groups", "GET /v1.0/groups"]), ["api", "groups", "GET /v1.0/groups"]);
+  // any other address stays
+  assert.equal(legacyReferenceAddress(["graph", "users"]), null);
+  assert.equal(legacyReferenceAddress(["graph"]), null);
+  assert.equal(legacyReferenceAddress(["api", "groups"]), null);
+  assert.equal(legacyReferenceAddress([]), null);
 });

@@ -1,4 +1,4 @@
-/** The place in the portal, kept in the hash: #/graph/api/groups. A hash needs no support from the server. */
+/** The place in the portal, kept in the hash: #/graph/users, #/api/groups. A hash needs no support from the server. */
 class Route {
   segments = $state(read());
 

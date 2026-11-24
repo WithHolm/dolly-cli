@@ -35,7 +35,7 @@
   const curl = $derived(
     `curl -H "Authorization: Bearer any"${e.writes ? ` -X ${e.method} -H "Content-Type: application/json" -d '{}'` : ""} "${url}"`,
   );
-  const link = $derived(origin + "/" + route.href("graph", "api", resourceOf(e), nodeKey(e)));
+  const link = $derived(origin + "/" + route.href("api", resourceOf(e), nodeKey(e)));
 
   // The text of the call from the markdown files. The parts titled Filtering and Search go next to the
   // text that the code makes for $filter and $search. The other parts have a heading of their own.

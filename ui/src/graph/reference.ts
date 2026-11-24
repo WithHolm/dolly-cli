@@ -169,7 +169,15 @@ export function matchEndpoint(endpoints: readonly Endpoint[], method: string, pa
   return best?.e;
 }
 
-/** The address of the page of a call in the reference: #/graph/api/groups/GET%20%2Fv1.0%2F... */
+/** The address of the page of a call in the reference: #/api/groups/GET%20%2Fv1.0%2F... */
 export function referenceHref(endpoints: readonly Endpoint[], e: Endpoint): string {
-  return `#/graph/api/${encodeURIComponent(resourceOf(e))}/${encodeURIComponent(nodeKey(mainOf(endpoints, e)))}`;
+  return `#/api/${encodeURIComponent(resourceOf(e))}/${encodeURIComponent(nodeKey(mainOf(endpoints, e)))}`;
+}
+
+/**
+ * The reference was a page of Graph (#/graph/api/...), and it is a page of its own now (#/api/...), because it is about the API and not about the tenant. This gives the
+ * new address (the parts) for an old one, so a link that was copied or kept still works. It gives null for any other address.
+ */
+export function legacyReferenceAddress(segments: readonly string[]): string[] | null {
+  return segments[0] === "graph" && segments[1] === "api" ? ["api", ...segments.slice(2)] : null;
 }
